@@ -1,0 +1,15 @@
+2025-05-04 Start the journey
+
+apply Github account
+  Problem: Somehow using Chrome on my laptop (macOS) failed
+  Solution: Using Chrome on my phone (Android)
+setup Github repository
+  Problem: git clone https://... failed
+  Solution:
+    $ ssh-keygen -t ed25519 -C "rayfos.fun@gmail.com"
+    # in github UI: click my profile icon on the right up corner -> Settings -> SSH and GPG keys -> New SSH Key -> paste in the content in previous step
+    $ git clone git@github.com:rayfos-fun/gblog.git
+    $ git config user.name Rayfos
+    $ git config user.email rayfos.fun@gmail.com
+public to Github Pages
+  # in github UI: in the gblog project, click Settings tab on the above menu -> Pages -> choose main /root => https://rayfos-fun.github.io/gblog
