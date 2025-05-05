@@ -1,0 +1,21 @@
+2025-05-04 現在出發！
+
+使用MAC筆電網頁申請Github帳號失敗 => 改用安卓手機網頁申請成功…
+
+設定github repository:
+$ ssh-keygen -t ed25519 -C "rayfos.fun@gmail.com"
+# 登入github，點選右上角小圖示 -> Settings -> SSH and GPG keys -> New SSH Key -> 貼上ssh key (之前步驟所得)
+# 創建public repository gblog
+$ git clone git@github.com:rayfos-fun/gblog.git
+$ cd gblog
+$ git config user.name Rayfos
+$ git config user.email rayfos.fun@gmail.com
+$ echo "gblog" >> README.md
+$ git add .
+$ git commit -m "first commit"
+$ git push
+
+設定Github Pages:
+# 登入github，進入gblog專案, 上列選單中點選Settings tab -> Pages -> 設定main /root => https://rayfos-fun.github.io/gblog
+
+新增中文頁面(https://rayfos-fun.github.io/gblog/index_ch.html)、中文日誌(gblog_ch.log)

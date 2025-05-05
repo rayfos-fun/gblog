@@ -13,3 +13,4 @@ setup Github repository
     $ git config user.email rayfos.fun@gmail.com
 public to Github Pages
   # in github UI: in the gblog project, click Settings tab on the above menu -> Pages -> choose main /root => https://rayfos-fun.github.io/gblog
+add index_ch.html, gblog_ch.log
