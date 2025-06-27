@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Guess the Number Game</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  .container {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  input[type="number"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 80%;
+    box-sizing: border-box;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #feedback {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Guess the Number</h1>
+    <p>I'm thinking of a number between 0 and 1000. Try to guess it!</p>
+    <input type="number" id="guess" placeholder="Enter your guess">
+    <button onclick="checkGuess()">Guess</button>
+    <div id="feedback"></div>
+  </div>
+
+  <script>
+    let secretNumber = Math.floor(Math.random() * 1001);
+    let low = 0;
+    let high = 1000;
+
+    function checkGuess() {
+      const guessInput = document.getElementById("guess");
+      const feedbackDiv = document.getElementById("feedback");
+      const guess = parseInt(guessInput.value);
+
+      if (isNaN(guess) || guess < 0 || guess > 1000) {
+        feedbackDiv.textContent = "Please enter a valid number between 0 and 1000.";
+        return;
+      }
+
+      if (guess === secretNumber) {
+        feedbackDiv.textContent = `Congratulations! You guessed the number ${secretNumber}!`;
+        // Optionally disable the input and button after winning
+        guessInput.disabled = true;
+        document.querySelector('button').disabled = true;
+      } else if (guess < secretNumber) {
+        low = Math.max(low, guess);
+        feedbackDiv.textContent = `Too low. Try again between ${low} and ${high}.`;
+      } else {
+        high = Math.min(high, guess);
+        feedbackDiv.textContent = `Too high. Try again between ${low} and ${high}.`;
+      }
+
+      // Clear the input field for the next guess
+      guessInput.value = "";
+    }
+  </script>
+</body>
+</html>
