@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas 繪製紅色圓形</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      border: 2px solid #ccc; /* 讓 canvas 邊框可見，方便定位 */
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="myCanvas" width="100" height="100"></canvas>
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d'); // 取得 2D 繪圖上下文
+
+    // 設定圓心座標和半徑
+    const centerX = canvas.width / 2;  // 50
+    const centerY = canvas.height / 2;   // 50
+    const radius = 50;           // 半徑為 直徑100px / 2 = 50px
+
+    // 開始繪製路徑
+    ctx.beginPath();
+    // 畫一個圓：arc(圓心X, 圓心Y, 半徑, 起始角度, 結束角度, 逆時針/順時針)
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
+    
+    // 設定填充顏色
+    ctx.fillStyle = 'red';
+    // 填充圓形
+    ctx.fill();
+
+    // 也可以選擇描邊
+    // ctx.strokeStyle = 'darkred';
+    // ctx.lineWidth = 2;
+    // ctx.stroke();
+  </script>
+
+</body>
+</html>
