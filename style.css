@@ -1,0 +1,27 @@
+.top-sitemap {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.top-sitemap ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.top-sitemap ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+.top-sitemap ul li a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.top-sitemap ul li a:hover {
+  text-decoration: underline;
+}
