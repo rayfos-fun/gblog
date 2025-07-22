@@ -7,9 +7,9 @@
   <script>
     const lang = navigator.language || navigator.userLanguage;
     if (lang && ['zh-cn', 'zh-tw'].includes(lang.toLowerCase())) {
-      window.location.replace('/gblog/' + lang.toLowerCase() + '/index.html');
+      window.location.replace(lang.toLowerCase() + '/index.html');
     } else {
-      window.location.replace('/gblog/en/index.html');
+      window.location.replace('en/index.html');
     }
   </script>    
   <link rel="stylesheet" href="style.css">
@@ -18,9 +18,9 @@
   <p>Detecting your preferred language...</p>
   <p>If you are not redirected automatically, please choose your language:</p>
   <ul>
-    <li><a href="/gblog/en/index.html">English</a></li>
-    <li><a href="/gblog/zh-cn/index.html">简体中文</a></li>
-    <li><a href="/gblog/zh-tw/index.html">繁體中文</a></li>
+    <li><a href="en/index.html">English</a></li>
+    <li><a href="zh-cn/index.html">简体中文</a></li>
+    <li><a href="zh-tw/index.html">繁體中文</a></li>
   </ul>
 </body>
 </html>
