@@ -10,7 +10,7 @@ loadHtml = function(selector, url) {
     document.querySelector(selector).innerHTML = html;
   })
   .catch(error => {
-    console.error('載入 HTML 失敗:', error);
+    console.error('Load HTML failure:', error);
   });
 }
 loadHtml('#top-sitemap-placeholder', 'sitemap.html');

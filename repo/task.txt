@@ -3,9 +3,12 @@
 
 ../README.md
 ../docs/css/style.css
-../docs/css/guess-number.css
+../docs/en/index.html
+../docs/en/sitemap.html
 ../docs/zh-tw/index.html
+../docs/zh-tw/main.js
 ../docs/zh-tw/guess-number.html
+../docs/zh-tw/guess-number.js
 ../docs/zh-tw/sitemap.html
 css.txt
 git.txt
