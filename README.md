@@ -1,8 +1,11 @@
-GBlog https://rayfos-fun.github.io/gblog
+## docs
 
-A blog representing in games.
+  G部落格 / GBlog https://rayfos-fun.github.io/gblog
 
+  以遊戲方式呈現的部落格。
+  A blog representing in games.
 
-G部落格 https://rayfos-fun.github.io/gblog/index-ch.html
-
-以遊戲方式呈現的部落格。
+## repo
+  
+  雜物間：存放個人化檔案方便自己本地端管理。
+  Repository to store everything.
