@@ -4,18 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>哈囉，雷弗斯</title>
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
   <h1>哈囉，GitHub Pages！</h1>
-  <nav class="top-sitemap">
-    <ul>
-      <li><a href="gblog.log">日誌</a></li>
-      <li><a href="guess-number.html">猜數字</a></li>
-      <li><a href="rock-paper-scissors.html">剪刀石頭布</a></li>
-      <li><a href="tic-tac-toe.html">井字遊戲</a></li>
-      <li><a href="md.md">Markdown</a></li>
-      <li><a href="../en/index.html">En</a></li>
-    </ul>
+  <div id="top-sitemap-placeholder"></div>
+  <script>
+    function loadHTML(selector, url) {
+      fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('HTTP error ' + response.status);
+        }
+        return response.text();
+      })
+      .then(html => {
+        document.querySelector(selector).innerHTML = html;
+      })
+      .catch(error => {
+        console.error('載入 HTML 失敗:', error);
+      });
+    }
+    loadHTML('#top-sitemap-placeholder', 'sitemap.html');
+  </script>
 </body>
 </html>

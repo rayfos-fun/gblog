@@ -1,7 +1,19 @@
 # links
 
+
 ../README.md
 ../docs/css/style.css
+../docs/css/guess-number.css
 ../docs/zh-tw/index.html
 ../docs/zh-tw/guess-number.html
+../docs/zh-tw/sitemap.html
 css.txt
+git.txt
+
+$ python3 -m http.server 8000
+http://localhost:8000/zh-tw/index.html
+
+# todo
+
+framework of top site for all pages
+apply to all pages

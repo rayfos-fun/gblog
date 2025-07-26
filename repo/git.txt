@@ -1,0 +1,1 @@
+git diff --staged  to show diff of the commit before and after
