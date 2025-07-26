@@ -9,11 +9,15 @@
 ../docs/zh-tw/sitemap.html
 css.txt
 git.txt
+javascript.txt
+python.txt
 
 $ python3 -m http.server 8000
+http://localhost:8000
 http://localhost:8000/zh-tw/index.html
 
 # todo
 
 framework of top site for all pages
-apply to all pages
+  template javascript
+  apply to all pages

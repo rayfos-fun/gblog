@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>猜數字</title>
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/guess-number.css">
@@ -8,14 +10,16 @@
 </style>
 </head>
 <body>
+  <h1>猜數字</h1>
+  <div id="top-sitemap-placeholder"></div>
   <div class="container">
-    <h1>猜數字</h1>
     <p>數字範圍 從0到1000</p>
     <input type="number" id="guess" placeholder="請輸入要猜的數字">
     <button onclick="checkGuess()">猜看看</button>
     <div id="feedback"></div>
   </div>
 
+  <script src="main.js" defer></script>
   <script>
     let secretNumber = Math.floor(Math.random() * 1001);
     let low = 0;
