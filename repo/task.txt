@@ -1,4 +1,7 @@
 # links
 
 ../README.md
-
+../docs/css/style.css
+../docs/zh-tw/index.html
+../docs/zh-tw/guess-number.html
+css.txt

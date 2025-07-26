@@ -1,0 +1,11 @@
+# snippet
+
+## HTML
+  <link rel="stylesheet" href="../style.css">
+
+
+selector
+
+e.g.
+body {...}
+
