@@ -1,2 +1,36 @@
 snippet
   <script src="main.js" defer></script>
+
+
+DOM Document Object Model
+  Element
+    className
+    firstElementChild
+    id
+    innerHTML
+    lastElementChild
+    nextElementSibling
+    previousElementSibling
+    style
+    tagName  e.g. 'DIV'
+    textContent
+  Input
+    value
+
+string
+  's', "s", `s with ${var}`
+
+
+document
+  createElement(s)  # e.g. createElement('div')
+  getElementById(s)
+  querySelector(s)  # return single HTMLElement
+  querySelectorAll(s)  # return NodeList (Array of Elements)
+isNaN(v)
+instanceof
+  e.g. obj instanceof Element
+parseInt(s): return n
+Math
+  ceil(n)
+  floor(n)
+  random(): (0, 1]

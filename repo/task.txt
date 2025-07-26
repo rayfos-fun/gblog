@@ -21,3 +21,5 @@ http://localhost:8000/zh-tw/index.html
 framework of top site for all pages
   template javascript
   apply to all pages
+
+learn css selector and document.querySelector(...)
