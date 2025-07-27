@@ -1,7 +1,8 @@
 # links
 
-
 ../README.md
+../docs/css/guess-number.css
+../docs/css/rock-paper-scissors.css
 ../docs/css/style.css
 ../docs/en/guess-number.html
 ../docs/en/guess-number.js
@@ -15,17 +16,30 @@
 ../docs/zh-tw/guess-number.html
 ../docs/zh-tw/guess-number.js
 ../docs/zh-tw/index.html
+../docs/zh-tw/rock-paper-scissors.js
+../docs/zh-tw/rock-paper-scissors.html
 ../docs/zh-tw/sitemap.html
+
 css.txt
 git.txt
-hello_opencc.py
+hello_opencc.py  # used to convert zh-tw into zh-ch
 javascript.txt
 python.txt
-tw2cn.py
+tw2cn.py  # convert zh-tw into zh-cn
 
-$ python3 -m http.server 8000
-http://localhost:8000
-http://localhost:8000/en/index.html
+http://devdocs.io  # offline docs for css, javascript, and html
+
+$ python3 -m http.server 8000  # this would fail when offline
+=> http://localhost:8000
+=> http://localhost:8000/en/index.html
+
+# sitemap
+  games
+    guess-number
+    rock-paper-scissors
+  blog
+    notes
+  lang
 
 # todo
 
@@ -34,6 +48,13 @@ framework of top site for all pages
 
 learn css selector and document.querySelector(...)
 
-sub sitemap
-
-convert zh-tw to zh-cn
+P1 60m how to test offline
+P1 30m venc for gblog
+P1 60m unit test for javascript
+P1 60m unit test for py
+P1 30m tw2cn.py only copy touched files
+P1 30m deploy.py to invoke tw2cn.py
+P1 60m test all links are valid
+P1 20m replace css px with em / vw
+P1 60m support various resolutions
+P1 30m sub sitemap 

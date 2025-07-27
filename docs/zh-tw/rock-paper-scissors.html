@@ -1,65 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rock Paper Scissors</title>
-<style>
-body {
-    font-family: sans-serif;
-    text-align: center;
-}
-.container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 5px;
-    cursor: pointer;
-}
-#result {
-    margin-top: 15px;
-    font-weight: bold;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>雷弗斯-剪刀、石頭、布</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/rock-paper-scissors.css">
 </head>
 <body>
 
-<div class="container">
-    <h1>Rock Paper Scissors</h1>
-    <p>Choose your weapon!</p>
-    <button onclick="playRound('rock')">Rock</button>
-    <button onclick="playRound('paper')">Paper</button>
-    <button onclick="playRound('scissors')">Scissors</button>
+  <h1>剪刀、石頭、布</h1>
+  <div id="top-sitemap-placeholder"></div>
+
+  <div class="container">
+    <button onclick="playRound('剪刀')">剪刀</button>
+    <button onclick="playRound('石頭')">石頭</button>
+    <button onclick="playRound('布')">布</button>
     <div id="result"></div>
-</div>
+  </div>
 
-<script>
-const choices = ["rock", "paper", "scissors"];
-const resultElement = document.getElementById("result");
-
-function playRound(playerChoice) {
-    const computerChoice = choices[Math.floor(Math.random() * 3)];
-    let result = "";
-
-    if (playerChoice === computerChoice) {
-        result = `Computer chose ${computerChoice}. It's a tie!`;
-    } else if (
-        (playerChoice === "rock" && computerChoice === "scissors") ||
-        (playerChoice === "paper" && computerChoice === "rock") ||
-        (playerChoice === "scissors" && computerChoice === "paper")
-    ) {
-        result = `You chose ${playerChoice}, computer chose ${computerChoice}. You win!`;
-    } else {
-        result = `You chose ${playerChoice}, computer chose ${computerChoice}. Computer wins!`;
-    }
-
-    resultElement.textContent = result;
-}
-</script>
-
+  <script src="../js/main.js" defer></script>
+  <script src="rock-paper-scissors.js" defer></script>
 </body>
 </html>
