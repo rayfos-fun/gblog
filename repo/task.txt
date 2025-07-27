@@ -4,26 +4,36 @@
 ../README.md
 ../docs/css/style.css
 ../docs/en/guess-number.html
+../docs/en/guess-number.js
 ../docs/en/index.html
 ../docs/en/sitemap.html
 ../docs/js/main.js
-../docs/zh-tw/index.html
+../docs/zh-cn/guess-number.html
+../docs/zh-cn/guess-number.js
+../docs/zh-cn/index.html
+../docs/zh-cn/sitemap.html
 ../docs/zh-tw/guess-number.html
 ../docs/zh-tw/guess-number.js
+../docs/zh-tw/index.html
 ../docs/zh-tw/sitemap.html
 css.txt
 git.txt
+hello_opencc.py
 javascript.txt
 python.txt
+tw2cn.py
 
 $ python3 -m http.server 8000
 http://localhost:8000
-http://localhost:8000/zh-tw/index.html
+http://localhost:8000/en/index.html
 
 # todo
 
 framework of top site for all pages
-  template javascript
   apply to all pages
 
 learn css selector and document.querySelector(...)
+
+sub sitemap
+
+convert zh-tw to zh-cn

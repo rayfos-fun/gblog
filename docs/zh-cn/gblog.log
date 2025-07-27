@@ -1,0 +1,34 @@
+2025-07-26
+
+整理文件
+
+2025-07-20
+
+新增style.css
+档案名称使用破折线(-)而非底线(_)
+
+2025-07-19 剪刀石头布
+2025-06-26 猜数字
+2025-05-26 井字游戏
+2025-05-23 从地址书写顺序看中美文化差异
+2025-05-04 现在出发！
+
+使用MAC笔电网页申请Github帐号失败 => 改用安卓手机网页申请成功…
+
+设定github repository:
+$ ssh-keygen -t ed25519 -C "rayfos.fun@gmail.com"
+# 登入github，点选右上角小图示 -> Settings -> SSH and GPG keys -> New SSH Key -> 贴上ssh key (之前步骤所得)
+# 创建public repository gblog
+$ git clone git@github.com:rayfos-fun/gblog.git
+$ cd gblog
+$ git config user.name Rayfos
+$ git config user.email rayfos.fun@gmail.com
+$ echo "gblog" >> README.md
+$ git add .
+$ git commit -m "first commit"
+$ git push
+
+设定Github Pages:
+# 登入github，进入gblog专案, 上列选单中点选Settings tab -> Pages -> 设定main /root => https://rayfos-fun.github.io/gblog
+
+新增中文页面(https://rayfos-fun.github.io/gblog/index_ch.html)、中文日志(gblog_ch.log)

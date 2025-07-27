@@ -1,1 +1,7 @@
 python -m http.server 8000    # host static htmls locally
+
+open(filename, 'r', encoding='utf-8')
+os
+  listdir(s) -> list[str]
+  path
+    join(p1, ...)
