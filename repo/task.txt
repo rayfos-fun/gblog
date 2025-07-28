@@ -20,6 +20,7 @@
 ../docs/zh-tw/rock-paper-scissors.html
 ../docs/zh-tw/sitemap.html
 
+chrome.txt
 css.txt
 git.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch

@@ -1,0 +1,1 @@
+cmd + shift + R: hard refresh (web browser might cache old css or js)

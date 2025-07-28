@@ -1,7 +1,10 @@
 python -m http.server 8000    # host static htmls locally
 
+inspect
+  signature(fnx)
 open(filename, 'r', encoding='utf-8')
 os
   listdir(s) -> list[str]
+  makedirs(name, mode=511, exist_ok=False)
   path
     join(p1, ...)

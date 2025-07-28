@@ -1,4 +1,4 @@
-const choices = ["石頭", "布", "剪刀"];
+const choices = ["石头", "布", "剪刀"];
 const resultElement = document.getElementById("result");
 
 function playRound(playerChoice) {
@@ -6,17 +6,17 @@ function playRound(playerChoice) {
   let result = "";
 
   if (playerChoice === computerChoice) {
-    result = `對手出${computerChoice}，雙方平手!`;
+    result = `对手出${computerChoice}，双方平手!`;
   } else {
-    result = `玩家出${playerChoice}，對手出${computerChoice}。`
-    if ((playerChoice === "石頭" && computerChoice === "剪刀") ||
-        (playerChoice === "布" && computerChoice === "石頭") ||
+    result = `玩家出${playerChoice}，对手出${computerChoice}。`
+    if ((playerChoice === "石头" && computerChoice === "剪刀") ||
+        (playerChoice === "布" && computerChoice === "石头") ||
         (playerChoice === "剪刀" && computerChoice === "布")) {
       result += '玩家';
     } else {
-      result += '對手';
+      result += '对手';
     }
-    result += '勝利！';
+    result += '胜利！';
   }
   resultElement.textContent = result;
 }
