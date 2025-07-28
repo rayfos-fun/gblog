@@ -1,0 +1,1 @@
+pip install opencc-python-reimplemented  # for tw2cn.py... etc.

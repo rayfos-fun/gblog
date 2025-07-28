@@ -1,5 +1,6 @@
 # links
 
+../.gitignore
 ../README.md
 ../docs/css/guess-number.css
 ../docs/css/rock-paper-scissors.css
@@ -25,6 +26,8 @@ css.txt
 git.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
 javascript.txt
+opencc.txt
+pip.txt
 python.txt
 tw2cn.py  # convert zh-tw into zh-cn
 venc.txt
@@ -50,12 +53,17 @@ framework of top site for all pages
 
 learn css selector and document.querySelector(...)
 
-P1 30m venc for gblog
-P1 60m unit test for javascript
-P1 60m unit test for py
-P1 30m tw2cn.py only copy touched files
-P1 30m deploy.py to invoke tw2cn.py
+P1 10m pip requirements
+P1 30m sub sitemap games demos notes blogs
 P1 60m test all links are valid
 P1 20m replace css px with em / vw
 P1 60m support various resolutions
-P1 30m sub sitemap 
+P1 60m unit test for javascript
+P1 60m unit test for py
+P1 30m deploy.py to invoke tw2cn.py
+P2 20m md.txt
+P2 30m fine tune tic tac toe
+P2 30m demo canvas doraemon
+P2 30m demo timer animation
+P2 30m blog flight cancellation
+P2 30m js module  export ...;   import ... from ...;   script type="module"

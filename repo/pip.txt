@@ -1,0 +1,6 @@
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+
+
+pip install opencc-python-reimplemented  # for tw2cn.py... etc.
