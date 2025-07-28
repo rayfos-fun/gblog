@@ -1,4 +1,5 @@
 python -m http.server 8000    # host static htmls locally
+python -m venv venv  # create virtual environment
 
 inspect
   signature(fnx)

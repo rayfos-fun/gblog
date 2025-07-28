@@ -1,0 +1,12 @@
+python -m venv $DIR  # e.g. $DIR=venc
+
+source $DIR/bin/activate    # the "source" is critical
+pip install $PACKAGE
+pip freeze > $REQUIREMENTS
+
+pip install -r $REQUIREMENTS
+
+
+
+
+edit venc/bin/activate to update PS1=... to customize the prompt hint

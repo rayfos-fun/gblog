@@ -27,6 +27,7 @@ hello_opencc.py  # used to convert zh-tw into zh-ch
 javascript.txt
 python.txt
 tw2cn.py  # convert zh-tw into zh-cn
+venc.txt
 
 http://devdocs.io  # offline docs for css, javascript, and html
 
@@ -49,7 +50,6 @@ framework of top site for all pages
 
 learn css selector and document.querySelector(...)
 
-P1 60m how to test offline
 P1 30m venc for gblog
 P1 60m unit test for javascript
 P1 60m unit test for py

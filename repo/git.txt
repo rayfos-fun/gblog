@@ -1,2 +1,5 @@
+.gitignore
+  venv/
+
 git commit --amend  to add touched files into current commit
 git diff --staged  to show diff of the commit before and after
