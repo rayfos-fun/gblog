@@ -2,9 +2,11 @@
 
 ../.gitignore
 ../README.md
+../docs/css/game.css
 ../docs/css/guess-number.css
 ../docs/css/rock-paper-scissors.css
 ../docs/css/style.css
+../docs/en/game.html
 ../docs/en/guess-number.html
 ../docs/en/guess-number.js
 ../docs/en/index.html
@@ -14,6 +16,7 @@
 ../docs/zh-cn/guess-number.js
 ../docs/zh-cn/index.html
 ../docs/zh-cn/sitemap.html
+../docs/zh-tw/game.html
 ../docs/zh-tw/guess-number.html
 ../docs/zh-tw/guess-number.js
 ../docs/zh-tw/index.html
@@ -60,7 +63,7 @@ P1 60m support various resolutions
 P1 60m unit test for javascript
 P1 60m unit test for py
 P1 30m deploy.py to invoke tw2cn.py
-P1 20m eg to edit gblog repo
+P1 30m en/game doesn't have sitemap yet
 P2 20m md.txt
 P2 30m fine tune tic tac toe
 P2 30m demo canvas doraemon
