@@ -4,6 +4,7 @@ body {
 }
 
 .top-sitemap {
+  display: block;
   background-color: #f4f4f4;
   padding: 10px;
   border-bottom: 1px solid #ccc;

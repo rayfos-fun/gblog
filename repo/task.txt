@@ -31,6 +31,7 @@ css.txt
 git.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
 javascript.txt
+log.txt
 opencc.txt
 pip.txt
 python.txt
@@ -50,16 +51,16 @@ $ python3 -m http.server 8000  # this would fail when offline
     rock-paper-scissors
   blog
     notes
-  lang
+  lang (en/zh-cn/zh-tw)
 
 # todo
 
 framework of top site for all pages
   apply to all pages
 
-learn css selector and document.querySelector(...)
-
-P1 30m en/game doesn't have sitemap yet
+P1 10m zh-tw/tic-tac-toe en/game doesn't have sitemap yet
+P1 10m en/tic-tac-toe en/game doesn't have sitemap yet
+P1 10m refresh zh-cn
 P1 60m support various resolutions
 P1 20m replace css px with em / vw
 P1 60m unit test for javascript
