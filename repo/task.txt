@@ -11,6 +11,7 @@
 ../docs/en/guess-number.html
 ../docs/en/guess-number.js
 ../docs/en/index.html
+../docs/en/rock-paper-scissors.html
 ../docs/en/sitemap.html
 ../docs/js/main.js
 ../docs/zh-cn/guess-number.html
@@ -58,13 +59,12 @@ framework of top site for all pages
 
 learn css selector and document.querySelector(...)
 
-P1 60m test all links are valid
-P1 20m replace css px with em / vw
+P1 30m en/game doesn't have sitemap yet
 P1 60m support various resolutions
+P1 20m replace css px with em / vw
 P1 60m unit test for javascript
 P1 60m unit test for py
 P1 30m deploy.py to invoke tw2cn.py
-P1 30m en/game doesn't have sitemap yet
 P2 20m md.txt
 P2 30m fine tune tic tac toe
 P2 30m demo canvas doraemon

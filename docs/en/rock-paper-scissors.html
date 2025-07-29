@@ -1,41 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rock Paper Scissors</title>
-<style>
-body {
-    font-family: sans-serif;
-    text-align: center;
-}
-.container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 5px;
-    cursor: pointer;
-}
-#result {
-    margin-top: 15px;
-    font-weight: bold;
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rock Paper Scissors</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/rock-paper-scissors.css">
 </head>
 <body>
-
-<div class="container">
-    <h1>Rock Paper Scissors</h1>
+  <h1>Rock Paper Scissors</h1>
+  <div id="top-sitemap-placeholder"></div>
+  <div class="container">
     <p>Choose your weapon!</p>
     <button onclick="playRound('rock')">Rock</button>
     <button onclick="playRound('paper')">Paper</button>
     <button onclick="playRound('scissors')">Scissors</button>
     <div id="result"></div>
-</div>
+  </div>
+  <script src="../js/main.js" defer></script>
+  <script src="rock-paper-scissors.js" defer></script>
 
 <script>
 const choices = ["rock", "paper", "scissors"];
