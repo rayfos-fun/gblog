@@ -2,6 +2,7 @@
 
 ../.gitignore
 ../README.md
+../docs/index.html
 ../docs/css/game.css
 ../docs/css/guess-number.css
 ../docs/css/rock-paper-scissors.css
@@ -34,6 +35,7 @@ pip.txt
 python.txt
 tw2cn.py  # convert zh-tw into zh-cn
 venc.txt
+w3.txt
 
 http://devdocs.io  # offline docs for css, javascript, and html
 
@@ -56,7 +58,6 @@ framework of top site for all pages
 
 learn css selector and document.querySelector(...)
 
-P1 30m sub sitemap games demos notes blogs
 P1 60m test all links are valid
 P1 20m replace css px with em / vw
 P1 60m support various resolutions
