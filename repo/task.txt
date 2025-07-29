@@ -1,6 +1,7 @@
 # links
 
 ../.gitignore
+../requirements.txt
 ../README.md
 ../docs/index.html
 ../docs/css/game.css
@@ -39,11 +40,17 @@ tw2cn.py  # convert zh-tw into zh-cn
 venc.txt
 w3.txt
 
+# ref
+
 http://devdocs.io  # offline docs for css, javascript, and html
+
+# test
 
 $ python3 -m http.server 8000  # this would fail when offline
 => http://localhost:8000
 => http://localhost:8000/en/index.html
+
+https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # sitemap
   games
@@ -55,10 +62,7 @@ $ python3 -m http.server 8000  # this would fail when offline
 
 # todo
 
-framework of top site for all pages
-  apply to all pages
-
-P1 10m zh-tw/tic-tac-toe en/game doesn't have sitemap yet
+P1 60m framework to show blog
 P1 10m en/tic-tac-toe en/game doesn't have sitemap yet
 P1 10m refresh zh-cn
 P1 60m support various resolutions
@@ -66,9 +70,11 @@ P1 20m replace css px with em / vw
 P1 60m unit test for javascript
 P1 60m unit test for py
 P1 30m deploy.py to invoke tw2cn.py
+P2 20m previous button in individual games to go back to game
 P2 20m md.txt
-P2 30m fine tune tic tac toe
 P2 30m demo canvas doraemon
 P2 30m demo timer animation
 P2 30m blog flight cancellation
 P2 30m js module  export ...;   import ... from ...;   script type="module"
+P2 20m sublime plugin quick open
+P2 30m blog ai
