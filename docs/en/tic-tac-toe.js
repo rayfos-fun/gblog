@@ -49,7 +49,7 @@ function checkWin() {
     }
 
     if (a === b && b === c) {
-      message.textContent = `${currentPlayer} 勝利!`;
+      message.textContent = `Player ${currentPlayer} wins!`;
       gameActive = false;
       return;
     }
@@ -58,7 +58,7 @@ function checkWin() {
 
 function checkDraw() {
   if (!gameBoard.includes('') && gameActive) {
-    message.textContent = `平手！`;
+    message.textContent = `It's a draw!`;
     gameActive = false;
   }
 }
