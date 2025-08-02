@@ -7,9 +7,32 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/css.css">
 </head>
-<body>
+<body style="text-align: left;">
   <h1>CSS</h1>
   <div id="top-sitemap-placeholder"></div>
+  <h2>程式碼片段</h2>
+  <div class="container">
+    於html裡∶
+    <pre><code>
+      &lt;link rel="stylesheet" href="../style.css"&gt;
+    </code></pre>
+  </div>
+  <h2>display - flex</h2>
+  <div>
+    <input type="radio" id="row" name="flex-direction" value="row" checked>
+    <label for="row">flex-direction: row</label>
+    <input type="radio" id="row-reverse" name="flex-direction" value="row-reverse">
+    <label for="row-reverse">flex-direction: row-reverse</label>
+    <input type="radio" id="column" name="flex-direction" value="column">
+    <label for="column">flex-direction: column</label>
+    <input type="radio" id="column-reverse" name="flex-direction" value="column-reverse">
+    <label for="column-reverse">flex-direction: column-reverse</label>
+  </div> 
+  <div id="flex-container" style="display: flex">
+    <div style="width: 100px; height: 100px; background-color: red;"></div>
+    <div style="width: 100px; height: 100px; background-color: green;"></div>
+  </div>
   <script src="../js/main.js" defer></script>
+  <script src="../js/css.js" defer></script>
 </body>
 </html>
