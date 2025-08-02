@@ -22,6 +22,7 @@ string
 
 
 document
+  body
   createElement(s)  # e.g. createElement('div')
   getElementById(s)
   querySelector(s)  # return single HTMLElement
@@ -29,8 +30,11 @@ document
 isNaN(v)
 instanceof
   e.g. obj instanceof Element
-parseInt(s): return n
 Math
   ceil(n)
   floor(n)
   random(): (0, 1]
+parseInt(s): return n
+window
+  location
+    pathname

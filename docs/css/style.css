@@ -1,8 +1,15 @@
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 body {
   font-family: sans-serif;
+}
+h1 {
   text-align: center;
 }
-
 .top-sitemap {
   display: block;
   background-color: #f4f4f4;

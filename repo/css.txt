@@ -8,3 +8,20 @@ selector
 e.g.
 body {...}
 
+# box
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model
+
+box-sizing: content-box (default) or border-box (suggested)
+  content-box: width / height configuration is for content
+  border-bod: width / height configuration is for border (content+padding+boarder)
+
+# property
+
+box-sizing: content-box (default) or border-box (suggested)
+  content-box: width / height configuration is for content
+  border-bod: width / height configuration is for border (content+padding+boarder)
+
+# value
+
+inherit: same from parent
