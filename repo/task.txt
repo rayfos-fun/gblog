@@ -32,7 +32,9 @@
 chrome.txt
 css.txt
 git.txt
+github.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
+html.txt
 javascript.txt
 log.txt
 opencc.txt
@@ -41,6 +43,7 @@ python.txt
 tw2cn.py  # convert zh-tw into zh-cn
 venc.txt
 w3.txt
+yaml.txt
 
 # ref
 
@@ -58,14 +61,31 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
   games
     guess-number
     rock-paper-scissors
-  blog
+    tic-tac-toe
+  blogs
+
     notes
   lang (en/zh-cn/zh-tw)
 
+  guess-number  # game
+  rock-paper-scissors  # game
+  tic-tac-toe  # game
+
 # todo
 
+P1 30m translate into en (develop a tool to diff zh-tw vs en) 
+P1 30m demo page to present css 
+P1 60m convert .txt in repo into .md in docs - css, html, javascript, ...etc.
+P1 60m localStorage to hold state
+P1 60m framework of sub sitemap on the left side hight light selected
+P1 60m framework to go prev page
+P1 60m yaml github actions
+P1 60m svg
+P1 60m framework of sitemap hightlight selected
+P1 60m fullscreen mode
+P1 60m materials
 P1 60m framework to show blog
-P1 10m refresh zh-cn
+P1 10m refresh zh-cn for tic tac toe
 P1 60m support various resolutions
 P1 20m replace css px with em / vw
 P1 60m unit test for javascript
@@ -77,6 +97,10 @@ P2 30m demo canvas doraemon
 P2 30m demo timer animation
 P2 30m blog flight cancellation
 P2 30m js module  export ...;   import ... from ...;   script type="module"
-P2 20m sublime plugin quick open
+P2 30m blog css/js/html from scratch vs bootstrap... etc. css generator
+P2 20m blog sublime plugin quick open
 P2 30m blog ai
-P2 30m
+P2 30m blog gracier
+P2 30m blog cruiser most workers are from asian
+P2 30m tictactoe single player mode with computer (ai)
+

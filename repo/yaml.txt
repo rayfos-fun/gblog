@@ -1,0 +1,18 @@
+YAML Ain't Markup Language
+
+https://yaml.org
+
+# Grammar
+
+key: value
+list:
+  - element1
+  - element2
+  ...
+key:
+  nested_map...
+
+&: anchor
+*: alias
+<<: merge
+
