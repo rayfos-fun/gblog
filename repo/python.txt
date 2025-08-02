@@ -9,3 +9,6 @@ os
   makedirs(name, mode=511, exist_ok=False)
   path
     join(p1, ...)
+pathlib
+  Path
+    ctor(*arg)  # str

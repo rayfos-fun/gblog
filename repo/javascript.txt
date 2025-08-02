@@ -27,6 +27,8 @@ string
 document
   body
   createElement(s)  # e.g. createElement('div')
+  documentElement
+    lang  # <html lang=xxx>
   getElementById(s)
   querySelector(s)  # return single HTMLElement
   querySelectorAll(s)  # return NodeList (Array of Elements)
@@ -37,6 +39,8 @@ Math
   ceil(n)
   floor(n)
   random(): (0, 1]
+navigator
+  language
 parseInt(s): return n
 window
   location

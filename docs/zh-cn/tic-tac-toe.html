@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Tic Tac Toe</title>
+<html lang="zh-Hans">
+ <head>
+  <title>
+   Tic Tac Toe
+  </title>
   <style>
-    body {
+   body {
       font-family: sans-serif;
       display: flex;
       justify-content: center;
@@ -59,27 +61,40 @@
       align-items: center;
     }
   </style>
-</head>
-<body>
+ </head>
+ <body>
   <div class="container">
-  <h1>Tic Tac Toe</h1>
-  <div class="board" id="board">
-    <div class="cell" data-index="0"></div>
-    <div class="cell" data-index="1"></div>
-    <div class="cell" data-index="2"></div>
-    <div class="cell" data-index="3"></div>
-    <div class="cell" data-index="4"></div>
-    <div class="cell" data-index="5"></div>
-    <div class="cell" data-index="6"></div>
-    <div class="cell" data-index="7"></div>
-    <div class="cell" data-index="8"></div>
+   <h1>
+    Tic Tac Toe
+   </h1>
+   <div class="board" id="board">
+    <div class="cell" data-index="0">
+    </div>
+    <div class="cell" data-index="1">
+    </div>
+    <div class="cell" data-index="2">
+    </div>
+    <div class="cell" data-index="3">
+    </div>
+    <div class="cell" data-index="4">
+    </div>
+    <div class="cell" data-index="5">
+    </div>
+    <div class="cell" data-index="6">
+    </div>
+    <div class="cell" data-index="7">
+    </div>
+    <div class="cell" data-index="8">
+    </div>
+   </div>
+   <div class="message" id="message">
+   </div>
+   <button id="reset">
+    Reset Game
+   </button>
   </div>
-  <div class="message" id="message"></div>
-    <button id="reset">Reset Game</button>
-  </div>
-
   <script>
-    const board = document.getElementById('board');
+   const board = document.getElementById('board');
     const cells = document.querySelectorAll('.cell');
     const message = document.getElementById('message');
     const resetBtn = document.getElementById('reset');
@@ -154,5 +169,5 @@
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
     resetBtn.addEventListener('click', handleReset);
   </script>
-</body>
+ </body>
 </html>

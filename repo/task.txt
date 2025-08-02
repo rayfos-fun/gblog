@@ -35,6 +35,7 @@ git.txt
 github.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
 html.txt
+html_fixer.py
 javascript.txt
 log.txt
 opencc.txt
@@ -62,9 +63,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
     guess-number
     rock-paper-scissors
     tic-tac-toe
+  demos
+    css
   blogs
-
-    notes
   lang (en/zh-cn/zh-tw)
 
   guess-number  # game
@@ -73,7 +74,13 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m responsive design
+P1 30m HTMLHint, Stylelint / prettier, ESLint / prettier
+P1 30m script to make sure all full htmls must have html lang
+P1 20m html lang for all pages
+P1 10m hreflang
+P1 30m lang to corresponding pages
+P1 60m design sitemap
+P1 30m responsive design - mobile first
 P1 30m translate into en (develop a tool to diff zh-tw vs en) 
 P1 30m demo page to present css box model
 P1 60m convert .txt in repo into .md in docs - css, html, javascript, ...etc.
