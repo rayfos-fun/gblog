@@ -73,8 +73,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P1 30m responsive design
 P1 30m translate into en (develop a tool to diff zh-tw vs en) 
-P1 30m demo page to present css 
+P1 30m demo page to present css box model
 P1 60m convert .txt in repo into .md in docs - css, html, javascript, ...etc.
 P1 60m localStorage to hold state
 P1 60m framework of sub sitemap on the left side hight light selected

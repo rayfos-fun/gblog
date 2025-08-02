@@ -4,6 +4,8 @@ snippet
 
 DOM Document Object Model
   Element
+    classList
+      add('')
     className
     firstElementChild
     id
@@ -18,7 +20,8 @@ DOM Document Object Model
     value
 
 string
-  's', "s", `s with ${var}`
+  # 's', "s", `s with ${var}`
+  includes(s)  # boolean
 
 
 document
