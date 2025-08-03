@@ -23,18 +23,21 @@ def fix_file(filename):
     return
   lang = html_tag.get('lang')
   updated = False
-  if 'zh-cn' in filename and lang != 'zh-Hans':
-    print(f'update lang zh-Hans file for {filename}')
-    html_tag['lang'] = 'zh-Hans'
-    updated = True
-  elif 'zh-tw' in filename and lang != 'zh-Hant':
-    print(f'update lang zh-Hant file for {filename}')
-    html_tag['lang'] = 'zh-Hant'
-    updated = True
-  elif lang != 'en': 
-    print(f'update lang en file for {filename}')
-    html_tag['lang'] = 'en'
-    updated = True
+  if 'zh-cn' in filename:
+    if lang != 'zh-Hans':
+      print(f'update lang zh-Hans file for {filename}')
+      html_tag['lang'] = 'zh-Hans'
+      updated = True
+  elif 'zh-tw' in filename:
+    if lang != 'zh-Hant':
+      print(f'update lang zh-Hant file for {filename}')
+      html_tag['lang'] = 'zh-Hant'
+      updated = True
+  else:
+    if lang != 'en':
+      print(f'update lang en file for {filename}')
+      html_tag['lang'] = 'en'
+      updated = True
 
   if updated:
     with open(filename, 'w', encoding='utf-8') as f:
