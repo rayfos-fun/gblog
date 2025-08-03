@@ -20,6 +20,7 @@
 ../docs/zh-cn/guess-number.js
 ../docs/zh-cn/index.html
 ../docs/zh-cn/sitemap.html
+../docs/zh-cn/tic-tac-toe.html
 ../docs/zh-tw/game.html
 ../docs/zh-tw/guess-number.html
 ../docs/zh-tw/guess-number.js
@@ -74,10 +75,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P1 10m install node.js nvm npm (for prettier)
 P1 30m HTMLHint, Stylelint / prettier, ESLint / prettier
-P1 30m script to make sure all full htmls must have html lang
-P1 20m html lang for all pages
-P1 10m hreflang
+P1 30m html_fixer for hreflang
 P1 30m lang to corresponding pages
 P1 60m design sitemap
 P1 30m responsive design - mobile first

@@ -6,7 +6,6 @@ from pathlib import Path
 import os
 
 def fix_dir(dirname):
-  print(f'fixing {dirname}...')
   for filename in os.listdir(dirname):
     filepath = os.path.join(dirname, filename)
     if os.path.isfile(filepath):
@@ -15,7 +14,6 @@ def fix_dir(dirname):
       fix_dir(filepath)
 
 def fix_file(filename):
-  print(f'fixing {filename}...')
   if Path(filename).suffix != '.html':
     return
   soup = BeautifulSoup(read_file(filename), 'lxml')
@@ -37,6 +35,7 @@ def fix_file(filename):
     print(f'update lang en file for {filename}')
     html_tag['lang'] = 'en'
     updated = True
+
   if updated:
     with open(filename, 'w', encoding='utf-8') as f:
       f.write(soup.prettify())
