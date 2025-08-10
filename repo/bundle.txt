@@ -1,0 +1,4 @@
+# install
+$ gem install bundler
+
+$ bundle update github-pages

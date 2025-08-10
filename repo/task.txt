@@ -30,6 +30,7 @@
 ../docs/zh-tw/tic-tac-toe.html
 ../docs/zh-tw/sitemap.html
 ../jekyll/_config.yaml
+../jekyll/Gemfile
 
 chrome.txt
 css.txt
