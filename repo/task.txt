@@ -39,6 +39,8 @@ html.txt
 html_fixer.py
 javascript.txt
 log.txt
+npm.txt
+npx.txt
 opencc.txt
 pip.txt
 python.txt
@@ -66,6 +68,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
     tic-tac-toe
   demos
     css
+  tools/services
+    inventory manager
+    time manager
   blogs
   lang (en/zh-cn/zh-tw)
 
@@ -75,7 +80,13 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 10m install node.js nvm npm (for prettier)
+P1 30m ruby.txt
+P1 30m jekyll.txt
+P1 30m blog mode
+P1 30m tool to scan repo into docs (list of template files)
+P1 30m novel mode
+P1 30m game mode
+P1 30m skip btn in game mode
 P1 30m HTMLHint, Stylelint / prettier, ESLint / prettier
 P1 30m html_fixer for hreflang
 P1 30m lang to corresponding pages
@@ -99,16 +110,30 @@ P1 20m replace css px with em / vw
 P1 60m unit test for javascript
 P1 60m unit test for py
 P1 30m deploy.py to invoke tw2cn.py
+P1 30m instruction how to deploy
+P1 30m tool time_manager
+P1 30m tags in blog
+P1 30m Google account storage
+P1 30m fav feature - fav btn, fav page
+P1 30m advanture: to be continue...
+P2 30m perfection: install prettier
 P2 20m previous button in individual games to go back to game
 P2 20m md.txt
 P2 30m demo canvas doraemon
 P2 30m demo timer animation
 P2 30m blog flight cancellation
 P2 30m js module  export ...;   import ... from ...;   script type="module"
+P2 30m offline download (git clone; might need to cache css resources... etc.)
+P2 30m blog movie e.g. smurf / jurassic world / mission impossible
+P2 30m blog gifted inpj
+P2 30m blog git push request rules
 P2 30m blog css/js/html from scratch vs bootstrap... etc. css generator
 P2 20m blog sublime plugin quick open
 P2 30m blog ai
+P2 30m blog seattle 
 P2 30m blog gracier
 P2 30m blog cruiser most workers are from asian
 P2 30m tictactoe single player mode with computer (ai)
-
+P2 30m donate 
+P2 30m blog category 文青
+P2 30m blog find my stuff app

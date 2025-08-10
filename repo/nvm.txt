@@ -1,0 +1,11 @@
+# troubleshoot
+
+fail to install nvm
+
+error message: syntax error
+
+root cause: .bash_profile run "source my_init.sh" before "nvm.sh" thus the failure.
+
+solution: move "nvm.sh" to the top in .bash_profile file
+
+
