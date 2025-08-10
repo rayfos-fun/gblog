@@ -83,8 +83,6 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m ruby.txt
-P1 30m jekyll.txt
 P1 30m blog mode
 P1 30m tool to scan repo into docs (list of template files)
 P1 30m novel mode
