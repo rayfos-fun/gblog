@@ -1,2 +1,7 @@
+/'jekl/
+
 https://jekyllrb.com/
 
+$ gem install bundler jekyll
+
+$ bundle exec jekyll serve --livereload

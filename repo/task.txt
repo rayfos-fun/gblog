@@ -29,6 +29,7 @@
 ../docs/zh-tw/rock-paper-scissors.html
 ../docs/zh-tw/tic-tac-toe.html
 ../docs/zh-tw/sitemap.html
+../jekyll/_config.yaml
 
 chrome.txt
 css.txt
@@ -38,6 +39,7 @@ hello_opencc.py  # used to convert zh-tw into zh-ch
 html.txt
 html_fixer.py
 javascript.txt
+jekyll.txt
 log.txt
 npm.txt
 npx.txt
@@ -137,3 +139,4 @@ P2 30m tictactoe single player mode with computer (ai)
 P2 30m donate 
 P2 30m blog category 文青
 P2 30m blog find my stuff app
+P2 30m blog ai not work https://github.com/rubygems/rubygems/issues/8390

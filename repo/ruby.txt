@@ -2,3 +2,10 @@ version control: rbenv
 
 $ brew install rbenv ruby-build
 $ rbenv install --list
+$ rbenv install 3.4.5
+$ rbenv local 3.4.5
+
+# log
+
+2025-08-09 https://github.com/rubygems/rubygems/issues/8390 (v 3.4.5)
+solution: export RUBY_TCP_NO_FAST_FALLBACK=1
