@@ -3,32 +3,32 @@
 ../.gitignore
 ../requirements.txt
 ../README.md
-../docs/index.html
-../docs/css/game.css
-../docs/css/guess-number.css
-../docs/css/rock-paper-scissors.css
-../docs/css/style.css
-../docs/en/game.html
-../docs/en/guess-number.html
-../docs/en/guess-number.js
-../docs/en/index.html
-../docs/en/rock-paper-scissors.html
-../docs/en/sitemap.html
-../docs/en/tic-tac-toe.html
-../docs/js/main.js
-../docs/zh-cn/guess-number.html
-../docs/zh-cn/guess-number.js
-../docs/zh-cn/index.html
-../docs/zh-cn/sitemap.html
-../docs/zh-cn/tic-tac-toe.html
-../docs/zh-tw/game.html
-../docs/zh-tw/guess-number.html
-../docs/zh-tw/guess-number.js
-../docs/zh-tw/index.html
-../docs/zh-tw/rock-paper-scissors.js
-../docs/zh-tw/rock-paper-scissors.html
-../docs/zh-tw/tic-tac-toe.html
-../docs/zh-tw/sitemap.html
+../index.html
+../css/game.css
+../css/guess-number.css
+../css/rock-paper-scissors.css
+../css/style.css
+../en/game.html
+../en/guess-number.html
+../en/guess-number.js
+../en/index.html
+../en/rock-paper-scissors.html
+../en/sitemap.html
+../en/tic-tac-toe.html
+../js/main.js
+../zh-cn/guess-number.html
+../zh-cn/guess-number.js
+../zh-cn/index.html
+../zh-cn/sitemap.html
+../zh-cn/tic-tac-toe.html
+../zh-tw/game.html
+../zh-tw/guess-number.html
+../zh-tw/guess-number.js
+../zh-tw/index.html
+../zh-tw/rock-paper-scissors.js
+../zh-tw/rock-paper-scissors.html
+../zh-tw/tic-tac-toe.html
+../zh-tw/sitemap.html
 ../jekyll/_config.yaml
 ../jekyll/Gemfile
 
@@ -84,7 +84,6 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 # todo
 
 P1 30m blog mode
-P1 30m tool to scan repo into docs (list of template files)
 P1 30m novel mode
 P1 30m game mode
 P1 30m skip btn in game mode
@@ -95,16 +94,12 @@ P1 60m design sitemap
 P1 30m responsive design - mobile first
 P1 30m translate into en (develop a tool to diff zh-tw vs en) 
 P1 30m demo page to present css box model
-P1 60m convert .txt in repo into .md in docs - css, html, javascript, ...etc.
 P1 60m localStorage to hold state
 P1 60m framework of sub sitemap on the left side hight light selected
 P1 60m framework to go prev page
-P1 60m yaml github actions
 P1 60m svg
 P1 60m framework of sitemap hightlight selected
 P1 60m fullscreen mode
-P1 60m materials
-P1 60m framework to show blog
 P1 10m refresh zh-cn for tic tac toe
 P1 60m support various resolutions
 P1 20m replace css px with em / vw
@@ -113,7 +108,6 @@ P1 60m unit test for py
 P1 30m deploy.py to invoke tw2cn.py
 P1 30m instruction how to deploy
 P1 30m tool time_manager
-P1 30m tags in blog
 P1 30m Google account storage
 P1 30m fav feature - fav btn, fav page
 P1 30m advanture: to be continue...
@@ -125,6 +119,7 @@ P2 30m demo timer animation
 P2 30m blog flight cancellation
 P2 30m js module  export ...;   import ... from ...;   script type="module"
 P2 30m offline download (git clone; might need to cache css resources... etc.)
+P2 30m blog android termux or github app
 P2 30m blog movie e.g. smurf / jurassic world / mission impossible
 P2 30m blog gifted inpj
 P2 30m blog git push request rules
