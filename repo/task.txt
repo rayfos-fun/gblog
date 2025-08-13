@@ -4,6 +4,7 @@
 ../requirements.txt
 ../README.md
 ../index.html
+../_posts/zh-tw/2025-05-21-address.md
 ../css/game.css
 ../css/guess-number.css
 ../css/rock-paper-scissors.css
