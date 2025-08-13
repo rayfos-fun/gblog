@@ -29,8 +29,8 @@
 ../zh-tw/rock-paper-scissors.html
 ../zh-tw/tic-tac-toe.html
 ../zh-tw/sitemap.html
-../jekyll/_config.yaml
-../jekyll/Gemfile
+../_config.yml
+../Gemfile
 
 chrome.txt
 css.txt
