@@ -86,6 +86,12 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 # todo
 
 P1 30m blog mode
+P2 5m jekyllize ../zh-tw/index.html
+P1 30m migrate jekyll to include only html/md/necessary files
+P2 5m cleanup About
+P2 5m cleanup 參考連結
+P2 5m cleanup 参考连结
+P2 5m cleanup 開放中文轉換（Pure Python）
 P1 30m novel mode
 P1 30m game mode
 P1 30m skip btn in game mode
