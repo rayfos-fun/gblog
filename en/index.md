@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Hello Rayfos"
+lang: en
 ---
 <body>
   <h1>Hello, GitHub Pages！</h1>

@@ -12,7 +12,7 @@
 ../en/game.html
 ../en/guess-number.html
 ../en/guess-number.js
-../en/index.html
+../en/index.md
 ../en/rock-paper-scissors.html
 ../en/sitemap.html
 ../en/tic-tac-toe.html
@@ -22,6 +22,7 @@
 ../zh-cn/index.html
 ../zh-cn/sitemap.html
 ../zh-cn/tic-tac-toe.html
+../zh-tw/blog.md
 ../zh-tw/game.html
 ../zh-tw/guess-number.html
 ../zh-tw/guess-number.js
