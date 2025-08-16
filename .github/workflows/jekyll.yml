@@ -64,4 +64,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          configuration: ./jekyll/_config.yml
+          configuration: ./jekyll-site/_config.yml

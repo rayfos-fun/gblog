@@ -1,5 +1,6 @@
 # links
 
+../.github/workflows/jekyll.yml
 ../.gitignore
 ../requirements.txt
 ../README.md
@@ -32,6 +33,7 @@
 ../jekyll/zh-tw/rock-paper-scissors.html
 ../jekyll/zh-tw/tic-tac-toe.html
 ../jekyll/zh-tw/sitemap.html
+../jekyll-site/_config.yml
 ../_config.yml
 ../Gemfile
 
