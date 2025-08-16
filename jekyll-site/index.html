@@ -1,0 +1,23 @@
+---
+layout: null
+permalink: /
+lang: en
+---
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="0; url=<%= site.default_lang %>/">
+</head>
+<script>
+  const lang = navigator.language || navigator.userLanguage;
+  const langCode = lang.toLowerCase().substring(0, 2);
+  const validLangs = ['en', 'zh-tw']; // Add your supported languages
+  const redirectPath = validLangs.includes(langCode) ? langCode : 'en'; // Fallback to 'en'
+  window.location.replace('/' + redirectPath + '/');
+</script>
+<body>
+  <p>Redirecting to the appropriate language version of this site...</p>
+</body>
+</html>
