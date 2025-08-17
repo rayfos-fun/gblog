@@ -1,0 +1,15 @@
+---
+layout: default
+title: Blog
+lang: en
+permalink: /en/blog/
+---
+<h1>Blog</h1>
+<ul>
+  {% assign posts = site.posts | where: "lang", "en" %}
+  {% for post in posts reversed %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

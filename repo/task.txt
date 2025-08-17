@@ -31,6 +31,8 @@
 
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
+../jekyll-site/en/blog.html
+
 ../jekyll-site/zh-tw/index.html
 ../jekyll-site/zh-tw/blog.html
 
