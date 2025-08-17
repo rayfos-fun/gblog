@@ -25,6 +25,7 @@
 ../jekyll/zh-tw/rock-paper-scissors.html
 ../jekyll/zh-tw/tic-tac-toe.html
 ../jekyll/zh-tw/sitemap.html
+../jekyll-site/_posts/zh-tw/2025-05-21-address.md
 ../jekyll-site/_config.yml
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
