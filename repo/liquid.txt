@@ -1,0 +1,1 @@
+{{ var | filter }}  # var from _config.yml in Jekyll

@@ -7,13 +7,12 @@ lang: en
 <head>
   <meta charset="utf-8">
   <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0; url=<%= site.default_lang %>/">
 </head>
 <script>
   const lang = navigator.language || navigator.userLanguage;
   const langCode = lang.toLowerCase().substring(0, 2);
-  const validLangs = ['en', 'zh-tw']; // Add your supported languages
-  const redirectPath = validLangs.includes(langCode) ? langCode : 'en'; // Fallback to 'en'
+  const validLangs = ['zh-tw'];
+  const redirectPath = validLangs.includes(langCode) ? langCode : 'en';
   window.location.replace('/gblog/' + redirectPath + '/home/');
 </script>
 <body>

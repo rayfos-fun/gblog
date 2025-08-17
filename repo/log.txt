@@ -3,3 +3,5 @@
 08:56:32 rm log and markdown from sitemap (5m)
 2025-08-09
 19:00:43 aa ag to activate gblog venv (5m)
+2025-08-17 Sun
+12:12:36 fix site.default_lang in j/index.html (5m)

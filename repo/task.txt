@@ -1,13 +1,10 @@
 # links
 
-../.github/workflows/jekyll.yml
+../.github/workflows/jekyll.yml  # github actions to deploy pages by jekyll
 ../.gitignore
 ../requirements.txt
 ../README.md
-../css/game.css
-../css/guess-number.css
-../css/rock-paper-scissors.css
-../css/style.css
+
 ../en/game.html
 ../en/guess-number.html
 ../en/guess-number.js
@@ -24,21 +21,22 @@
 ../jekyll/zh-tw/tic-tac-toe.html
 ../jekyll/zh-tw/sitemap.html
 
-../jekyll-site/_posts/zh-tw/2025-05-21-address.md
 ../jekyll-site/_config.yml
 ../jekyll-site/Gemfile
 ../jekyll-site/Gemfile.lock
-
 ../jekyll-site/index.html  # redirect to en or zh-tw
+../jekyll-site/_posts/en/2025-08-16-address.md
+../jekyll-site/_posts/zh-tw/2025-08-16-address.md
+../jekyll-site/css/game.css
+../jekyll-site/css/guess-number.css
+../jekyll-site/css/rock-paper-scissors.css
+../jekyll-site/css/style.css
 ../jekyll-site/en/index.html
 ../jekyll-site/en/blog.html
-
+../jekyll-site/js/main.js
 ../jekyll-site/zh-tw/index.html
 ../jekyll-site/zh-tw/blog.html
 
-../temp/nav.txt
-
-../js/main.js
 ../zh-cn/guess-number.html
 ../zh-cn/guess-number.js
 ../zh-cn/index.html
@@ -46,7 +44,6 @@
 ../zh-cn/tic-tac-toe.html
 ../zh-tw/blog.md
 ../zh-tw/game.html
-
 
 chrome.txt
 css.txt
@@ -99,6 +96,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P1 30m share sublime plugin
+P1 30m p/zh-tw/2025-08-16-ai.md
+P1 30m nav order
 P1 30m content of home page: story / game / blog
 P1 30m nav = home story game blog
 P1 30m migrate jekyll to include only html/md/necessary files
@@ -113,7 +113,6 @@ P1 30m HTMLHint, Stylelint / prettier, ESLint / prettier
 P1 30m html_fixer for hreflang
 P1 30m lang to corresponding pages
 P1 60m design sitemap
-P1 30m responsive design - mobile first
 P1 30m translate into en (develop a tool to diff zh-tw vs en) 
 P1 30m demo page to present css box model
 P1 60m localStorage to hold state
@@ -132,6 +131,7 @@ P1 30m instruction how to deploy
 P1 30m tool time_manager
 P1 30m Google account storage
 P1 30m fav feature - fav btn, fav page
+P2 30m multilang title
 P1 30m advanture: to be continue...
 P2 30m perfection: install prettier
 P2 20m previous button in individual games to go back to game
@@ -156,4 +156,6 @@ P2 30m donate
 P2 30m blog category 文青
 P2 30m blog find my stuff app
 P2 30m blog ai not work https://github.com/rubygems/rubygems/issues/8390
-P2 30m blog ics
+P2 30m blog ics (calendar)
+P2 30m blog bay club
+P2 30m blog foam party $550/hr

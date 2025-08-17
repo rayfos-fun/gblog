@@ -1,0 +1,6 @@
+Embedded Ruby
+
+cp to liquid {{ ... }}
+
+<%= expression %>  
+
