@@ -1,5 +1,9 @@
 {%- comment -%}
 copied from .rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/minima-2.5.2/_includes/header.html
+updated:
+  sort the default_paths by order
+  filter with lang
+  lang switch
 {%- endcomment -%}
 <header class="site-header" role="banner">
 
@@ -28,6 +32,25 @@ copied from .rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/minima-2.5.2/_include
           {%- endfor -%}
         </div>
       </nav>
+      <nav class="lang-switcher">
+        {% if page.lang == 'en' %}
+        <a onclick="toZhtw()">中</a>
+        {% elsif page.lang == 'zh-tw' %}
+        <a onclick="toEn()">En</a>
+        {% endif %}
+      </nav>
     {%- endif -%}
   </div>
+
+  <script>
+{% if page.lang == 'en' %}
+function toZhtw() {
+  window.location.href = window.location.href.replace('en', 'zh-tw');
+}
+{% elsif page.lang == 'zh-tw' %}
+function toEn() {
+  window.location.href = window.location.href.replace('zh-tw', 'en');
+}
+{% endif %}
+  </script>
 </header>

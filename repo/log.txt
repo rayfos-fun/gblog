@@ -12,8 +12,9 @@
   j/zh-tw/game.html
   j/zh-tw/blog.html
   j/_includes/header.html
-13:12:57 sort nav en
+13:12:57 sort nav en (10m)
   j/en/blog.html
   j/en/index.html
   j/en/game.html
+  g/jekyll/en
   p/en/2025-08-17-guess-number.html
