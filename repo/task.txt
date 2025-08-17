@@ -17,15 +17,7 @@
 ../en/rock-paper-scissors.html
 ../en/sitemap.html
 ../en/tic-tac-toe.html
-../jekyll/_config.yml
-../js/main.js
-../zh-cn/guess-number.html
-../zh-cn/guess-number.js
-../zh-cn/index.html
-../zh-cn/sitemap.html
-../zh-cn/tic-tac-toe.html
-../zh-tw/blog.md
-../zh-tw/game.html
+
 ../jekyll/zh-tw/guess-number.html
 ../jekyll/zh-tw/guess-number.js
 ../jekyll/zh-tw/index.html
@@ -37,6 +29,16 @@
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
 ../jekyll-site/zh-tw/index.html
+
+../js/main.js
+../zh-cn/guess-number.html
+../zh-cn/guess-number.js
+../zh-cn/index.html
+../zh-cn/sitemap.html
+../zh-cn/tic-tac-toe.html
+../zh-tw/blog.md
+../zh-tw/game.html
+
 ../_config.yml
 ../Gemfile
 
