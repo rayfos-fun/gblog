@@ -25,8 +25,11 @@
 ../jekyll/zh-tw/rock-paper-scissors.html
 ../jekyll/zh-tw/tic-tac-toe.html
 ../jekyll/zh-tw/sitemap.html
+
 ../jekyll-site/_posts/zh-tw/2025-05-21-address.md
 ../jekyll-site/_config.yml
+../jekyll-site/Gemfile
+../jekyll-site/Gemfile.lock
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
 ../jekyll-site/zh-tw/index.html
@@ -40,8 +43,6 @@
 ../zh-tw/blog.md
 ../zh-tw/game.html
 
-../_config.yml
-../Gemfile
 
 chrome.txt
 css.txt
@@ -94,7 +95,7 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m nav = story game blog
+P1 30m nav = home story game blog
 P1 30m migrate jekyll to include only html/md/necessary files
 P2 5m cleanup About
 P2 5m cleanup 參考連結
