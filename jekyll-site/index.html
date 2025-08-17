@@ -1,6 +1,5 @@
 ---
 layout: null
-permalink: /
 lang: en
 ---
 <!DOCTYPE html>
@@ -15,7 +14,7 @@ lang: en
   const langCode = lang.toLowerCase().substring(0, 2);
   const validLangs = ['en', 'zh-tw']; // Add your supported languages
   const redirectPath = validLangs.includes(langCode) ? langCode : 'en'; // Fallback to 'en'
-  window.location.replace('/' + redirectPath + '/');
+  window.location.replace('/gblog/' + redirectPath + '/');
 </script>
 <body>
   <p>Redirecting to the appropriate language version of this site...</p>

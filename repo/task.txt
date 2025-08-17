@@ -34,6 +34,9 @@
 ../jekyll/zh-tw/tic-tac-toe.html
 ../jekyll/zh-tw/sitemap.html
 ../jekyll-site/_config.yml
+../jekyll-site/index.html  # redirect to en or zh-tw
+../jekyll-site/en/index.html
+../jekyll-site/zh-tw/index.html
 ../_config.yml
 ../Gemfile
 
