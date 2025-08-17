@@ -2,13 +2,14 @@
 layout: default
 title: 部落格
 lang: zh-tw
+permalink: /zh-tw/blog/
 ---
 <h1>部落格</h1>
 <ul>
   {% assign posts = site.posts | where: "lang", "zh-tw" %}
   {% for post in posts reversed %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
     </li>
   {% endfor %}
 </ul>
