@@ -94,8 +94,7 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m blog mode
-P2 5m jekyllize ../jekyll/index.html ../jekyll/zh-tw/index.html
+P1 30m nav = story game blog
 P1 30m migrate jekyll to include only html/md/necessary files
 P2 5m cleanup About
 P2 5m cleanup 參考連結
