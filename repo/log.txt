@@ -6,4 +6,14 @@
 2025-08-17 Sun
 12:12:36 fix site.default_lang in j/index.html (5m)
 12:18:19 migrate p/zh-tw/2025-08-17-guess-number.html (20m)
-12:39:37 j/zh-tw/game.html
+12:39:37 j/zh-tw/game.html (10m)
+12:52:27 sort nav (home, game, blog) (10m)
+  j/zh-tw/index.html
+  j/zh-tw/game.html
+  j/zh-tw/blog.html
+  j/_includes/header.html
+13:12:57 sort nav en
+  j/en/blog.html
+  j/en/index.html
+  j/en/game.html
+  p/en/2025-08-17-guess-number.html

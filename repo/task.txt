@@ -1,11 +1,10 @@
 # links
 
-../.github/workflows/jekyll.yml  # github actions to deploy pages by jekyll
+../.github/workflows/jekyll.yml  # github actions to build and deploy pages by jekyll
 ../.gitignore
 ../requirements.txt
 ../README.md
 
-../en/game.html
 ../en/guess-number.html
 ../en/guess-number.js
 ../en/index.md
@@ -26,16 +25,18 @@
 ../jekyll-site/Gemfile.lock
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/_posts/en/2025-08-16-address.md
-../jekyll-site/_posts/zh-tw/2025-08-16-address.md
-../jekyll-site/css/game.css
+../jekyll-site/_posts/zh-tw/2025-05-21-address.md
+../jekyll-site/_posts/zh-tw/2025-08-17-guess-number.html
+
 ../jekyll-site/css/guess-number.css
 ../jekyll-site/css/rock-paper-scissors.css
 ../jekyll-site/css/style.css
 ../jekyll-site/en/index.html
 ../jekyll-site/en/blog.html
-../jekyll-site/js/main.js
-../jekyll-site/zh-tw/index.html
+../jekyll-site/en/game.html
 ../jekyll-site/zh-tw/blog.html
+../jekyll-site/zh-tw/index.html  # home
+../jekyll-site/zh-tw/game.html
 
 ../zh-cn/guess-number.html
 ../zh-cn/guess-number.js
@@ -43,10 +44,10 @@
 ../zh-cn/sitemap.html
 ../zh-cn/tic-tac-toe.html
 ../zh-tw/blog.md
-../zh-tw/game.html
 
 chrome.txt
 css.txt
+erb.txt
 git.txt
 github.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
@@ -54,6 +55,7 @@ html.txt
 html_fixer.py
 javascript.txt
 jekyll.txt
+liquid.txt
 log.txt
 npm.txt
 npx.txt
@@ -96,17 +98,13 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m game
+P1 30m p/ guess number
+P1 30m summary
 P1 30m share sublime plugin
 P1 30m p/zh-tw/2025-08-16-ai.md
-P1 30m nav order
 P1 30m content of home page: story / game / blog
 P1 30m nav = home story game blog
 P1 30m migrate jekyll to include only html/md/necessary files
-P2 5m cleanup About
-P2 5m cleanup 參考連結
-P2 5m cleanup 参考连结
-P2 5m cleanup 開放中文轉換（Pure Python）
 P1 30m novel mode
 P1 30m game mode
 P1 30m skip btn in game mode
@@ -120,8 +118,6 @@ P1 60m localStorage to hold state
 P1 60m framework of sub sitemap on the left side hight light selected
 P1 60m framework to go prev page
 P1 60m svg
-P1 60m framework of sitemap hightlight selected
-P1 60m fullscreen mode
 P1 10m refresh zh-cn for tic tac toe
 P1 60m support various resolutions
 P1 20m replace css px with em / vw
@@ -160,3 +156,5 @@ P2 30m blog ai not work https://github.com/rubygems/rubygems/issues/8390
 P2 30m blog ics (calendar)
 P2 30m blog bay club
 P2 30m blog foam party $550/hr
+P2 10m framework of sitemap hightlight selected
+P2 30m fullscreen mode
