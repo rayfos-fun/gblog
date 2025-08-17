@@ -32,6 +32,7 @@
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
 ../jekyll-site/zh-tw/index.html
+../jekyll-site/zh-tw/blog.html
 
 ../js/main.js
 ../zh-cn/guess-number.html
@@ -94,6 +95,8 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P1 30m blog page include posts
+P1 30m home page include story / game / blog
 P1 30m nav = home story game blog
 P1 30m migrate jekyll to include only html/md/necessary files
 P2 5m cleanup About
