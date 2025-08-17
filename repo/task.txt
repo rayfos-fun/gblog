@@ -96,6 +96,7 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P1 30m game
 P1 30m share sublime plugin
 P1 30m p/zh-tw/2025-08-16-ai.md
 P1 30m nav order

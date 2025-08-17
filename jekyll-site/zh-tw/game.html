@@ -1,12 +1,12 @@
 ---
 layout: default
-title: 部落格
+title: 遊戲
 lang: zh-tw
-permalink: /zh-tw/blog/
+permalink: /zh-tw/game/
 ---
-<h1>部落格</h1>
+<h1>遊戲</h1>
 <ul>
-  {% assign posts = site.posts | where: "lang", "zh-tw" | where: "type", "blog" %}
+  {% assign posts = site.posts | where: "lang", "zh-tw" | where: "type": "game" %}
   {% for post in posts reversed %}
     <li>
       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
