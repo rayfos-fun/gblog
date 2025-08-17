@@ -4,8 +4,6 @@
 ../.gitignore
 ../requirements.txt
 ../README.md
-../index.html
-../_posts/zh-tw/2025-05-21-address.md
 ../css/game.css
 ../css/guess-number.css
 ../css/rock-paper-scissors.css
@@ -30,6 +28,7 @@
 ../jekyll-site/_config.yml
 ../jekyll-site/Gemfile
 ../jekyll-site/Gemfile.lock
+
 ../jekyll-site/index.html  # redirect to en or zh-tw
 ../jekyll-site/en/index.html
 ../jekyll-site/zh-tw/index.html
