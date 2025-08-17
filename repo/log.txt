@@ -5,3 +5,4 @@
 19:00:43 aa ag to activate gblog venv (5m)
 2025-08-17 Sun
 12:12:36 fix site.default_lang in j/index.html (5m)
+12:18:19 migrate p/zh-tw/2025-08-17-guess-number.html
