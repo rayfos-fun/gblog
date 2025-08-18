@@ -21,6 +21,7 @@
 ../jekyll/zh-tw/sitemap.html
 
 ../jekyll-site/_config.yml
+../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/Gemfile
 ../jekyll-site/Gemfile.lock
 ../jekyll-site/index.html  # redirect to en or zh-tw
@@ -28,6 +29,7 @@
 ../jekyll-site/_posts/zh-tw/2025-05-21-address.md
 ../jekyll-site/_posts/zh-tw/2025-08-17-guess-number.html
 
+../jekyll-site/assets/js/zh-tw/guess-number.js
 ../jekyll-site/css/guess-number.css
 ../jekyll-site/css/rock-paper-scissors.css
 ../jekyll-site/css/style.css
@@ -96,10 +98,9 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
-P1 30m lang switch
-P1 30m rock-paper-scissors
-P1 30m tic-tac-toe
-P1 30m summary
+P1 30m game rock-paper-scissors
+P1 30m game tic-tac-toe
+P1 30m post summary
 P1 30m share sublime plugin
 P1 30m p/zh-tw/2025-08-16-ai.md
 P1 30m content of home page: story / game / blog
