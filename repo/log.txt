@@ -36,4 +36,5 @@ public to Github Pages
   j/_includes/header.html
 17:10:33 post template e.g. p/zh-tw/blog/2025-08-07-guess-number.md  (50m)
 2025-08-18 Mon
-18:06:56 cleanup jekyll
+18:06:56 cleanup jekyll (20m)
+20:24:16 p/zh-tw/novel/2025-08-18-three-heroes.md (10m)

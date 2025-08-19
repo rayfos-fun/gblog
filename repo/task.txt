@@ -39,6 +39,7 @@
 ../jekyll-site/zh-tw/blog.html
 ../jekyll-site/zh-tw/index.html  # home
 ../jekyll-site/zh-tw/game.html
+../jekyll-site/zh-tw/story.html
 
 ../README.md  # github project
 ../package.json  # node.js
@@ -79,27 +80,27 @@ $ python3 -m http.server 8000  # this would fail when offline
 
 https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
-# sitemap
-  advanture
-  games
+# nav sitemap
+  lang: en <-> zh-tw <-> zh-tw <-> en
+  home
+  (advanture)
+  game
     guess-number
-    rock-paper-scissors
-    tic-tac-toe
-  demos
-    css
-  tools/services
-    inventory manager
-    time manager
-  blogs
-  lang (en/zh-cn/zh-tw)
-  novel
+    (rock-paper-scissors)
+    (tic-tac-toe)
+  (demos)
+    (css)
+  (tools/services)
+    (time manager)
+  blog
+    guess-number
+    address
+  (story)
 
 # todo
 
-P1 30m migrate jekyll into jekyll-site
 P1 30m blog b/en/guess-number.html
 P1 30m blog insert.py
-P1 30m insert.py permalink parse basename
 P1 30m game rock-paper-scissors
 P1 30m game tic-tac-toe
 P1 30m post summary
@@ -117,7 +118,6 @@ P1 60m localStorage to hold state
 P1 60m framework of sub sitemap on the left side hight light selected
 P1 60m framework to go prev page
 P1 60m svg
-P1 10m refresh zh-cn for tic tac toe
 P1 60m support various resolutions
 P1 20m replace css px with em / vw
 P1 60m unit test for javascript
