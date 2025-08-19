@@ -1,3 +1,17 @@
+2025-05-04
+apply Github account
+  Problem: Somehow using Chrome on my laptop (macOS) failed
+  Solution: Using Chrome on my phone (Android)
+setup Github repository
+  Problem: git clone https://... failed
+  Solution:
+    $ ssh-keygen -t ed25519 -C "rayfos.fun@gmail.com"
+    # in github UI: click my profile icon on the right up corner -> Settings -> SSH and GPG keys -> New SSH Key -> paste in the content in previous step
+    $ git clone git@github.com:rayfos-fun/gblog.git
+    $ git config user.name Rayfos
+    $ git config user.email rayfos.fun@gmail.com
+public to Github Pages
+  # in github UI: in the gblog project, click Settings tab on the above menu -> Pages -> choose main /root => https://rayfos-fun.github.io/gblog
 2025-07-29
 08:17:08 ../docs/zh-tw/tic-tac-toe.html (10m)
 08:56:32 rm log and markdown from sitemap (5m)
@@ -20,4 +34,6 @@
   p/en/2025-08-17-guess-number.html
 13:22:19 lang switch (30m)
   j/_includes/header.html
-17:10:33 post template e.g. p/zh-tw/blog/2025-08-07-guess-number.md 
+17:10:33 post template e.g. p/zh-tw/blog/2025-08-07-guess-number.md  (50m)
+2025-08-18 Mon
+18:06:56 cleanup jekyll
