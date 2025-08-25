@@ -38,3 +38,4 @@ public to Github Pages
 2025-08-18 Mon
 18:06:56 cleanup jekyll (20m)
 20:24:16 p/zh-tw/novel/2025-08-18-three-heroes.md (10m)
+
