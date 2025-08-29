@@ -1,0 +1,24 @@
+---
+title: "三英戰呂布"
+layout: post
+lang: zh-tw
+permalink: /zh-tw/game/three-heroes/
+type: "game"
+---
+<link href="{{ 'assets/css/three-heroes.css' | relative_url }}" rel="stylesheet"/>
+
+<div id="game-wrapper">
+  <div id="game-container">
+    <div id="game-output"></div>
+    <div id="game-controls">
+      <div id="status-section" class="status-section"></div>
+      <div id="choice-buttons" class="button-group" style="display: none;"></div>
+      <div id="action-buttons" class="button-group">
+        <button class="action-button" id="attack-btn">攻擊</button>
+        <button class="action-button" id="musou-btn">無雙</button>
+        <button class="action-button" id="flee-btn">逃跑</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{ 'assets/js/zh-tw/three-heroes.js' | relative_url }}" defer></script>

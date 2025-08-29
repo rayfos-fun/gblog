@@ -13,13 +13,17 @@
 ../jekyll-site/_includes/header.html  # copied from minima
 
 ../jekyll-site/_posts/en/2025-08-16-address.md
-../jekyll-site/_posts/zh-tw/2025-05-21-address.md
-../jekyll-site/_posts/zh-tw/2025-08-17-guess-number.html
+../jekyll-site/_posts/zh-tw/blog/2025-05-21-address.md
+../jekyll-site/_posts/zh-tw/game/2025-08-17-guess-number.html
 ../jekyll-site/_posts/zh-tw/story/2025-08-18-three-heroes.md  # /zh-tw/story/001 三英戰呂布
 
 ../jekyll-site/_site  # output
+../jekyll-site/_site/assets/main.css
 
+../jekyll-site/assets/css/guess-number.css
+../jekyll-site/assets/css/three-heroes.css
 ../jekyll-site/assets/js/zh-tw/guess-number.js
+../jekyll-site/assets/js/zh-tw/three-heroes.js
 
 # should migrate into assets/js
 ../jekyll-site/js/css.js
@@ -29,7 +33,6 @@
 ../jekyll-site/assets/css/guess-number.css
 
 # should migrate into ../assets/css
-../jekyll-site/css/guess-number.css
 ../jekyll-site/css/rock-paper-scissors.css
 ../jekyll-site/css/style.css
 
