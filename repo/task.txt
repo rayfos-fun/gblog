@@ -1,4 +1,4 @@
-# quick links
+# links
 
 ../.github/workflows/jekyll.yml  # github actions to build and deploy pages by jekyll
 ../.gitignore
@@ -13,8 +13,10 @@
 ../jekyll-site/_includes/header.html  # copied from minima
 
 ../jekyll-site/_posts/en/2025-08-16-address.md
+
 ../jekyll-site/_posts/zh-tw/blog/2025-05-21-address.md
 ../jekyll-site/_posts/zh-tw/game/2025-08-17-guess-number.html
+../jekyll-site/_posts/zh-tw/game/2025-08-29-tic-tac-toe.html
 ../jekyll-site/_posts/zh-tw/story/2025-08-18-three-heroes.md  # /zh-tw/story/001 三英戰呂布
 
 ../jekyll-site/_site  # output
@@ -22,8 +24,10 @@
 
 ../jekyll-site/assets/css/guess-number.css
 ../jekyll-site/assets/css/three-heroes.css
+../jekyll-site/assets/css/tic-tac-toe.css
 ../jekyll-site/assets/js/zh-tw/guess-number.js
 ../jekyll-site/assets/js/zh-tw/three-heroes.js
+../jekyll-site/assets/js/zh-tw/tic-tac-toe.js
 
 # should migrate into assets/js
 ../jekyll-site/js/css.js
