@@ -146,30 +146,14 @@ P2 30m multilang title
 P1 30m advanture: to be continue...
 P2 30m perfection: install prettier
 P2 20m previous button in individual games to go back to game
-P2 20m md.txt
-P2 30m demo canvas doraemon
-P2 30m demo timer animation
-P2 30m blog flight cancellation
+P2 30m demo canvas doraemon / timer animation
 P2 30m js module  export ...;   import ... from ...;   script type="module"
-P2 30m offline download (git clone; might need to cache css resources... etc.)
-P2 30m blog android termux or github app
+P2 30m game tictactoe single player mode with computer (ai)
+P2 30m feature framework of sitemap hightlight selected / fullscreen mode / donate / offline download (git clone; might need to cache css resources... etc.)
+P2 30m blog life ai / bmi / food / foam party $550/hr / find my stuff app; 
+P2 30m blog edu: gifted inpj
+P2 30m blog travel: cruiser most workers are from asian / gracier / seattle / flight cancellation
+P2 30m blog tech ics (calendar); sublime plugin quick open; css/js/html from scratch vs bootstrap... etc. css generator; git push request rules / android termux or github app / md.txt
 P2 30m blog movie e.g. smurf / jurassic world / mission impossible
-P2 30m blog gifted inpj
-P2 30m blog git push request rules
-P2 30m blog css/js/html from scratch vs bootstrap... etc. css generator
-P2 20m blog sublime plugin quick open
-P2 30m blog ai
-P2 30m blog seattle 
-P2 30m blog gracier
-P2 30m blog cruiser most workers are from asian
-P2 30m tictactoe single player mode with computer (ai)
-P2 30m donate 
-P2 30m blog category 文青
-P2 30m blog find my stuff app
-P2 30m blog ai not work https://github.com/rubygems/rubygems/issues/8390
-P2 30m blog ics (calendar)
-P2 30m blog bay club
-P2 30m blog foam party $550/hr
-P2 10m framework of sitemap hightlight selected
-P2 30m fullscreen mode
-P2 30m blog bmi / food / baba is you
+P2 30m log ai not work https://github.com/rubygems/rubygems/issues/8390
+P2 30m game baba is you / 3 gem...
