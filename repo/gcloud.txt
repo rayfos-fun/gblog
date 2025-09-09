@@ -1,0 +1,35 @@
+# install
+$ brew install --cask google-cloud-sdk
+
+# init
+gcloud init
+
+# main.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+
+# app.yaml
+
+runtime: python311
+
+entrypoint: gunicorn -b :$PORT main:app
+
+# requirements.txt
+Flask
+gunicorn
+
+# deploy
+gcloud app deploy
+
+# error
+invalid bucket "staging.gblog-471104.appspot.com"; service account gblog-471104@appspot.gserviceaccount.com does not have access to the bucket
+
+solution: add role "Storage Admin" (in addition to Editor) in IAM 
