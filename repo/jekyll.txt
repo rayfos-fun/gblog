@@ -5,3 +5,5 @@ https://jekyllrb.com/
 $ gem install bundler jekyll
 
 $ bundle exec jekyll serve --livereload
+
+$ jekyll serve  => _sites

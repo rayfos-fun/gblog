@@ -3,7 +3,7 @@ layout: post
 title: "第二回：馬失前蹄"
 lang: zh-tw
 type: story
-permalink: /zh-tw/story/002
+permalink: /zh-tw/story/002/
 ---
 這是什麼樣的一個時代？英雄輩出，卻也梟雄並起，一個浪擲生命、為所欲為的時代。空氣中盡是血腥與泥土的氣味，彷彿連天上的飛鳥都沾染了殺意。虎牢關外，三條人影與一員猛將的激戰方歇，塵土飛揚，夕陽如血。
 

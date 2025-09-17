@@ -57,6 +57,7 @@
 chrome.txt
 css.txt
 erb.txt
+gcloud.txt
 git.txt
 github.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch

@@ -3,7 +3,7 @@ layout: post
 title: "第一回：三英戰呂布"
 lang: zh-tw
 type: story
-permalink: /zh-tw/story/001
+permalink: /zh-tw/story/001/
 ---
 # 第一回 三英戰呂布
 
