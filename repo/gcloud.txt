@@ -33,3 +33,7 @@ gcloud app deploy
 invalid bucket "staging.gblog-471104.appspot.com"; service account gblog-471104@appspot.gserviceaccount.com does not have access to the bucket
 
 solution: add role "Storage Admin" (in addition to Editor) in IAM 
+
+# local testing
+
+dev_appserver.py app.yaml
