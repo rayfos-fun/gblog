@@ -7,10 +7,10 @@ order: 4
 ---
 <h1>劇情</h1>
 <ul>
-  {% assign posts = site.posts | where: "lang", "zh-tw" | where: "type": "story" %}
-  {% for post in posts reversed %}
+  {% assign stories = site.stories | where: "lang", "zh-tw" %}
+  {% for story in stories %}
     <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <a href="{{ story.url | relative_url }}">{{ story.title }}</a>
     </li>
   {% endfor %}
 </ul>

@@ -3,6 +3,11 @@
 ../.github/workflows/jekyll.yml  # github actions to build and deploy pages by jekyll
 ../.gitignore
 ../.ruby-version
+../app.yaml  # gcloud app deploy
+../main.py  # flask: convert url with index.html
+../README.md
+../requirements.txt
+../venv
 
 ../jekyll-site/_config.yml
 ../jekyll-site/404.html
@@ -108,6 +113,7 @@ https://validator.w3.org/checklink => https://rayfos-fun.github.io/gblog
 
 # todo
 
+P0 30m collection
 P1 30m cron to push (content from private repo)
 P1 30m feed
 P1 30m images / videoes / audio
