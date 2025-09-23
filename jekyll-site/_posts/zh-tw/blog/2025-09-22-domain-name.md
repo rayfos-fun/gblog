@@ -2,8 +2,7 @@
 layout: post
 title: "從地址書寫順序看中美文化差異"
 lang: zh-tw
-date: 2025-05-21
-permalink: /zh-tw/blog/20250521/
+permalink: /zh-tw/blog/20250922/
 type: blog
 ---
 # 從無到有：我的部落格上線了！歡迎來到 https://rayfos.fun/gblog
