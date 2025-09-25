@@ -7,10 +7,10 @@ order: 2
 ---
 <h1>Game</h1>
 <ul>
-  {% assign posts = site.posts | where: "lang", "en" | where: "type": "game" %}
-  {% for post in posts reversed %}
+  {% assign games = site.games-en %}
+  {% for game in games reversed %}
     <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <a href="{{ game.url | relative_url }}">{{ game.title }}</a>
     </li>
   {% endfor %}
 </ul>

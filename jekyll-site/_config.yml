@@ -37,6 +37,8 @@ collections:
     output: true
   games-zh-tw:
     output: true
+  games-en:
+    output: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
