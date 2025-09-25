@@ -7,7 +7,7 @@ order: 4
 ---
 <h1>劇情</h1>
 <ul>
-  {% assign stories = site.stories | where: "lang", "zh-tw" %}
+  {% assign stories = site.stories-zh-tw %}
   {% for story in stories %}
     <li>
       <a href="{{ story.url | relative_url }}">{{ story.title }}</a>

@@ -33,7 +33,7 @@ plugins:
   - jekyll-feed
 
 collections:
-  stories:
+  stories-zh-tw:
     output: true
   games-zh-tw:
     output: true
