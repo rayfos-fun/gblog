@@ -19,15 +19,21 @@
 
 ../jekyll-site/_posts/en/2025-08-16-address.md
 
-../jekyll-site/_posts/zh-tw/blog/2025-05-21-address.md
-../jekyll-site/_posts/zh-tw/game/2025-08-17-guess-number.html
+../jekyll-site/_posts/2025-05-21-zh-tw.md  # 中英地址看文化
+../jekyll-site/_posts/2025-08-07-zh-tw.md  # 猜數字
+../jekyll-site/_posts/2025-09-18-zh-tw.md  # AI寫部落格
+../jekyll-site/_posts/2025-09-20-zh-tw.md  # 立志每日git push
+../jekyll-site/_posts/2025-09-21-zh-tw.md  # baba is you
+../jekyll-site/_posts/2025-09-22-zh-tw.md  # 上線rayfos.fun
+../jekyll-site/_posts/2025-09-23-zh-tw.md  # six seven 次文化
+../jekyll-site/_posts/2025-09-24-zh-tw.md  # Andrew Ng
+
 ../jekyll-site/_posts/zh-tw/game/2025-08-29-tic-tac-toe.html
-../jekyll-site/_posts/zh-tw/story/2025-08-18-three-heroes.md  # /zh-tw/story/001 三英戰呂布
 
 ../jekyll-site/_site  # output
 ../jekyll-site/_site/assets/main.css
 
-../jekyll-site/_stories/zh-tw/0001.md
+../jekyll-site/_stories/zh-tw/0001.md  # 三英戰呂布
 ../jekyll-site/_stories/zh-tw/0002.md
 ../jekyll-site/_stories/zh-tw/0003.md
 ../jekyll-site/_stories/zh-tw/0004.md
