@@ -56,16 +56,18 @@
 ../jekyll-site/en/index.html  # home
 ../jekyll-site/en/game.html
 
-../jekyll-site/zh-tw/blog.html
-../jekyll-site/zh-tw/index.html  # home
-../jekyll-site/zh-tw/game.html
-../jekyll-site/zh-tw/story.html
+../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
+
+# pages: layout=default
+../jekyll-site/pages-zh-tw/blog.html
+../jekyll-site/pages-zh-tw/index.html  # home
+../jekyll-site/pages-zh-tw/game.html
+../jekyll-site/pages-zh-tw/story.html
 
 ../README.md  # github project
-../package.json  # node.js
-../package-lock.json  # node.js
 ../requirements.txt
 
+# repo
 chrome.txt
 css.txt
 erb.txt
