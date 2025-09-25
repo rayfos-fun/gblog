@@ -35,6 +35,8 @@ plugins:
 collections:
   stories:
     output: true
+  games-zh-tw:
+    output: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
