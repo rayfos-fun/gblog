@@ -15,18 +15,17 @@
 ../jekyll-site/Gemfile.lock
 ../jekyll-site/index.html  # redirect to en or zh-tw
 
+../jekyll-site/_games-en/guess-number.html
 ../jekyll-site/_games-zh-tw/guess-number.html
 ../jekyll-site/_games-zh-tw/three-heroes.html
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html
 
 ../jekyll-site/_includes/header.html  # copied from minima
-
-../jekyll-site/_posts/en/2025-08-16-address.md
+../jekyll-site/_layouts/post.html  # copied from minima
 
 ../jekyll-site/_posts/2025-05-21-en.md  # address
 ../jekyll-site/_posts/2025-05-21-zh-tw.md  # 中英地址看文化
 ../jekyll-site/_posts/2025-08-07-zh-tw.md  # 猜數字
-../jekyll-site/_posts/2025-08-07-en.md  # guess number
 ../jekyll-site/_posts/2025-09-18-zh-tw.md  # AI寫部落格
 ../jekyll-site/_posts/2025-09-20-zh-tw.md  # 立志每日git push
 ../jekyll-site/_posts/2025-09-21-zh-tw.md  # baba is you
@@ -34,17 +33,15 @@
 ../jekyll-site/_posts/2025-09-23-zh-tw.md  # six seven 次文化
 ../jekyll-site/_posts/2025-09-24-zh-tw.md  # Andrew Ng
 
-../jekyll-site/_posts/zh-tw/game/2025-08-29-tic-tac-toe.html
-
 ../jekyll-site/_site  # output
 ../jekyll-site/_site/assets/main.css
 
-../jekyll-site/_stories/zh-tw/0001.md  # 三英戰呂布
-../jekyll-site/_stories/zh-tw/0002.md
-../jekyll-site/_stories/zh-tw/0003.md
-../jekyll-site/_stories/zh-tw/0004.md
-../jekyll-site/_stories/zh-tw/0005.md
-../jekyll-site/_stories/zh-tw/0006.md
+../jekyll-site/_stories-zh-tw/0001.md  # 三英戰呂布
+../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
+../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
+../jekyll-site/_stories-zh-tw/0004.md  # 重啟人生
+../jekyll-site/_stories-zh-tw/0005.md  # 奪命追魂劍
+../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
 
 ../jekyll-site/assets/css/guess-number.css
 ../jekyll-site/assets/css/three-heroes.css
@@ -57,24 +54,19 @@
 ../jekyll-site/js/css.js
 ../jekyll-site/js/main.js
 
-# should migrate into zh-tw
-../jekyll-site/assets/css/guess-number.css
-
 # should migrate into ../assets/css
 ../jekyll-site/css/rock-paper-scissors.css
 ../jekyll-site/css/style.css
 
-../jekyll-site/en/blog.html
-../jekyll-site/en/index.html  # home
-../jekyll-site/en/game.html
-
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
-
 # pages: layout=default
-../jekyll-site/pages-zh-tw/blog.html
+../jekyll-site/pages-en/index.html  # home
+../jekyll-site/pages-en/game.html
+../jekyll-site/pages-en/post.html
 ../jekyll-site/pages-zh-tw/index.html  # home
 ../jekyll-site/pages-zh-tw/game.html
+../jekyll-site/pages-zh-tw/post.html
 ../jekyll-site/pages-zh-tw/story.html
 
 ../README.md  # github project
