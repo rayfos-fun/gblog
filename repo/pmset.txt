@@ -1,0 +1,3 @@
+$ sudo pmset repeat wakeorpoweron MTWThFSaSu 23:27:00
+
+$ pmset -g sched

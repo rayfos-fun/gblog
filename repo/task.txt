@@ -34,6 +34,7 @@
 ../jekyll-site/_posts/2025-09-22-zh-tw.md  # 上線rayfos.fun
 ../jekyll-site/_posts/2025-09-23-zh-tw.md  # six seven 次文化
 ../jekyll-site/_posts/2025-09-24-zh-tw.md  # Andrew Ng
+../jekyll-site/_posts/2025-09-25-zh-tw.md  # vibe coding
 
 ../jekyll-site/_site  # output
 ../jekyll-site/_site/assets/main.css
@@ -81,6 +82,7 @@ erb.txt
 gcloud.txt
 git.txt
 github.txt
+git_push.sh
 hello_opencc.py  # used to convert zh-tw into zh-ch
 html.txt
 html_fixer.py

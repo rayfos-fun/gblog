@@ -1,0 +1,6 @@
+$ crontab -e  # edit
+30 23 * * * /home/path/gblog/repo/git_push.sh >/dev/null 2>&1
+min   Day Day of week (0: Sun)
+   hr   Month
+$ crontab -l  # list
+
