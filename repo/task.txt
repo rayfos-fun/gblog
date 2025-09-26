@@ -16,7 +16,9 @@
 ../jekyll-site/index.html  # redirect to en or zh-tw
 
 ../jekyll-site/_games-en/guess-number.html
+../jekyll-site/_games-en/nine-rings.html
 ../jekyll-site/_games-zh-tw/guess-number.html
+../jekyll-site/_games-zh-tw/nine-rings.html
 ../jekyll-site/_games-zh-tw/three-heroes.html
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html
 
