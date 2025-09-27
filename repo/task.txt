@@ -81,8 +81,8 @@ css.txt
 erb.txt
 gcloud.txt
 git.txt
-github.txt
 git_push.sh
+github.txt
 hello_opencc.py  # used to convert zh-tw into zh-ch
 html.txt
 html_fixer.py
