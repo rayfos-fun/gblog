@@ -8,6 +8,7 @@ STATIC_FOLDER = 'jekyll-site/_site'
 app = Flask(__name__, static_folder=STATIC_FOLDER)
 logging.basicConfig(level=logging.INFO)
 
+@app.route('/', defaults={'url': ''})
 @app.route('/gblog', defaults={'url': ''})
 @app.route('/gblog/<path:url>')
 def serve_index(url):
