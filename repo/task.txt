@@ -22,6 +22,7 @@
 ../jekyll-site/_games-zh-tw/nine-rings.html
 ../jekyll-site/_games-zh-tw/three-heroes.html
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html
+../jekyll-site/_games-zh-tw/whack-a-mole.html
 
 ../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/_layouts/post.html  # copied from minima
@@ -60,12 +61,12 @@
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
-# pages: layout=default; sitemap
-../jekyll-site/pages-en/index.html  # home
+# pages  sitemap
+../jekyll-site/pages-en/index.md  # home
 ../jekyll-site/pages-en/game.html
 ../jekyll-site/pages-en/post.html
 
-../jekyll-site/pages-zh-tw/index.html  # home
+../jekyll-site/pages-zh-tw/index.md  # home
 ../jekyll-site/pages-zh-tw/game.html
 ../jekyll-site/pages-zh-tw/post.html
 ../jekyll-site/pages-zh-tw/story.html

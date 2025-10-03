@@ -1,0 +1,234 @@
+---
+title: "Whack a mole"
+layout: post
+lang: zh-tw
+permalink: /zh-tw/game/whack-a-mole/
+date: 2025-10-02
+---
+<div class="game-wrapper bg-gray-50 flex flex-col items-center justify-start min-h-screen p-4">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { font-family: 'Inter', sans-serif; }
+
+    /* Custom CSS for the popping effect */
+    .mole-number {
+      /* initial position: under ground 100% */
+      transform: translateY(100%); 
+      /* pop up animation */
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    }
+
+    /* 'up' position */
+    .hole.up .mole-number {
+      transform: translateY(0);
+    }
+
+    /* board game grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0.5rem; /* 8px */
+      max-width: 480px; /* keep shape */
+      width: 95%;
+      aspect-ratio: 1 / 1; /* square */
+    }
+    
+    .hole {
+      /* simulate round and shadow */
+      box-shadow: inset 0 -10px 10px rgba(0, 0, 0, 0.1);
+      user-select: none; /* disable */
+    }
+
+    .hit {
+      background-color: #ef4444 !important; /* Tailwind red-500 */
+    }
+  </style>
+
+  <div id="game-container" class="w-full max-w-lg bg-white p-6 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-4">Whack-a-mole (1~9)</h1>
+    <!-- dashboard -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 p-4 bg-indigo-100 rounded-lg shadow-inner">
+      <p class="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Score: <span id="score" class="text-indigo-600">0</span></p>
+      <p class="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Time: <span id="timer" class="text-indigo-600">30</span> seconds</p>
+      <button id="startButton" class="w-full sm:w-auto px-6 py-2 bg-indigo-500 text-white font-bold rounded-full shadow-lg hover:bg-indigo-600   transition duration-150 transform hover:scale-105" disabled>Loading...</button>
+    </div>
+  
+    <!-- board game area -->
+    <div id="gridContainer" class="grid-container mx-auto p-3 bg-yellow-800 rounded-xl shadow-lg border-4 border-yellow-900">
+      <!-- filled by JavaScript -->
+    </div>
+      
+    <!-- game over dialogue (Modal instead of alert) -->
+    <div id="gameOverModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
+      <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm w-full">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-4">Game Over!</h2>
+        <p class="text-xl text-gray-700 mb-6">Score: <span id="finalScore" class="font-extrabold text-4xl text-red-500">0</span></p>
+        <button id="closeModalButton" class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full hover:bg-indigo-600 transition duration-150">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const startButton = document.getElementById('startButton');
+const gridContainer = document.getElementById('gridContainer');
+const gameOverModal = document.getElementById('gameOverModal');
+const finalScoreDisplay = document.getElementById('finalScore');
+const closeModalButton = document.getElementById('closeModalButton');
+
+let score = 0;
+let time = 30;
+let timeUp = true;
+let lastHole = null;
+let countdownInterval;
+let moleTimeout;
+let holes = [];
+
+function randomHole(currentHoles) {
+  const idx = Math.floor(Math.random() * currentHoles.length);
+  const hole = currentHoles[idx];
+    
+  if (hole === lastHole) {
+    return randomHole(currentHoles);  // to prevent the same hole
+  }
+  lastHole = hole;
+  return hole;
+}
+
+function randomTime(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+function whackHole(hole) {
+  // if being hit already
+  if (!hole || !hole.classList.contains('up')) return; 
+
+  // scoring
+  score++;
+  scoreDisplay.textContent = score;
+
+  // take down (undo "up")
+  hole.classList.remove('up');
+  // being hit
+  hole.classList.add('hit');
+  setTimeout(() => {
+    hole.classList.remove('hit');
+  }, 100); 
+}
+
+// mole get up
+function peep() {
+  if (timeUp) return;
+
+  const time = randomTime(500, 1500); // time to stay up
+  const hole = randomHole(holes);
+    
+  hole.classList.add('up'); 
+
+  // 在隨機時間後縮回並設定下一次彈出
+  moleTimeout = setTimeout(() => {
+    // this mole get down
+    hole.classList.remove('up');
+    // another mole get up
+    peep();
+  }, time);
+}
+
+function handleMouseWhack(event) {
+  whackHole(event.currentTarget);
+}
+
+function handleKeyWhack(event) {
+  if (timeUp || event.key.length > 1 || event.metaKey || event.ctrlKey || event.altKey) return;
+
+  const keyPressed = event.key;
+  const targetNumber = parseInt(keyPressed);
+
+  if (targetNumber >= 1 && targetNumber <= 9) {
+    const targetHole = holes.find(hole => {
+      const holeNumber = parseInt(hole.getAttribute('data-number'));
+      return hole.classList.contains('up') && holeNumber === targetNumber;
+    });
+
+    if (targetHole) {
+      whackHole(targetHole);
+      event.preventDefault(); // just in case
+    }
+  }
+}
+
+function createGrid() {
+  gridContainer.innerHTML = '';
+  holes = [];
+    
+  for (let i = 1; i <= 9; i++) {
+    const hole = document.createElement('div');
+    hole.classList.add('hole', 'bg-lime-600', 'rounded-lg', 'relative', 'overflow-hidden');
+    hole.setAttribute('data-number', i);
+    hole.addEventListener('click', handleMouseWhack);
+
+    const moleNumber = document.createElement('div');
+    moleNumber.classList.add('mole-number', 'text-4xl', 'font-extrabold', 'select-none', 'bg-lime-700', 'text-white', 'shadow-2xl');
+    moleNumber.textContent = i; 
+        
+    hole.appendChild(moleNumber);
+    gridContainer.appendChild(hole);
+    holes.push(hole);
+  }
+}
+
+function countdown() {
+  time--;
+  timerDisplay.textContent = time;
+
+  if (time <= 0) {
+    endGame();
+  }
+}
+
+function endGame() {
+  clearInterval(countdownInterval);
+  clearTimeout(moleTimeout);
+  timeUp = true;
+  startButton.textContent = 'Restart';
+  startButton.disabled = false;
+    
+  holes.forEach(hole => hole.classList.remove('up'));
+    
+  finalScoreDisplay.textContent = score;
+  gameOverModal.classList.remove('hidden');
+}
+
+function startGame() {
+  if (!timeUp) return;
+
+  score = 0;
+  time = 30;
+  scoreDisplay.textContent = score;
+  timerDisplay.textContent = time;
+  timeUp = false;
+  startButton.disabled = true;
+  startButton.textContent = 'Playing...';
+  gameOverModal.classList.add('hidden');
+
+  countdownInterval = setInterval(countdown, 1000);
+  peep();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  createGrid();
+  startButton.textContent = 'Start';
+  startButton.disabled = false;
+  document.addEventListener('keydown', handleKeyWhack);
+});
+
+startButton.addEventListener('click', startGame);
+
+closeModalButton.addEventListener('click', () => {
+  gameOverModal.classList.add('hidden');
+});
+    
+  </script>
+</div>
