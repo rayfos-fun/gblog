@@ -1,0 +1,269 @@
+---
+title: "打地鼠"
+layout: post
+lang: zh-tw
+permalink: /zh-tw/game/whack-the-mole/
+date: 2025-08-29
+---
+<div class="game-wrapper bg-gray-50 flex flex-col items-center justify-start min-h-screen p-4">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { font-family: 'Inter', sans-serif; }
+
+    /* Custom CSS for the popping effect (彈出效果) */
+    .mole-number {
+      /* 初始位置：在地底下 100% */
+      transform: translateY(100%); 
+      /* 彈跳動畫效果 */
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    }
+
+    /* 當洞口被標記為 'up' 時，數字彈出 */
+    .hole.up .mole-number {
+      transform: translateY(0);
+    }
+
+    /* 九宮格容器使用 Grid 佈局 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0.5rem; /* 8px */
+      max-width: 480px; /* 限制最大寬度，保持九宮格外觀 */
+      width: 95%;
+      aspect-ratio: 1 / 1; /* 保持正方形 */
+    }
+    
+    .hole {
+      /* 模擬地洞的圓角和陰影 */
+      box-shadow: inset 0 -10px 10px rgba(0, 0, 0, 0.1);
+      user-select: none; /* 防止選取文字 */
+    }
+
+    .hit {
+      /* 被點擊時的閃爍效果 */
+      background-color: #ef4444 !important; /* Tailwind red-500 */
+    }
+  </style>
+
+  <div id="game-container" class="w-full max-w-lg bg-white p-6 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-4">數字打地鼠 (1~9)</h1>
+    <!-- 遊戲資訊和控制區 -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 p-4 bg-indigo-100 rounded-lg shadow-inner">
+      <p class="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">分數: <span id="score" class="text-indigo-600">0</span></p>
+      <p class="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">時間: <span id="timer" class="text-indigo-600">30</span> 秒</p>
+      <button id="startButton" class="w-full sm:w-auto px-6 py-2 bg-indigo-500 text-white font-bold rounded-full shadow-lg hover:bg-indigo-600   transition duration-150 transform hover:scale-105" disabled>載入中...</button>
+    </div>
+  
+    <!-- 九宮格遊戲區域 -->
+    <div id="gridContainer" class="grid-container mx-auto p-3 bg-yellow-800 rounded-xl shadow-lg border-4 border-yellow-900">
+      <!-- 洞口將由 JavaScript 填充 -->
+    </div>
+      
+    <!-- 遊戲結束提示框 (使用客製化 Modal 取代 alert) -->
+    <div id="gameOverModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
+      <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm w-full">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-4">遊戲結束！</h2>
+        <p class="text-xl text-gray-700 mb-6">你的最終分數是: <span id="finalScore" class="font-extrabold text-4xl text-red-500">0</span></p>
+        <button id="closeModalButton" class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-full hover:bg-indigo-600 transition duration-150"  >關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+// --- 變數宣告 ---
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const startButton = document.getElementById('startButton');
+const gridContainer = document.getElementById('gridContainer');
+const gameOverModal = document.getElementById('gameOverModal');
+const finalScoreDisplay = document.getElementById('finalScore');
+const closeModalButton = document.getElementById('closeModalButton');
+
+let score = 0;
+let time = 30; // 遊戲時間 30 秒
+let timeUp = true;
+let lastHole = null;
+let countdownInterval;
+let moleTimeout;
+let holes = [];
+
+// --- 輔助函數 ---
+
+/** 隨機選擇一個洞口，避免與上一個重複 */
+function randomHole(currentHoles) {
+  const idx = Math.floor(Math.random() * currentHoles.length);
+  const hole = currentHoles[idx];
+    
+  if (hole === lastHole) {
+    return randomHole(currentHoles);
+  }
+  lastHole = hole;
+  return hole;
+}
+
+/** 隨機產生地鼠彈出時間 (毫秒) */
+function randomTime(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+// --- 核心擊打邏輯 ---
+
+/** 核心擊打邏輯：處理得分和視覺回饋 */
+function whackHole(hole) {
+  // 檢查是否為 'up' 狀態
+  if (!hole || !hole.classList.contains('up')) return; 
+
+  // 得分
+  score++;
+  scoreDisplay.textContent = score;
+
+  // 視覺回饋：立即縮回並閃爍
+  hole.classList.remove('up'); 
+  hole.classList.add('hit');
+    
+  // 移除閃爍效果
+  setTimeout(() => {
+    hole.classList.remove('hit');
+  }, 100); 
+}
+
+// --- 遊戲邏輯函數 ---
+
+/** 讓數字 (地鼠) 彈出 */
+function peep() {
+  if (timeUp) return;
+
+  const time = randomTime(500, 1500); // 彈出時間
+  const hole = randomHole(holes);
+    
+  hole.classList.add('up'); 
+
+  // 在隨機時間後縮回並設定下一次彈出
+  moleTimeout = setTimeout(() => {
+    hole.classList.remove('up');
+    peep(); // 遞迴呼叫，持續彈出
+  }, time);
+}
+
+/** 處理滑鼠點擊事件 */
+function handleMouseWhack(event) {
+  whackHole(event.currentTarget);
+}
+
+/** 處理鍵盤按下事件 */
+function handleKeyWhack(event) {
+  // 遊戲結束或非數字鍵時不處理
+  if (timeUp || event.key.length > 1 || event.metaKey || event.ctrlKey || event.altKey) return;
+
+  const keyPressed = event.key;
+  const targetNumber = parseInt(keyPressed);
+
+  // 檢查按下的鍵是否為 1 到 9 的數字
+  if (targetNumber >= 1 && targetNumber <= 9) {
+    // 尋找目前彈出且數字符合的洞口
+    const targetHole = holes.find(hole => {
+      const holeNumber = parseInt(hole.getAttribute('data-number'));
+      // 必須是彈出狀態 且 數字相符
+      return hole.classList.contains('up') && holeNumber === targetNumber;
+    });
+
+    if (targetHole) {
+      whackHole(targetHole);
+      // 阻止瀏覽器預設行為（例如數字鍵不會有預設行為，但這是好習慣）
+      event.preventDefault(); 
+    }
+  }
+}
+
+/** 創建九宮格 (1~9) 及其事件監聽器 */
+function createGrid() {
+  gridContainer.innerHTML = '';
+  holes = [];
+    
+  for (let i = 1; i <= 9; i++) {
+    // 洞口元素 (hole)
+    const hole = document.createElement('div');
+    hole.classList.add('hole', 'bg-lime-600', 'rounded-lg', 'relative', 'overflow-hidden');
+    hole.setAttribute('data-number', i); // 新增 data-number 屬性供鍵盤比對
+    hole.addEventListener('click', handleMouseWhack); // 改用新的滑鼠處理函數
+
+    // 數字元素 (mole-number)
+    const moleNumber = document.createElement('div');
+    moleNumber.classList.add('mole-number', 'text-4xl', 'font-extrabold', 'select-none', 'bg-lime-700', 'text-white', 'shadow-2xl');
+    moleNumber.textContent = i; 
+        
+    hole.appendChild(moleNumber);
+    gridContainer.appendChild(hole);
+    holes.push(hole);
+  }
+}
+
+/** 倒數計時器 */
+function countdown() {
+  time--;
+  timerDisplay.textContent = time;
+
+  if (time <= 0) {
+    endGame();
+  }
+}
+
+/** 遊戲結束處理 */
+function endGame() {
+  clearInterval(countdownInterval);
+  clearTimeout(moleTimeout);
+  timeUp = true;
+  startButton.textContent = '重新開始';
+  startButton.disabled = false;
+    
+  // 確保所有地鼠縮回
+  holes.forEach(hole => hole.classList.remove('up'));
+    
+  // 顯示客製化 Modal
+  finalScoreDisplay.textContent = score;
+  gameOverModal.classList.remove('hidden');
+}
+
+/** 開始遊戲 */
+function startGame() {
+  if (!timeUp) return;
+
+  // 重設狀態
+  score = 0;
+  time = 30;
+  scoreDisplay.textContent = score;
+  timerDisplay.textContent = time;
+  timeUp = false;
+  startButton.disabled = true;
+  startButton.textContent = '遊戲進行中...';
+
+  // 關閉 Modal (如果它還開著)
+  gameOverModal.classList.add('hidden');
+
+  // 開始計時
+  countdownInterval = setInterval(countdown, 1000);
+
+  // 開始彈出數字
+  peep();
+}
+
+// --- 事件監聽器和初始化 ---
+
+document.addEventListener('DOMContentLoaded', () => {
+  createGrid();
+  startButton.textContent = '開始遊戲';
+  startButton.disabled = false;
+    
+  // ** 新增鍵盤事件監聽器 **
+  document.addEventListener('keydown', handleKeyWhack);
+});
+
+startButton.addEventListener('click', startGame);
+
+closeModalButton.addEventListener('click', () => {
+  gameOverModal.classList.add('hidden');
+});
+    
+  </script>
+</div>
