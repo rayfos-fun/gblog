@@ -5,9 +5,12 @@ lang: zh-tw
 permalink: /zh-tw/home/
 order: 1
 ---
-# 一日一金句
+# 一日一金句 
+
+<sub>[金句大全]({{ '/zh-tw/motto/' | relative_url }})</sub>
 
 人生海海 歡喜就好  --by 陳雷
+
 
 # 日誌
 

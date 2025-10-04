@@ -33,11 +33,13 @@ plugins:
   - jekyll-feed
 
 collections:
-  stories-zh-tw:
+  games-en:
     output: true
   games-zh-tw:
     output: true
-  games-en:
+  others-zh-tw:
+    output: true
+  stories-zh-tw:
     output: true
 
 # Exclude from processing.
