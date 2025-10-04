@@ -7,9 +7,10 @@ order: 1
 ---
 # 一日一金句
 
-幹就完了！  --by 金久哲
+人生海海 歡喜就好  --by 陳雷
 
 # 日誌
 
-* [2025-10-02: 打地鼠]({{ '/zh-tw/game/whack-a-mole/' | relative_url }})
-...
+* [2025-10-03: 長安的荔枝: 美人嘴饞萬骨枯]({{ '/zh-tw/post/20251003/' | relative_url }})
+* [2025-10-02: 遊戲-打地鼠]({{ '/zh-tw/game/whack-a-mole/' | relative_url }})
+* ...
