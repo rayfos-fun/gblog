@@ -7,9 +7,11 @@ order: 1
 ---
 # Daily motto
 
-Just do it!  --by Nike
+<sub>[history]({{ '/en/motto/' | relative_url }})</sub>
 
-# 日誌
+Hakuna Matata  --by Pumbaa and Timon
+
+# Log
 
 * [2025-10-02: whack-a-mole]({{ '/en/game/whack-a-mole/' | relative_url }})
 ...

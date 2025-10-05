@@ -28,6 +28,10 @@
 ../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/_layouts/post.html  # copied from minima
 
+../jekyll-site/_others-en/motto.md
+../jekyll-site/_others-zh-tw/log.md
+../jekyll-site/_others-zh-tw/motto.md
+
 # file format under _posts must be YYYY-MM-DD-xxx.md|html
 ../jekyll-site/_posts/2025-05-21-en.md  # address
 ../jekyll-site/_posts/2025-05-21-zh-tw.md  # 中英地址看文化
@@ -75,6 +79,8 @@
 
 ../README.md  # github project
 ../requirements.txt
+
+
 
 # repo
 chrome.txt

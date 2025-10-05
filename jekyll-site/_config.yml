@@ -37,6 +37,8 @@ collections:
     output: true
   games-zh-tw:
     output: true
+  others-en:
+    output: true
   others-zh-tw:
     output: true
   stories-zh-tw:
