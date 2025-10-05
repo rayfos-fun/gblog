@@ -31,16 +31,28 @@ layout: default
 
 <hr>
 
+{% assign posts = site.posts | where: "lang", page.lang %}
+{% for post in posts %}
+  {% if post.url == page.url %}
+    {% assign current_index = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+{% assign prev_index = current_index | plus: 1 %}
+{% assign next_index = current_index | minus: 1 %}
+{% assign prev_post = posts[prev_index] %}
+{% assign next_post = posts[next_index] %}
+
+
 <div class="post-navigation" style="display: flex; justify-content: space-between;">
-  {% if page.previous %}
-    <a href="{{ page.previous.url | relative_url }}" class="previous-post">
-      &laquo; <span>{{ page.previous.title }}</span>
+  {% if prev_post %}
+    <a href="{{ prev_post.url | relative_url }}" class="previous-post">
+      &laquo; <span>{{ prev_post.title }}</span>
     </a>
   {% endif %}
 
-  {% if page.next %}
-    <a href="{{ page.next.url | relative_url }}" class="next-post" style="text-align: right">
-      <span>{{ page.next.title }}</span> &raquo;
+  {% if next_post %}
+    <a href="{{ next_post.url | relative_url }}" class="next-post" style="text-align: right">
+      <span>{{ next_post.title }}</span> &raquo;
     </a>
   {% endif %}
 </div>
