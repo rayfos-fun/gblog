@@ -28,6 +28,7 @@
 ../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/_layouts/post.html  # copied from minima
 
+../jekyll-site/_others-en/log.md
 ../jekyll-site/_others-en/motto.md
 ../jekyll-site/_others-zh-tw/log.md
 ../jekyll-site/_others-zh-tw/motto.md
