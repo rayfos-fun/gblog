@@ -2,7 +2,7 @@
 layout: default
 title: Blog
 lang: en
-permalink: /en/blog/
+permalink: /en/post/
 order: 3
 ---
 <h1>Blog</h1>
@@ -10,7 +10,7 @@ order: 3
   {% assign posts = site.posts | where: "lang", "en" %}
   {% for post in posts reversed %}
     <li>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <a href="{{ post.url | relative_url }}">[{{post.date | date: "%Y-%m-%d"}}] {{ post.title }}</a>
     </li>
   {% endfor %}
 </ul>

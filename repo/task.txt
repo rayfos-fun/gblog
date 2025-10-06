@@ -33,8 +33,9 @@
 ../jekyll-site/_others-zh-tw/motto.md
 
 # file format under _posts must be YYYY-MM-DD-xxx.md|html
-../jekyll-site/_posts/2025-05-21-en.md  # address
+../jekyll-site/_posts/2025-05-21-en.md
 ../jekyll-site/_posts/2025-05-21-zh-tw.md  # 中英地址看文化
+../jekyll-site/_posts/2025-08-07-en.md
 ../jekyll-site/_posts/2025-08-07-zh-tw.md  # 猜數字
 ../jekyll-site/_posts/2025-09-18-zh-tw.md  # AI寫部落格
 ../jekyll-site/_posts/2025-09-20-zh-tw.md  # 立志每日git push
