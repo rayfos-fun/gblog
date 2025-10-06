@@ -62,9 +62,7 @@
 ../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
 ../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
 
-../jekyll-site/assets/css/guess-number.css
 ../jekyll-site/assets/css/three-heroes.css
-../jekyll-site/assets/js/zh-tw/guess-number.js
 ../jekyll-site/assets/js/zh-tw/three-heroes.js
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
