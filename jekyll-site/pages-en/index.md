@@ -11,18 +11,20 @@ order: 1
 
 Hakuna Matata  --by Pumbaa and Timon
 
-# Recent blog
-
-<sub>[history]({{ '/en/post/' | relative_url }})</sub>
-
-* [2025-10-03: Review: The Lychee Road – A White-Collar Worker's Saga and How to Make Peace with Fate]({{ '/en/post/20251003/' | relative_url }})
-* ...
-
 # Recent games
 
 <sub>[history]({{ '/en/game/' | relative_url }})</sub>
 
 * [2025-10-02: whack-a-mole]({{ '/en/game/whack-a-mole/' | relative_url }})
+* [2025-09-25: Nine Rings]({{ '/en/game/nine-rings/' | relative_url }})
+* ...
+
+# Recent blog
+
+<sub>[history]({{ '/en/post/' | relative_url }})</sub>
+
+* [2025-10-03: Review: The Lychee Road – A White-Collar Worker's Saga and How to Make Peace with Fate]({{ '/en/post/20251003/' | relative_url }})
+* [2025-10-01: [Post] The Engineer's Anchor: Why I'm Obsessed with the World Beneath High-Level Code]({{ '/en/post/20251001/' | relative_url }})
 * ...
 
 # Log
