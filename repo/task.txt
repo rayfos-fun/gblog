@@ -63,10 +63,8 @@
 
 ../jekyll-site/assets/css/guess-number.css
 ../jekyll-site/assets/css/three-heroes.css
-../jekyll-site/assets/css/tic-tac-toe.css
 ../jekyll-site/assets/js/zh-tw/guess-number.js
 ../jekyll-site/assets/js/zh-tw/three-heroes.js
-../jekyll-site/assets/js/zh-tw/tic-tac-toe.js
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
