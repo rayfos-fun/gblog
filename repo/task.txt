@@ -67,7 +67,6 @@
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
-# pages  sitemap
 ../jekyll-site/pages-en/index.md  # home
 ../jekyll-site/pages-en/game.md
 ../jekyll-site/pages-en/post.md
