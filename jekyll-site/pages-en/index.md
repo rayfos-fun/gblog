@@ -15,7 +15,8 @@ Hakuna Matata  --by Pumbaa and Timon
 
 <sub>[history]({{ '/en/game/' | relative_url }})</sub>
 
-{% for game in site.games-en limit: 3 %}
+{% assign games = site.games-en | reverse %}
+{% for game in games limit: 3 %}
 * [{{ game.date | date: "%Y-%m-%d" }}: {{ game.title }}]({{ game.url | relative_url }})
 {% endfor %}
 * ...
@@ -34,7 +35,15 @@ Hakuna Matata  --by Pumbaa and Timon
 
 <sub>[history]({{ '/en/log/' | relative_url }})</sub>
 
-* [2025-10-03: [Post] Review: The Lychee Road – A White-Collar Worker's Saga and How to Make Peace with Fate]({{ '/en/post/20251003/' | relative_url }})
-* [2025-10-02: [Game] whack-a-mole]({{ '/en/game/whack-a-mole/' | relative_url }})
-* [2025-10-01: [Post] The Engineer's Anchor: Why I'm Obsessed with the World Beneath High-Level Code]({{ '/en/post/20251001/' | relative_url }})
+{% assign collections = games | concat: posts | sort: "date" | reverse %}
+{% for collection in collections limit: 3 %}
+  {% assign paths = collection.url | split: '/' %}
+  {% if paths[2] == "game" %}
+    {% assign type = "GAME" %}
+  {% elsif paths[2] == "post" %}
+    {% assign type = "POST" %}
+  {% endif %}
+* [{{ collection.date | date: "%Y-%m-%d"}}: [{{ type }}] {{ collection.title }}]({{ collection.url | relative_url }})
+{% endfor %}
 * ...
+
