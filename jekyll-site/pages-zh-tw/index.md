@@ -11,6 +11,20 @@ order: 1
 
 人生海海 歡喜就好  --by 陳雷
 
+# 最近更新遊戲
+
+<sub>[遊戲列表]({{ '/zh-tw/game/' | relative_url }})</sub>
+
+* [2025-10-02: 遊戲-打地鼠]({{ '/zh-tw/game/whack-a-mole/' | relative_url }})
+* [2025-09-25: 遊戲-九連環]({{ '/zh-tw/game/nine-rings/' | relative_url }})
+* ...
+
+# 最近更新文章
+
+<sub>[文章列表]({{ '/zh-tw/post/' | relative_url }})</sub>
+
+* [2025-10-03: 長安的荔枝: 美人嘴饞萬骨枯]({{ '/zh-tw/post/20251003/' | relative_url }})
+* ...
 
 # 日誌
 
