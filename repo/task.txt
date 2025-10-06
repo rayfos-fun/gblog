@@ -17,6 +17,7 @@
 
 ../jekyll-site/_games-en/guess-number.html
 ../jekyll-site/_games-en/nine-rings.html
+../jekyll-site/_games-en/tic-tac-toe.html
 ../jekyll-site/_games-en/whack-a-mole.html
 
 ../jekyll-site/_games-zh-tw/guess-number.html
