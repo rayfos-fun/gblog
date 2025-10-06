@@ -75,7 +75,7 @@
 ../jekyll-site/pages-zh-tw/index.md  # home
 ../jekyll-site/pages-zh-tw/game.md
 ../jekyll-site/pages-zh-tw/post.md
-../jekyll-site/pages-zh-tw/story.html
+../jekyll-site/pages-zh-tw/story.md
 
 ../README.md  # github project
 ../requirements.txt
