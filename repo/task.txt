@@ -40,6 +40,7 @@
 ../jekyll-site/_posts/2025-05-21-zh-tw.md  # 中英地址看文化
 ../jekyll-site/_posts/2025-08-07-en.md
 ../jekyll-site/_posts/2025-08-07-zh-tw.md  # 猜數字
+
 ../jekyll-site/_posts/2025-09-18-zh-tw.md  # AI寫部落格
 ../jekyll-site/_posts/2025-09-20-zh-tw.md  # 立志每日git push
 ../jekyll-site/_posts/2025-09-21-zh-tw.md  # baba is you
@@ -50,6 +51,7 @@
 ../jekyll-site/_posts/2025-09-26-zh-tw.md  # K-POP Demon Hunter同溫層以外的世界
 ../jekyll-site/_posts/2025-09-30-zh-tw.md  # 遊泳距離 認知侷限極限
 ../jekyll-site/_posts/2025-10-01-zh-tw.md  # 邏輯閘 底層原理
+
 ../jekyll-site/_posts/2025-10-03-en.md
 ../jekyll-site/_posts/2025-10-03-zh-tw.md  # 長安的荔枝 人生命定
 
@@ -79,7 +81,6 @@
 
 ../README.md  # github project
 ../requirements.txt
-
 
 
 # repo
