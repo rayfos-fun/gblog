@@ -8,3 +8,4 @@ permalink: /zh-tw/log/
 
 * [2025-10-03: 長安的荔枝: 美人嘴饞萬骨枯]({{ '/zh-tw/post/20251003/' | relative_url }})
 * [2025-10-02: 遊戲-打地鼠]({{ '/zh-tw/game/whack-a-mole/' | relative_url }})
+* [2025-08-29: 井字遊戲]({{ '/zh-tw/game/tic-tac-toe/' | relative_url }})
