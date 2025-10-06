@@ -14,4 +14,5 @@ permalink: /en/log/
 * [2025-08-29: Game: Tic Tac Toe]({{ '/en/game/tic-tac-toe/' | relative_url }})
 * [2025-08-28: Game: Three heroes]({{ '/en/game/three-heroes/' | relative_url }})
 * [2025-08-17: Game: Guess the number]({{ '/en/game/guess-number/' | relative_url }})
+* [2025-08-07: From 1 to 1000: Binary Search Revealed—Why You Only Need 10 Guesses]({{ '/en/post/20250807/' | relative_url }})
 * [2025-05-21: A Cultural Comparison Through Address Order]({{ '/en/post/20250521/' | relative_url }})
