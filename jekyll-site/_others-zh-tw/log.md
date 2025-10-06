@@ -5,5 +5,6 @@ lang: zh-tw
 permalink: /zh-tw/log/
 ---
 [<< 返回]({{ '/zh-tw/home/' | relative_url }})
-* 2025-10-03 人生海海 歡喜就好  --by 陳雷 
-* 2025-10-02 幹就完了  --by 金久哲
+
+* [2025-10-03: 長安的荔枝: 美人嘴饞萬骨枯]({{ '/zh-tw/post/20251003/' | relative_url }})
+* [2025-10-02: 遊戲-打地鼠]({{ '/zh-tw/game/whack-a-mole/' | relative_url }})
