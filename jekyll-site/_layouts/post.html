@@ -34,17 +34,17 @@ layout: default
 {% assign paths = page.url | split: '/' %}
 {% assign lang = paths[1] %}
 {% assign type = paths[2] %}
-{% if lang == 'zh-tw' type == 'game' %}
+{% if lang == 'zh-tw' and type == 'game' %}
   {% assign collections = site.games-zh-tw %}
-{% elsif lang == 'zh-tw' type == 'post' %}
-  {% assign collections = site.posts | where lang, 'zh-tw' %}
-{% elsif lang == 'zh-tw' type == 'story' %}
+{% elsif lang == 'zh-tw' and type == 'post' %}
+  {% assign collections = site.posts | where: 'lang', 'zh-tw' %}
+{% elsif lang == 'zh-tw' and type == 'story' %}
   {% assign collections = site.stories-zh-tw %}
-{% elsif lang == 'en' type == 'game' %}
+{% elsif lang == 'en' and type == 'game' %}
   {% assign collections = site.games-en %}
-{% elsif lang == 'en' type == 'post' %}
-  {% assign collections = site.posts | where lang, 'en' %}
-{% elsif lang == 'en' type == 'story' %}
+{% elsif lang == 'en' and type == 'post' %}
+  {% assign collections = site.posts | where: 'lang', 'en' %}
+{% elsif lang == 'en' and type == 'story' %}
   {% assign collections = site.stories-en %}
 {% endif %}
 
@@ -53,8 +53,9 @@ layout: default
     {% assign current_index = forloop.index0 %}
   {% endif %}
 {% endfor %}
-{% assign prev_index = current_index | plus: 1 %}
-{% assign next_index = current_index | minus: 1 %}
+
+{% assign prev_index = current_index | minus: 1 %}
+{% assign next_index = current_index | plus: 1 %}
 {% assign prev_collection = collections[prev_index] %}
 {% assign next_collection = collections[next_index] %}
 

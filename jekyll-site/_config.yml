@@ -41,6 +41,8 @@ collections:
     output: true
   others-zh-tw:
     output: true
+  stories-en:
+    output: true
   stories-zh-tw:
     output: true
 
