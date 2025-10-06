@@ -14,3 +14,4 @@ permalink: /zh-tw/log/
 * [2025-08-29: 遊戲-井字遊戲]({{ '/zh-tw/game/tic-tac-toe/' | relative_url }})
 * [2025-08-28: 遊戲-三英戰呂布]({{ '/zh-tw/game/three-heroes/' | relative_url }})
 * [2025-08-17: 遊戲-猜數字]({{ '/zh-tw/game/guess-number/' | relative_url }})
+* [2025-05-21: 從地址書寫順序看中美文化差異]({{ '/zh-tw/post/20250521/' | relative_url }})
