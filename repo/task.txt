@@ -69,8 +69,8 @@
 
 # pages  sitemap
 ../jekyll-site/pages-en/index.md  # home
-../jekyll-site/pages-en/game.html
-../jekyll-site/pages-en/post.html
+../jekyll-site/pages-en/game.md
+../jekyll-site/pages-en/post.md
 
 ../jekyll-site/pages-zh-tw/index.md  # home
 ../jekyll-site/pages-zh-tw/game.html
