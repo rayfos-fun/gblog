@@ -9,7 +9,7 @@ order: 1
 
 <sub>[history]({{ '/en/motto/' | relative_url }})</sub>
 
-Hakuna Matata  --by Pumbaa and Timon
+Time is money  --by Benjamin Franklin
 
 # Recent games
 

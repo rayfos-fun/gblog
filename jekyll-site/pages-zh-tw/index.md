@@ -9,7 +9,7 @@ order: 1
 
 <sub>[金句大全]({{ '/zh-tw/motto/' | relative_url }})</sub>
 
-人生海海 歡喜就好  --by 陳雷
+湯姆就是瑪莉  --by 台灣龍捲風 袁志龍
 
 # 最近更新遊戲
 

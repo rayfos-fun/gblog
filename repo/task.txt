@@ -51,6 +51,7 @@
 * ../jekyll-site/_posts/2025-09-25-zh-tw.md  # vibe coding
 * ../jekyll-site/_posts/2025-09-26-zh-tw.md  # K-POP Demon Hunter同溫層以外的世界
 * ../jekyll-site/_posts/2025-09-30-zh-tw.md  # 遊泳距離 認知侷限極限
+* ../jekyll-site/_posts/2025-10-07-zh-tw.md  # 生命週曆
 ../jekyll-site/_posts/2025-10-01-en.md
 ../jekyll-site/_posts/2025-10-01-zh-tw.md  # 邏輯閘 底層原理
 ../jekyll-site/_posts/2025-10-03-en.md
@@ -65,7 +66,7 @@
 * ../jekyll-site/_stories-zh-tw/0005.md  # 奪命追魂劍
 * ../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
 * ../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
-* ../jekyll-site/_stories-zh-tw/0008.md
+* ../jekyll-site/_stories-zh-tw/0008.md  # 皖城之戰
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
