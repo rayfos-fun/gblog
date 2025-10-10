@@ -1,0 +1,333 @@
+---
+title: "四子棋"
+layout: post
+lang: zh-tw
+permalink: /zh-tw/game/connect-four/
+date: 2025-10-09
+---
+<!-- 載入 Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* 使用 Inter 字體 */
+:root {
+  font-family: 'Inter', sans-serif;
+}
+
+/* 遊戲板樣式 */
+#board {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 欄 */
+  grid-template-rows: repeat(6, 1fr);  /* 6 列 */
+  background-color: #1e40af; /* 深藍色，代表棋盤 */
+  border: 4px solid #102e86;
+  aspect-ratio: 7 / 6; /* 確保棋盤比例固定 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  overflow: hidden; /* 確保棋子不會溢出 */
+}
+
+/* 棋子單元格 (空洞) 樣式 */
+.cell-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px; /* 單元格間距 */
+  cursor: pointer;
+  transition: background-color 0.2s;
+  /* 讓單元格在 Hover 時有視覺反饋 */
+  background-color: rgba(255, 255, 255, 0.05); 
+}
+
+.cell-container:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* 棋盤上的孔洞 (使用內陰影實現深度感) */
+.hole {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  background-color: #1e40af;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+  position: absolute;
+  z-index: 10;
+}
+
+/* 棋子樣式 */
+.piece {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0; /* 棋子從底部開始 */
+  transition: transform 0.5s ease-out; /* 模擬棋子落下動畫 */
+  z-index: 20;
+  opacity: 0; /* 初始隱藏 */
+  transform: translateY(-500px); /* 從上方開始掉落 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* 棋子落下的動畫結束狀態 */
+.piece.dropped {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 玩家顏色 */
+.player-1 { background-color: #ef4444; } /* 紅色 */
+.player-2 { background-color: #f59e0b; } /* 黃色 */
+
+/* 響應式棋盤大小 */
+@media (max-width: 640px) {
+  #board {
+    width: 95vw;
+    max-width: 420px;
+  }
+}
+</style>
+<div class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+  <div id="app" class="w-full max-w-lg bg-white p-6 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">四子棋</h1>
+    
+    <!-- 遊戲狀態顯示區域 -->
+    <div id="game-status" class="text-center mb-4 p-3 rounded-lg shadow-md transition-colors duration-300">
+      <p id="status-text" class="text-lg font-semibold text-gray-700">請開始遊戲</p>
+    </div>
+
+    <!-- 遊戲板 -->
+    <div id="board" class="mx-auto w-full">
+      <!-- 棋盤單元格將由 JavaScript 動態生成 -->
+    </div>
+
+    <!-- 按鈕與結果區域 -->
+    <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+      <button id="reset-button" 
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+        重新開始
+      </button>
+      <div id="game-message" 
+         class="hidden bg-yellow-100 text-yellow-800 p-3 rounded-lg font-medium text-center shadow-inner mt-4 sm:mt-0">
+        <!-- 遊戲結束訊息顯示區 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// JavaScript 遊戲邏輯
+
+const ROWS = 6; // 棋盤行數
+const COLS = 7; // 棋盤欄數
+let gameBoard = []; // 遊戲狀態的二維陣列 (0=空, 1=玩家1, 2=玩家2)
+let currentPlayer = 1;
+let isGameOver = false;
+
+const boardElement = document.getElementById('board');
+const statusText = document.getElementById('status-text');
+const gameMessage = document.getElementById('game-message');
+const resetButton = document.getElementById('reset-button');
+
+/**
+ * 初始化遊戲狀態和 HTML 棋盤
+ */
+function initializeGame() {
+  gameBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+  currentPlayer = 1;
+  isGameOver = false;
+  boardElement.innerHTML = ''; // 清空舊棋盤內容
+  gameMessage.classList.add('hidden');
+  
+  // 產生 7 欄 x 6 列的單元格
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cellContainer = document.createElement('div');
+      cellContainer.classList.add('cell-container');
+      cellContainer.dataset.row = r;
+      cellContainer.dataset.col = c;
+      cellContainer.addEventListener('click', () => handleDrop(c));
+
+      // 棋盤上的孔洞視覺元素
+      const hole = document.createElement('div');
+      hole.classList.add('hole');
+      cellContainer.appendChild(hole);
+
+      boardElement.appendChild(cellContainer);
+    }
+  }
+  updateStatusDisplay();
+}
+
+/**
+ * 處理玩家點擊某列來放置棋子
+ * @param {number} col - 被點擊的欄位索引
+ */
+function handleDrop(col) {
+  if (isGameOver) return;
+
+  // 1. 找到該欄位的最底空位 (從底層往上找)
+  let rowToDrop = -1;
+  for (let r = ROWS - 1; r >= 0; r--) {
+    if (gameBoard[r][col] === 0) {
+      rowToDrop = r;
+      break;
+    }
+  }
+
+  // 如果該欄已滿
+  if (rowToDrop === -1) {
+    console.log(`Column ${col} is full.`);
+    return;
+  }
+
+  // 2. 更新遊戲狀態陣列
+  gameBoard[rowToDrop][col] = currentPlayer;
+  
+  // 3. 繪製棋子並執行動畫
+  drawPiece(rowToDrop, col, currentPlayer);
+
+  // 4. 檢查勝負 (稍微延遲以讓動畫播放)
+  setTimeout(() => {
+    if (checkWin(rowToDrop, col, currentPlayer)) {
+      endGame(`玩家 ${currentPlayer} 獲勝！`);
+    } else if (isBoardFull()) {
+      endGame('平手！棋盤已滿。');
+    } else {
+      // 5. 切換回合
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      updateStatusDisplay();
+    }
+  }, 550); // 略大於 transition: 0.5s 的時間
+}
+
+/**
+ * 繪製棋子到 HTML 棋盤上
+ * @param {number} r - 行索引
+ * @param {number} c - 欄索引
+ * @param {number} player - 玩家編號 (1 或 2)
+ */
+function drawPiece(r, c, player) {
+  // 找到該位置的 cell-container 元素
+  const index = r * COLS + c; 
+  const cellContainer = boardElement.children[index];
+
+  // 建立新的棋子元素
+  const piece = document.createElement('div');
+  piece.classList.add('piece', `player-${player}`);
+  
+  // 將棋子添加到容器中
+  cellContainer.appendChild(piece);
+
+  // 強制瀏覽器重繪 (很重要，確保 transform: translateY(-500px) 先應用)
+  piece.offsetHeight; 
+  
+  // 觸發動畫
+  piece.classList.add('dropped');
+}
+
+/**
+ * 檢查給定位置是否達成四子連線
+ * @param {number} r - 放置棋子的行
+ * @param {number} c - 放置棋子的欄
+ * @param {number} player - 玩家編號
+ * @returns {boolean} - 是否獲勝
+ */
+function checkWin(r, c, player) {
+  // 檢查四個方向: 橫向(H)、縱向(V)、主斜線(\)、副斜線(/)
+  const directions = [
+    [0, 1],  // H: 右
+    [1, 0],  // V: 下
+    [1, 1],  // D1: 右下
+    [1, -1]  // D2: 左下
+  ];
+
+  for (const [dr, dc] of directions) {
+    // 檢查正反兩個方向
+    if (countLine(r, c, player, dr, dc) + countLine(r, c, player, -dr, -dc) >= 3) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * 從給定位置和方向延伸計數連續同色棋子 (不包含起點)
+ * @param {number} r - 起始行
+ * @param {number} c - 起始欄
+ * @param {number} player - 玩家編號
+ * @param {number} dr - 行方向增量
+ * @param {number} dc - 欄方向增量
+ * @returns {number} - 連續棋子數量 (不含起點)
+ */
+function countLine(r, c, player, dr, dc) {
+  let count = 0;
+  for (let i = 1; i < 4; i++) {
+    const newR = r + dr * i;
+    const newC = c + dc * i;
+
+    // 邊界檢查
+    if (newR < 0 || newR >= ROWS || newC < 0 || newC >= COLS) {
+      break;
+    }
+
+    if (gameBoard[newR][newC] === player) {
+      count++;
+    } else {
+      break;
+    }
+  }
+  return count;
+}
+
+/**
+ * 檢查棋盤是否已滿
+ * @returns {boolean} - 棋盤是否已滿
+ */
+function isBoardFull() {
+  // 只需檢查最上面一排 (第 0 行) 是否有空位
+  return gameBoard[0].every(cell => cell !== 0);
+}
+
+/**
+ * 更新回合狀態顯示
+ */
+function updateStatusDisplay() {
+  const playerColor = currentPlayer === 1 ? '紅色' : '黃色';
+  const colorClass = currentPlayer === 1 ? 'text-red-600' : 'text-yellow-600';
+  
+  statusText.innerHTML = `現在是 <span class="font-extrabold ${colorClass}">玩家 ${currentPlayer} (${playerColor})</span> 的回合`;
+
+  // 更新狀態框的背景顏色
+  const statusBox = document.getElementById('game-status');
+  statusBox.classList.remove('bg-red-100', 'bg-yellow-100', 'bg-gray-200');
+  statusBox.classList.add(currentPlayer === 1 ? 'bg-red-100' : 'bg-yellow-100');
+}
+
+/**
+ * 結束遊戲並顯示訊息
+ * @param {string} message - 遊戲結束的訊息
+ */
+function endGame(message) {
+  isGameOver = true;
+  statusText.textContent = '遊戲結束！';
+  
+  gameMessage.classList.remove('hidden');
+  gameMessage.textContent = message;
+
+  // 顯示勝利訊息並高亮
+  const statusBox = document.getElementById('game-status');
+  statusBox.classList.remove('bg-red-100', 'bg-yellow-100');
+  statusBox.classList.add('bg-gray-200');
+}
+
+// 綁定重新開始按鈕事件
+resetButton.addEventListener('click', initializeGame);
+
+// 遊戲啟動
+window.onload = initializeGame;
+</script>
