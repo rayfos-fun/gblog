@@ -5,11 +5,11 @@ lang: en
 permalink: /en/home/
 order: 1
 ---
-# Daily motto
+# Motto
 
 <sub>[history]({{ '/en/motto/' | relative_url }})</sub>
 
-Time is money  --by Benjamin Franklin
+FRUGALITY. Make no expense but to do good to others or yourself; i.e., waste nothing. --by Benjamin Franklin
 
 # Recent games
 

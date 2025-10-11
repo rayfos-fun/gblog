@@ -5,11 +5,11 @@ lang: zh-tw
 permalink: /zh-tw/home/
 order: 1
 ---
-# 一日一金句 
+# 本日金句 
 
 <sub>[金句大全]({{ '/zh-tw/motto/' | relative_url }})</sub>
 
-湯姆就是瑪莉  --by 台灣龍捲風 袁志龍
+一粥一飯，當思來處不易；半絲半縷，恆念物力維艱。 --朱子家訓
 
 # 最近更新遊戲
 
