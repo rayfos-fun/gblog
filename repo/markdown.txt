@@ -1,0 +1,19 @@
+extention: .md
+
+# title
+## sub title
+### sub sub title
+...
+
+* bullet point 1
+    * sub buillet point 1.1
+    * sub buillet point 1.2
+* bullet point 2
+
+1 first list point
+2 second list point
+
+*italic*
+**bold**
+***bold and italic***
+
