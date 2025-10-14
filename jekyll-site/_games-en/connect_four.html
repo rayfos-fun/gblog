@@ -1,0 +1,266 @@
+---
+title: "Connect four"
+layout: post
+lang: en
+permalink: /en/game/connect-four/
+date: 2025-10-09
+---
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  font-family: 'Inter', sans-serif;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 columns */
+  grid-template-rows: repeat(6, 1fr);  /* 6 rows */
+  background-color: #1e40af; /* dark blue */
+  border: 4px solid #102e86;
+  aspect-ratio: 7 / 6;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cell-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: rgba(255, 255, 255, 0.05); 
+}
+
+.cell-container:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.hole {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  background-color: #1e40af;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+  position: absolute;
+  z-index: 10;
+}
+
+.piece {
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  transition: transform 0.5s ease-out;
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(-500px); /* fall from up*/
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.piece.dropped {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.player-1 { background-color: #ef4444; } /* red */
+.player-2 { background-color: #f59e0b; } /* yellow */
+
+@media (max-width: 640px) {
+  #board {
+    width: 95vw;
+    max-width: 420px;
+  }
+}
+</style>
+<div class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+  <div id="app" class="w-full max-w-lg bg-white p-6 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Connect Four</h1>
+    
+    <div id="game-status" class="text-center mb-4 p-3 rounded-lg shadow-md transition-colors duration-300">
+      <p id="status-text" class="text-lg font-semibold text-gray-700">Start the game</p>
+    </div>
+
+    <div id="board" class="mx-auto w-full">
+      <!-- controlled by javascript -->
+    </div>
+
+    <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+      <button id="reset-button" 
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+        Restart
+      </button>
+      <div id="game-message" 
+         class="hidden bg-yellow-100 text-yellow-800 p-3 rounded-lg font-medium text-center shadow-inner mt-4 sm:mt-0">
+        <!-- game over message -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const ROWS = 6; 
+const COLS = 7; 
+let gameBoard = []; // 0: empty; 1: player 1; 2: player 2
+let currentPlayer = 1;
+let isGameOver = false;
+
+const boardElement = document.getElementById('board');
+const statusText = document.getElementById('status-text');
+const gameMessage = document.getElementById('game-message');
+const resetButton = document.getElementById('reset-button');
+
+function initializeGame() {
+  gameBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+  currentPlayer = 1;
+  isGameOver = false;
+  boardElement.innerHTML = '';
+  gameMessage.classList.add('hidden');
+  
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cellContainer = document.createElement('div');
+      cellContainer.classList.add('cell-container');
+      cellContainer.dataset.row = r;
+      cellContainer.dataset.col = c;
+      cellContainer.addEventListener('click', () => handleDrop(c));
+
+      const hole = document.createElement('div');
+      hole.classList.add('hole');
+      cellContainer.appendChild(hole);
+
+      boardElement.appendChild(cellContainer);
+    }
+  }
+  updateStatusDisplay();
+}
+
+function handleDrop(col) {
+  if (isGameOver) return;
+
+  // find the empty row 
+  let rowToDrop = -1;
+  for (let r = ROWS - 1; r >= 0; r--) {
+    if (gameBoard[r][col] === 0) {
+      rowToDrop = r;
+      break;
+    }
+  }
+
+  if (rowToDrop === -1) {
+    console.log(`Column ${col} is full.`);
+    return;
+  }
+
+  gameBoard[rowToDrop][col] = currentPlayer;
+  
+  drawPiece(rowToDrop, col, currentPlayer);
+
+  setTimeout(() => {
+    if (checkWin(rowToDrop, col, currentPlayer)) {
+      endGame(`Player ${currentPlayer} win!`);
+    } else if (isBoardFull()) {
+      endGame('Tie!');
+    } else {
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      updateStatusDisplay();
+    }
+  }, 550); // > transition .5s
+}
+
+function drawPiece(r, c, player) {
+  const index = r * COLS + c; 
+  const cellContainer = boardElement.children[index];
+
+  const piece = document.createElement('div');
+  piece.classList.add('piece', `player-${player}`);
+  
+  cellContainer.appendChild(piece);
+
+  piece.offsetHeight; 
+  
+  piece.classList.add('dropped');
+}
+
+function checkWin(r, c, player) {
+  const directions = [
+    [0, 1],  // right
+    [1, 0],  // down
+    [1, 1],  // right-down
+    [1, -1]  // left-down
+  ];
+
+  for (const [dr, dc] of directions) {
+    if (countLine(r, c, player, dr, dc) + countLine(r, c, player, -dr, -dc) >= 3) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @param {number} r - start row
+ * @param {number} c - start column
+ * @param {number} player - player
+ * @param {number} dr - delta row
+ * @param {number} dc - delta column
+ * @returns {number} - count
+ */
+function countLine(r, c, player, dr, dc) {
+  let count = 0;
+  for (let i = 1; i < 4; i++) {
+    const newR = r + dr * i;
+    const newC = c + dc * i;
+
+    if (newR < 0 || newR >= ROWS || newC < 0 || newC >= COLS) {
+      break;
+    }
+
+    if (gameBoard[newR][newC] === player) {
+      count++;
+    } else {
+      break;
+    }
+  }
+  return count;
+}
+
+function isBoardFull() {
+  return gameBoard[0].every(cell => cell !== 0);
+}
+
+function updateStatusDisplay() {
+  const playerColor = currentPlayer === 1 ? 'RED' : 'YELLOW';
+  const colorClass = currentPlayer === 1 ? 'text-red-600' : 'text-yellow-600';
+  
+  statusText.innerHTML = `It's <span class="font-extrabold ${colorClass}">player ${currentPlayer} (${playerColor})</span>'s turn`;
+
+  const statusBox = document.getElementById('game-status');
+  statusBox.classList.remove('bg-red-100', 'bg-yellow-100', 'bg-gray-200');
+  statusBox.classList.add(currentPlayer === 1 ? 'bg-red-100' : 'bg-yellow-100');
+}
+function endGame(message) {
+  isGameOver = true;
+  statusText.textContent = 'Game Over!';
+  
+  gameMessage.classList.remove('hidden');
+  gameMessage.textContent = message;
+
+  const statusBox = document.getElementById('game-status');
+  statusBox.classList.remove('bg-red-100', 'bg-yellow-100');
+  statusBox.classList.add('bg-gray-200');
+}
+
+resetButton.addEventListener('click', initializeGame);
+
+window.onload = initializeGame;
+</script>
