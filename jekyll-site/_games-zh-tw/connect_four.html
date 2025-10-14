@@ -127,6 +127,7 @@ const COLS = 7; // 棋盤欄數
 let gameBoard = []; // 遊戲狀態的二維陣列 (0=空, 1=玩家1, 2=玩家2)
 let currentPlayer = 1;
 let isGameOver = false;
+let isProcessingTurn = false;
 
 const boardElement = document.getElementById('board');
 const statusText = document.getElementById('status-text');
@@ -140,6 +141,7 @@ function initializeGame() {
   gameBoard = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
   currentPlayer = 1;
   isGameOver = false;
+  isProcessingTurn = false;
   boardElement.innerHTML = ''; // 清空舊棋盤內容
   gameMessage.classList.add('hidden');
   
@@ -168,7 +170,7 @@ function initializeGame() {
  * @param {number} col - 被點擊的欄位索引
  */
 function handleDrop(col) {
-  if (isGameOver) return;
+  if (isGameOver || isProcessingTurn) return;
 
   // 1. 找到該欄位的最底空位 (從底層往上找)
   let rowToDrop = -1;
@@ -184,6 +186,8 @@ function handleDrop(col) {
     console.log(`Column ${col} is full.`);
     return;
   }
+
+  isProcessingTurn = true;
 
   // 2. 更新遊戲狀態陣列
   gameBoard[rowToDrop][col] = currentPlayer;
@@ -202,6 +206,7 @@ function handleDrop(col) {
       currentPlayer = currentPlayer === 1 ? 2 : 1;
       updateStatusDisplay();
     }
+    isProcessingTurn = false;
   }, 550); // 略大於 transition: 0.5s 的時間
 }
 
