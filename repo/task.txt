@@ -17,20 +17,24 @@
 ../jekyll-site/Gemfile.lock
 ../jekyll-site/index.html  # redirect to en or zh-tw
 
-../jekyll-site/_games-en/connect_four.html
+../jekyll-site/_data/locales/en.yml
+../jekyll-site/_data/locales/zh-tw.yml
+
+../jekyll-site/_games-en/connect-four.html
 ../jekyll-site/_games-en/guess-number.html 
 ../jekyll-site/_games-en/nine-rings.html   
 ../jekyll-site/_games-en/three-heroes.html 
 ../jekyll-site/_games-en/tic-tac-toe.html  
 ../jekyll-site/_games-en/whack-a-mole.html 
 
-../jekyll-site/_games-zh-tw/connect_four.html  # 2025-10-09
+../jekyll-site/_games-zh-tw/connect-four.html  # 2025-10-09
 ../jekyll-site/_games-zh-tw/guess-number.html  # 2025-08-17
 ../jekyll-site/_games-zh-tw/nine-rings.html    # 2025-09-25
 ../jekyll-site/_games-zh-tw/three-heroes.html  # 2025-08-28
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html   # 2025-08-29
 ../jekyll-site/_games-zh-tw/whack-a-mole.html  # 2025-10-02
 
+../jekyll-site/_includes/games/connect-four.html
 ../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/_layouts/post.html  # copied from minima
 

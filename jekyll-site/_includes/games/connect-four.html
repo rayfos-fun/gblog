@@ -1,10 +1,4 @@
----
-title: "四子棋"
-layout: post
-lang: zh-tw
-permalink: /zh-tw/game/connect-four/
-date: 2025-10-09
----
+{% assign game = site.data.locales[page.lang].games.connect_four %}
 <!-- 載入 Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -93,11 +87,11 @@ date: 2025-10-09
 <div class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
   <div id="app" class="w-full max-w-lg bg-white p-6 rounded-xl shadow-2xl">
-    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">四子棋</h1>
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">{{ game.title }}</h1>
     
     <!-- 遊戲狀態顯示區域 -->
     <div id="game-status" class="text-center mb-4 p-3 rounded-lg shadow-md transition-colors duration-300">
-      <p id="status-text" class="text-lg font-semibold text-gray-700">請開始遊戲</p>
+      <p id="status-text" class="text-lg font-semibold text-gray-700">{{ game.start }}</p>
     </div>
 
     <!-- 遊戲板 -->
@@ -109,7 +103,7 @@ date: 2025-10-09
     <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
       <button id="reset-button" 
           class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-        重新開始
+        {{ game.restart }}
       </button>
       <div id="game-message" 
          class="hidden bg-yellow-100 text-yellow-800 p-3 rounded-lg font-medium text-center shadow-inner mt-4 sm:mt-0">
@@ -121,7 +115,7 @@ date: 2025-10-09
 
 <script>
 // JavaScript 遊戲邏輯
-
+const i18n = {{ game.i18n | jsonify }};
 const ROWS = 6; // 棋盤行數
 const COLS = 7; // 棋盤欄數
 let gameBoard = []; // 遊戲狀態的二維陣列 (0=空, 1=玩家1, 2=玩家2)
@@ -198,9 +192,9 @@ function handleDrop(col) {
   // 4. 檢查勝負 (稍微延遲以讓動畫播放)
   setTimeout(() => {
     if (checkWin(rowToDrop, col, currentPlayer)) {
-      endGame(`玩家 ${currentPlayer} 獲勝！`);
+      endGame('{{ game.win }}'.replace('{currentPlayer}', currentPlayer));
     } else if (isBoardFull()) {
-      endGame('平手！棋盤已滿。');
+      endGame('{{ game.tie }}');
     } else {
       // 5. 切換回合
       currentPlayer = currentPlayer === 1 ? 2 : 1;
@@ -302,10 +296,15 @@ function isBoardFull() {
  * 更新回合狀態顯示
  */
 function updateStatusDisplay() {
-  const playerColor = currentPlayer === 1 ? '紅色' : '黃色';
+  const playerColor = currentPlayer === 1 ? '{{ game.red }}' : '{{ game.yellow }}';
   const colorClass = currentPlayer === 1 ? 'text-red-600' : 'text-yellow-600';
   
-  statusText.innerHTML = `現在是 <span class="font-extrabold ${colorClass}">玩家 ${currentPlayer} (${playerColor})</span> 的回合`;
+  statusText.innerHTML = "{{ game.status }}"
+    .replace('{player}', 
+        '<span class="font-extrabold {colorClass}">{{ game.player }}({playerColor})</span>'
+          .replace('{colorClass}', colorClass)
+          .replace('{currentPlayer}', currentPlayer)
+          .replace('{playerColor}', playerColor));
 
   // 更新狀態框的背景顏色
   const statusBox = document.getElementById('game-status');
@@ -319,7 +318,7 @@ function updateStatusDisplay() {
  */
 function endGame(message) {
   isGameOver = true;
-  statusText.textContent = '遊戲結束！';
+  statusText.textContent = '{{ game.gameover }}';
   
   gameMessage.classList.remove('hidden');
   gameMessage.textContent = message;

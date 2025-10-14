@@ -1,0 +1,12 @@
+games:
+  connect_four:
+    title: "Connect Four"
+    start: "Start the game"
+    restart: "Restart"
+    win: "Player {currentPlayer} win!"
+    tie: "Tie!"
+    red: "RED"
+    yellow: "YELLOW"
+    status: "{player}'s turn"
+    player: "player {currentPlayer}"
+    gameover: "GAME OVER!"
