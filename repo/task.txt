@@ -23,7 +23,6 @@
 ../jekyll-site/_games-en/tic-tac-toe.html  
 ../jekyll-site/_games-en/whack-a-mole.html 
 
-
 ../jekyll-site/_games-zh-tw/connect_four.html  # 2025-10-09
 ../jekyll-site/_games-zh-tw/guess-number.html  # 2025-08-17
 ../jekyll-site/_games-zh-tw/nine-rings.html    # 2025-09-25
@@ -71,7 +70,8 @@
 * ../jekyll-site/_stories-zh-tw/0005.md  # 奪命追魂劍
 * ../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
 * ../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
-* ../jekyll-site/_stories-zh-tw/0008.md  # 皖城之戰
+* ../jekyll-site/_stories-zh-tw/0008.md  # 銅雀春深鎖二喬
+* ../jekyll-site/_stories-zh-tw/0009.md  # 皖城之戰
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 

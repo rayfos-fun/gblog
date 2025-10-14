@@ -31,6 +31,16 @@ order: 1
 {% endfor %}
 * ...
 
+# 最近更新小說
+
+<sub>[章回列表]({{ '/zh-tw/story/' | relative_url }})</sub>
+
+{% assign stories = site.stories-zh-tw | reverse %}
+{% for story in stories limit: 3 %}
+* [{{ story.date | date: "%Y-%m-%d"}}: {{ story.title }}]({{ story.url | relative_url }})
+{% endfor %}
+* ...
+
 # 日誌
 
 <sub>[日誌大全]({{ '/zh-tw/log/' | relative_url }})</sub>
