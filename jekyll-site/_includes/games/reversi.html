@@ -1,0 +1,588 @@
+{% assign game = site.data.locales[page.lang].games.reversi %}
+<style>
+/* 引入 Inter 字體作為通用字體 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+  --board-color: #006400; /* 深綠色棋盤 */
+  --cell-size: 60px;
+  --black-piece-color: #1a1a1a;
+  --white-piece-color: #f0f0f0;
+  --highlight-color: rgba(255, 255, 255, 0.2);
+  --valid-move-color: rgba(255, 255, 255, 0.4);
+  --text-color: #e0e0e0;
+  --bg-color: #2c3e50;
+  --info-bg: #34495e;
+  --win-color: #27ae60;
+  --lose-color: #e74c3c;
+}
+
+.game-container {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90%;
+  width: 550px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.game-info {
+  background-color: var(--info-bg);
+  padding: 15px 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+}
+
+.score-display, .status-display {
+  text-align: center;
+  margin: 5px 10px;
+}
+
+.score-display div {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  min-width: 40px;
+}
+
+#black-score { background-color: var(--black-piece-color); color: var(--white-piece-color); }
+#white-score { background-color: var(--white-piece-color); color: var(--black-piece-color); border: 1px solid #333; }
+
+.status-display {
+  font-size: 1.2em;
+  padding: 5px;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(8, var(--cell-size));
+  background-color: var(--board-color);
+  border: 8px solid #5a5a5a;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid #107a10; /* 棋格線 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.cell:hover:not(.occupied):not(.valid-move) {
+  background-color: var(--highlight-color);
+}
+
+.piece {
+  width: calc(var(--cell-size) * 0.8);
+  height: calc(var(--cell-size) * 0.8);
+  border-radius: 50%;
+  transition: transform 0.3s ease-out, background-color 0.5s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.piece.black {
+  background-color: var(--black-piece-color);
+}
+
+.piece.white {
+  background-color: var(--white-piece-color);
+}
+
+/* 翻轉動畫效果 */
+.flipping {
+  animation: flip-scale 0.5s ease-in-out;
+}
+@keyframes flip-scale {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.5); }
+  100% { transform: scale(1); }
+}
+
+/* 有效落子提示 */
+.valid-move::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: var(--valid-move-color);
+  pointer-events: none;
+  opacity: 0.8;
+}
+.valid-move:hover::after {
+  background-color: var(--white-piece-color);
+}
+
+.current-player-indicator {
+  padding: 5px 15px;
+  border-radius: 6px;
+  margin-left: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+/* 遊戲結束模態框 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none; /* 預設隱藏 */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--info-bg);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  transform: scale(0.8);
+  animation: pop-up 0.3s forwards;
+}
+
+@keyframes pop-up {
+  to { transform: scale(1); }
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 2em;
+}
+
+.modal-content button {
+  background-color: var(--win-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.modal-content button:hover {
+  background-color: #2ecc71;
+  transform: translateY(-1px);
+}
+
+/* 響應式設計 */
+@media (max-width: 600px) {
+  :root {
+    --cell-size: 40px;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  .game-info {
+    flex-direction: column;
+  }
+  .score-display, .status-display {
+    margin: 5px 0;
+  }
+}
+</style>
+
+<div class="game-container">
+  <div class="game-info">
+    <div class="score-display">
+      {{ game.black }}: 
+      <div id="black-score" class="current-player-indicator">2</div>
+    </div>
+    
+    <div class="score-display">
+      {{ game.white }}: 
+      <div id="white-score">2</div>
+    </div>
+    
+    <div class="status-display">
+      {{ game.current_player }}: 
+      <span id="current-player-text" class="current-player-indicator black">{{ game.black }}</span>
+    </div>
+  </div>
+  
+  <div id="game-board">
+    <!-- 棋格將由 JavaScript 動態生成 -->
+  </div>
+  </div>
+  
+  <!-- 遊戲結束模態框 -->
+  <div id="game-over-modal" class="modal">
+  <div class="modal-content">
+    <h2 id="modal-message"></h2>
+    <button onclick="resetGame()">{{ game.restart }}</button>
+  </div>
+</div>
+
+<script>
+// 遊戲狀態變量
+let board;
+let currentPlayer; // 1: Black, 2: White
+let isGameActive = true;
+const BOARD_SIZE = 8;
+
+// 方向：[dr, dc] (8個方向)
+const directions = [
+  [0, 1], [0, -1], [1, 0], [-1, 0],
+  [1, 1], [1, -1], [-1, 1], [-1, -1]
+];
+
+// DOM 元素
+const boardElement = document.getElementById('game-board');
+const blackScoreElement = document.getElementById('black-score');
+const whiteScoreElement = document.getElementById('white-score');
+const currentPlayerText = document.getElementById('current-player-text');
+const gameOverModal = document.getElementById('game-over-modal');
+const modalMessage = document.getElementById('modal-message');
+
+// 定義變量來儲存 CSS 顏色值 (修正 SyntaxError: Unexpected token 'var')
+let blackColor, whiteColor, textColor;
+
+
+/**
+ * 初始化遊戲
+ */
+function initializeGame() {
+  // 初始化棋盤為 8x8 陣列，全部為 0 (空)
+  board = Array(BOARD_SIZE).fill(0).map(() => Array(BOARD_SIZE).fill(0));
+  // 設置初始的四個棋子
+  board[3][3] = 2; // White
+  board[3][4] = 1; // Black
+  board[4][3] = 1; // Black
+  board[4][4] = 2; // White
+
+  currentPlayer = 1; // 黑色先手
+  isGameActive = true;
+
+  // 獲取 CSS 變量的值
+  const rootStyle = getComputedStyle(document.documentElement);
+  blackColor = rootStyle.getPropertyValue('--black-piece-color').trim();
+  whiteColor = rootStyle.getPropertyValue('--white-piece-color').trim();
+  textColor = rootStyle.getPropertyValue('--text-color').trim();
+
+
+  renderBoard();
+  updateGameInfo();
+}
+
+/**
+ * 渲染棋盤到 DOM
+ */
+function renderBoard() {
+  boardElement.innerHTML = ''; // 清空棋盤
+  
+  // 找出所有有效落子位置
+  const validMoves = getValidMoves(currentPlayer);
+  
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.row = r;
+      cell.dataset.col = c;
+      
+      // 繪製棋子
+      if (board[r][c] !== 0) {
+        cell.classList.add('occupied');
+        const piece = document.createElement('div');
+        piece.classList.add('piece', board[r][c] === 1 ? 'black' : 'white');
+        cell.appendChild(piece);
+      } else {
+        // 標記有效落子位置
+        const isValid = validMoves.some(move => move.r === r && move.c === c);
+        if (isValid) {
+          cell.classList.add('valid-move');
+          // 設置點擊事件
+          cell.addEventListener('click', () => handleMove(r, c));
+        }
+      }
+      boardElement.appendChild(cell);
+    }
+  }
+}
+
+/**
+ * 檢查一個位置是否在棋盤內
+ * @param {number} r 行索引
+ * @param {number} c 列索引
+ * @returns {boolean}
+ */
+function isWithinBounds(r, c) {
+  return r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE;
+}
+
+/**
+ * 獲取對手的棋子代碼
+ * @param {number} player 玩家代碼 (1 or 2)
+ * @returns {number} 對手代碼
+ */
+function getOpponent(player) {
+  return player === 1 ? 2 : 1;
+}
+
+/**
+ * 檢查特定位置的落子是否有效，並返回所有可翻轉的棋子座標
+ * @param {number} r 行索引
+ * @param {number} c 列索引
+ * @param {number} player 當前玩家代碼
+ * @returns {Array<{r: number, c: number}> | null} 可翻轉的棋子陣列，如果無效則為 null
+ */
+function checkValidMove(r, c, player) {
+  if (!isWithinBounds(r, c) || board[r][c] !== 0) {
+    return null; // 必須是空位
+  }
+
+  const opponent = getOpponent(player);
+  let piecesToFlip = [];
+
+  // 檢查所有 8 個方向
+  for (const [dr, dc] of directions) {
+    let currentR = r + dr;
+    let currentC = c + dc;
+    let lineToFlip = [];
+
+    // 沿著一個方向移動，直到：
+    // 1. 移出棋盤
+    // 2. 遇到空位
+    // 3. 遇到自己的棋子
+    while (isWithinBounds(currentR, currentC) && board[currentR][currentC] === opponent) {
+      lineToFlip.push({ r: currentR, c: currentC });
+      currentR += dr;
+      currentC += dc;
+    }
+
+    // 條件 1 & 2：如果移出棋盤或遇到空位，這條線無效
+    if (!isWithinBounds(currentR, currentC) || board[currentR][currentC] === 0) {
+      continue;
+    }
+
+    // 條件 3：遇到自己的棋子，且中間有至少一個對手棋子
+    if (board[currentR][currentC] === player && lineToFlip.length > 0) {
+      piecesToFlip = piecesToFlip.concat(lineToFlip);
+    }
+  }
+
+  return piecesToFlip.length > 0 ? piecesToFlip : null;
+}
+
+/**
+ * 遍歷棋盤，獲取所有有效落子位置及其可翻轉的棋子
+ * @param {number} player 當前玩家代碼
+ * @returns {Array<{r: number, c: number, flips: Array<{r: number, c: number}>}>} 有效落子陣列
+ */
+function getValidMoves(player) {
+  const moves = [];
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      const flips = checkValidMove(r, c, player);
+      if (flips) {
+        moves.push({ r, c, flips });
+      }
+    }
+  }
+  return moves;
+}
+
+/**
+ * 處理玩家落子
+ * @param {number} r 行索引
+ * @param {number} c 列索引
+ */
+function handleMove(r, c) {
+  if (!isGameActive) return;
+
+  const validMoves = getValidMoves(currentPlayer);
+  const move = validMoves.find(m => m.r === r && m.c === c);
+
+  if (!move) {
+    console.error("無效的移動！/invalid moves!");
+    return;
+  }
+
+  // 1. 放置新棋子
+  board[r][c] = currentPlayer;
+
+  // 獲取落子格的 DOM 元素並添加棋子
+  const cellElement = boardElement.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+  cellElement.classList.add('occupied');
+  cellElement.classList.remove('valid-move');
+  const newPiece = document.createElement('div');
+  newPiece.classList.add('piece', currentPlayer === 1 ? 'black' : 'white');
+  cellElement.appendChild(newPiece);
+
+  // 2. 翻轉棋子
+  flipPieces(move.flips);
+
+  // 3. 換手並檢查遊戲狀態
+  switchPlayerAndCheck();
+}
+
+/**
+ * 翻轉棋子
+ * @param {Array<{r: number, c: number}>} flips 待翻轉的棋子座標
+ */
+function flipPieces(flips) {
+  const playerClass = currentPlayer === 1 ? 'black' : 'white';
+  const opponentClass = getOpponent(currentPlayer) === 1 ? 'black' : 'white';
+
+  flips.forEach(({ r, c }) => {
+    board[r][c] = currentPlayer; // 更新棋盤狀態
+
+    // 翻轉 DOM 元素
+    const pieceElement = boardElement.querySelector(`.cell[data-row="${r}"][data-col="${c}"] .piece`);
+    if (pieceElement) {
+      // 添加翻轉動畫，並在動畫結束後改變顏色
+      pieceElement.classList.add('flipping');
+      
+      setTimeout(() => {
+        pieceElement.classList.remove(opponentClass);
+        pieceElement.classList.add(playerClass);
+        pieceElement.classList.remove('flipping');
+      }, 250); // 延遲一半動畫時間來切換顏色
+    }
+  });
+}
+
+/**
+ * 切換玩家並檢查遊戲狀態 (是否有有效落子)
+ */
+function switchPlayerAndCheck() {
+  // 等待動畫完成再進行切換和重新渲染，使視覺效果流暢
+  setTimeout(() => {
+    currentPlayer = getOpponent(currentPlayer);
+    
+    let validMoves = getValidMoves(currentPlayer);
+
+    if (validMoves.length > 0) {
+      // 新玩家有有效移動，繼續遊戲
+      renderBoard();
+      updateGameInfo();
+    } else {
+      // 新玩家無有效移動，切換回原玩家 (跳過回合)
+      currentPlayer = getOpponent(currentPlayer);
+      validMoves = getValidMoves(currentPlayer);
+
+      if (validMoves.length > 0) {
+        // 原玩家有有效移動，跳過回合
+        alertMessage(`${currentPlayer === 0 ? '黑子' : '白子'}沒有有效落子，輪到 ${currentPlayer === 1 ? '黑子' : '白子'} 繼續！/no valid moves. next player's turn!`);
+        renderBoard();
+        updateGameInfo();
+      } else {
+        // 雙方都無有效移動，遊戲結束
+        endGame();
+      }
+    }
+  }, 600);
+}
+
+/**
+ * 更新分數和狀態顯示
+ */
+function updateGameInfo() {
+  let blackCount = 0;
+  let whiteCount = 0;
+
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      if (board[r][c] === 1) blackCount++;
+      if (board[r][c] === 2) whiteCount++;
+    }
+  }
+
+  blackScoreElement.textContent = blackCount;
+  whiteScoreElement.textContent = whiteCount;
+
+  // 更新誰是當前玩家的視覺提示
+  const isBlack = currentPlayer === 1;
+  currentPlayerText.textContent = isBlack ? '{{ game.black }}' : '{{ game.white }}';
+  currentPlayerText.classList.toggle('black', isBlack);
+  currentPlayerText.classList.toggle('white', !isBlack);
+
+  blackScoreElement.classList.toggle('current-player-indicator', isBlack);
+  whiteScoreElement.classList.toggle('current-player-indicator', !isBlack);
+}
+
+/**
+ * 顯示一個簡單的消息
+ * @param {string} message 
+ */
+function alertMessage(message) {
+  // 由於不能使用 alert()，這裡只輸出到控制台，您可以在 UI 中添加臨時消息框
+  console.log("遊戲消息/Message:", message);
+  // 這裡可以實現一個小的、短暫的 UI 提示
+}
+
+/**
+ * 結束遊戲
+ */
+function endGame() {
+  isGameActive = false;
+  updateGameInfo(); // 確保最終分數更新
+
+  const blackScore = parseInt(blackScoreElement.textContent);
+  const whiteScore = parseInt(whiteScoreElement.textContent);
+  let message = "";
+
+  if (blackScore > whiteScore) {
+    message = `{{ game.gameover }}{{ game.black }} (${blackScore}) {{ game.win }}`;
+    modalMessage.style.color = blackColor; // 使用 JS 變量
+  } else if (whiteScore > blackScore) {
+    message = `{{ game.gameover }}{{ game.white }} (${whiteScore}) {{ game.win }}`;
+    modalMessage.style.color = whiteColor; // 使用 JS 變量
+  } else {
+    message = "{{ game.gameover }}{{ game.tie }}";
+    modalMessage.style.color = textColor; // 使用 JS 變量
+  }
+
+  modalMessage.textContent = message;
+  gameOverModal.style.display = 'flex';
+}
+
+/**
+ * 重置遊戲
+ */
+function resetGame() {
+  gameOverModal.style.display = 'none';
+  initializeGame();
+}
+
+// 啟動遊戲
+window.onload = initializeGame;
+
+</script>

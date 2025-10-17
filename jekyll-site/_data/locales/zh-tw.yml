@@ -10,3 +10,12 @@ games:
     status: "現在是 {player} 的回合"
     player: "玩家 {currentPlayer}"
     gameover: "遊戲結束！"
+  reversi:
+    title: "黑白棋"
+    black: "黑子"
+    white: "白子"
+    current_player: "目前玩家"
+    restart: "再玩一次"
+    gameover: "遊戲結束！"
+    win: "獲勝！"
+    tie: "平手！"

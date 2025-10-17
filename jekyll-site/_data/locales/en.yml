@@ -10,3 +10,14 @@ games:
     status: "{player}'s turn"
     player: "player {currentPlayer}"
     gameover: "GAME OVER!"
+  reversi:
+    title: "Reversi"
+    black: "BLACK"
+    white: "WHITE"
+    current_player: "CURRENT PLAYER"
+    restart: "RESTART"
+    gameover: "GAME OVER!"
+    win: "WIN!"
+    tie: "TIE!"
+
+
