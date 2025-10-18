@@ -17,3 +17,6 @@ extention: .md
 **bold**
 ***bold and italic***
 
+| header1 | header2 | header3 |
+| :--- | :---: | ---: |
+| row1 cell1 | cell 2 | cell 3 |
