@@ -67,7 +67,8 @@
 ../jekyll-site/_posts/2025-09-25-zh-tw.md  # vibe coding
 ../jekyll-site/_posts/2025-09-26-en.md
 ../jekyll-site/_posts/2025-09-26-zh-tw.md  # K-POP Demon Hunter同溫層以外的世界
-* ../jekyll-site/_posts/2025-09-30-zh-tw.md  # 遊泳距離 認知侷限極限
+../jekyll-site/_posts/2025-09-30-en.md
+../jekyll-site/_posts/2025-09-30-zh-tw.md  # 遊泳距離 認知侷限極限
 ../jekyll-site/_posts/2025-10-01-en.md
 ../jekyll-site/_posts/2025-10-01-zh-tw.md  # 邏輯閘 底層原理
 ../jekyll-site/_posts/2025-10-03-en.md
