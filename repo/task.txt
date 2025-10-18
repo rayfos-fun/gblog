@@ -55,7 +55,8 @@
 ../jekyll-site/_posts/2025-09-18-zh-tw.md  # AI寫部落格
 ../jekyll-site/_posts/2025-09-20-en.md
 ../jekyll-site/_posts/2025-09-20-zh-tw.md  # 立志每日git push
-* ../jekyll-site/_posts/2025-09-21-zh-tw.md  # baba is you
+../jekyll-site/_posts/2025-09-21-en.md
+../jekyll-site/_posts/2025-09-21-zh-tw.md  # baba is you
 * ../jekyll-site/_posts/2025-09-22-zh-tw.md  # 上線rayfos.fun
 * ../jekyll-site/_posts/2025-09-23-zh-tw.md  # six seven 次文化
 * ../jekyll-site/_posts/2025-09-24-zh-tw.md  # Andrew Ng
