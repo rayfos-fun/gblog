@@ -94,7 +94,8 @@
 ../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
 ../jekyll-site/_stories-en/0003.md
 ../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
-* ../jekyll-site/_stories-zh-tw/0004.md  # 重啟人生
+../jekyll-site/_stories-en/0004.md
+../jekyll-site/_stories-zh-tw/0004.md  # 重啟人生
 * ../jekyll-site/_stories-zh-tw/0005.md  # 奪命追魂劍
 * ../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
 * ../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
