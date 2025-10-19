@@ -11,7 +11,7 @@ lang: en
 <script>
   const lang = navigator.language || navigator.userLanguage;
   const langCode = lang.toLowerCase().substring(0, 2);
-  const validLangs = ['zh-tw'];
+  const validLangs = ['zh-cn', 'zh-tw'];
   const redirectPath = validLangs.includes(langCode) ? langCode : 'en';
   window.location.replace('/gblog/' + redirectPath + '/home/');
 </script>

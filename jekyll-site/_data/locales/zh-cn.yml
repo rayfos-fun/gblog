@@ -1,0 +1,21 @@
+games:
+  connect_four:
+    title: "四子棋"
+    start: "请开始游戏"
+    restart: "重新开始"
+    win: "玩家 {currentPlayer} 获胜！"
+    tie: "平手！棋盘已满。"
+    red: "红色"
+    yellow: "黄色"
+    status: "现在是 {player} 的回合"
+    player: "玩家 {currentPlayer}"
+    gameover: "游戏结束！"
+  reversi:
+    title: "黑白棋"
+    black: "黑子"
+    white: "白子"
+    current_player: "目前玩家"
+    restart: "再玩一次"
+    gameover: "游戏结束！"
+    win: "获胜！"
+    tie: "平手！"

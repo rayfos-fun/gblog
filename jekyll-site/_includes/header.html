@@ -34,8 +34,9 @@ updated:
       </nav>
       <nav class="lang-switcher">
         {% if page.lang == 'en' %}
-        <a onclick="toZhtw()">中</a>
-        {% elsif page.lang == 'zh-tw' %}
+        <a onclick="toZhcn()">简</a>
+        <a onclick="toZhtw()">繁</a>
+        {% else %}
         <a onclick="toEn()">En</a>
         {% endif %}
       </nav>
@@ -44,8 +45,15 @@ updated:
 
   <script>
 {% if page.lang == 'en' %}
+function toZhcn() {
+  window.location.href = window.location.href.replace('en', 'zh-cn');
+}
 function toZhtw() {
   window.location.href = window.location.href.replace('en', 'zh-tw');
+}
+{% elsif page.lang == 'zh-cn' %}
+function toEn() {
+  window.location.href = window.location.href.replace('zh-cn', 'en');
 }
 {% elsif page.lang == 'zh-tw' %}
 function toEn() {

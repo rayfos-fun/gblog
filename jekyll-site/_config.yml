@@ -35,13 +35,19 @@ plugins:
 collections:
   games-en:
     output: true
+  games-zh-cn:
+    output: true
   games-zh-tw:
     output: true
   others-en:
     output: true
+  others-zh-cn:
+    output: true
   others-zh-tw:
     output: true
   stories-en:
+    output: true
+  stories-zh-cn:
     output: true
   stories-zh-tw:
     output: true
