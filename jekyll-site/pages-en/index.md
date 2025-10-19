@@ -31,17 +31,29 @@ FRUGALITY. Make no expense but to do good to others or yourself; i.e., waste not
 {% endfor %}
 * ...
 
+# Recent novel
+
+<sub>[history]({{ '/en/story/' | relative_url }})</sub>
+
+{% assign stories = site.stories-en | reverse %}
+{% for story in stories limit: 3 %}
+* [{{ story.date | date: "%Y-%m-%d"}}: {{ story.title }}]({{ story.url | relative_url }})
+{% endfor %}
+* ...
+
 # Log
 
 <sub>[history]({{ '/en/log/' | relative_url }})</sub>
 
-{% assign collections = games | concat: posts | sort: "date" | reverse %}
+{% assign collections = games | concat: posts | concat: stories | sort: "date" | reverse %}
 {% for collection in collections limit: 3 %}
   {% assign paths = collection.url | split: '/' %}
   {% if paths[2] == "game" %}
     {% assign type = "GAME" %}
   {% elsif paths[2] == "post" %}
     {% assign type = "POST" %}
+  {% elsif paths[2] == "story" %}
+    {% assign type = "NOVEL" %}
   {% endif %}
 * [{{ collection.date | date: "%Y-%m-%d"}}: [{{ type }}] {{ collection.title }}]({{ collection.url | relative_url }})
 {% endfor %}
