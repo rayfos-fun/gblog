@@ -100,7 +100,8 @@
 ../jekyll-site/_stories-zh-tw/0005.md  # 奪命追魂劍
 ../jekyll-site/_stories-en/0006.md
 ../jekyll-site/_stories-zh-tw/0006.md  # 美麗的錯誤
-* ../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
+../jekyll-site/_stories-en/0007.md
+../jekyll-site/_stories-zh-tw/0007.md  # 立志成為王者的青銅
 * ../jekyll-site/_stories-zh-tw/0008.md  # 銅雀春深鎖二喬
 * ../jekyll-site/_stories-zh-tw/0009.md  # 諜中諜
 
