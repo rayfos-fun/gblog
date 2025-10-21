@@ -145,6 +145,9 @@
 ../jekyll-site/_stories-en/0009.md
 ../jekyll-site/_stories-zh-cn/0009.md
 ../jekyll-site/_stories-zh-tw/0009.md  # 諜中諜
+../jekyll-site/_stories-en/0010.md
+../jekyll-site/_stories-zh-cn/0010.md
+../jekyll-site/_stories-zh-tw/0010.md  # 投名狀
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
