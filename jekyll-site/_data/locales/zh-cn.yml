@@ -1,4 +1,17 @@
 games:
+  checkers:
+    title: "西洋跳棋"
+    status_init: "游戏尚未开始，点击棋盘开始。"
+    player1: "红棋"
+    player2: "黑棋"
+    status: "轮到 ${playerColor} 行动。"
+    must_jump: "强制跳跃！"
+    can_not_jump: "请选择可以执行跳跃的棋子！"
+    not_yours: "请选择您的棋子。"
+    next_jump: "连跳中... 轮到 ${playerColor}。"
+    invalid_must_jump: "您有强制跳跃动作必须执行！"
+    invalid_pos: "移动无效，请选择有效的位置。"
+    invalid_click: "移动无效，请选择有效的位置或取消选择。"
   connect_four:
     title: "四子棋"
     start: "请开始游戏"
@@ -19,3 +32,8 @@ games:
     gameover: "游戏结束！"
     win: "获胜！"
     tie: "平手！"
+exc: "！"
+gameover: "游戏结束"
+restart: "重新开始"
+sep: ""
+win: "获胜"

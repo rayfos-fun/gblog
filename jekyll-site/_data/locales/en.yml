@@ -1,4 +1,17 @@
 games:
+  checkers:
+    title: "Checkers"
+    status_init: "Initializing..."
+    player1: "RED"
+    player2: "BLACK"
+    status: "${playerColor}'s Turn"
+    must_jump: "Must jump! "
+    can_not_jump: "Please pick one that can jump! "
+    not_yours: "Please pick one on your side! "
+    next_jump: "Keep jumping... ${playerColor}'s turn"
+    invalid_must_jump: "Please jump!"
+    invalid_pos: "Invalid movement"
+    invalid_click: "Invalid movement"
   connect_four:
     title: "Connect Four"
     start: "Start the game"
@@ -19,5 +32,8 @@ games:
     gameover: "GAME OVER!"
     win: "WIN!"
     tie: "TIE!"
-
-
+exc: "! "
+gameover: "Game over"
+restart: "Restart"
+sep: " "
+win: "win"
