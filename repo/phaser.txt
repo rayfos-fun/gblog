@@ -1,0 +1,55 @@
+Phaser
+  Game(config)
+
+create()
+  this.add.text(x, y, 'init', /* style */ {});
+
+preload()
+update()
+
+this
+  add
+    image(x, y, key)
+    text
+  anims
+    create({key: 'left', frames: this.anims.generateFrameNumbers(key, {start:0, end:3}, frameRate: 10, repeat: -1})
+      frameRate: frames/sec
+  input
+    keyboard
+      createCursorKeys()
+      =>
+        left/right/...
+          isDown
+  load
+    image(key, 'file.png')
+    spritesheet(name, file, {fromWidth: , fromHeight: })
+  physics
+    add
+      collider(sprite1, sprite2)
+      staticGroup()
+
+image
+  setOrigin(x, y)  # put center at Origin
+
+physics
+  staticGroup: static (not impact by gravity... etc.)
+    create(x, y, key)  # add sprite into this group
+
+sprite
+  body  # arcade.body
+    setGravityY(300)
+  setBounce(0.2)  # bounce back a bit (0.2) when collide
+  setCollideWorldBounds(true)
+  setScale(2)  # size x2
+  refreshBody()  # for static sprite, setScale only change its look but not physics. refreshBody woul update its physics
+
+
+
+config
+  type: Phaser.AUTO/CANVAS/WEBGL
+  width
+  height
+  scene:
+    preload: fnx,
+    create: fnx,
+    update: fnx
