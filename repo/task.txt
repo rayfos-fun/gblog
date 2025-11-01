@@ -21,6 +21,7 @@
 ../jekyll-site/_data/locales/zh-cn.yml
 ../jekyll-site/_data/locales/zh-tw.yml
 
+../jekyll-site/_games-en/chess.html
 ../jekyll-site/_games-en/checkers.html
 ../jekyll-site/_games-en/connect-four.html
 ../jekyll-site/_games-en/guess-number.html
@@ -30,6 +31,7 @@
 ../jekyll-site/_games-en/tic-tac-toe.html  
 ../jekyll-site/_games-en/whack-a-mole.html
 
+../jekyll-site/_games-zh-cn/chess.html
 ../jekyll-site/_games-zh-cn/checkers.html
 ../jekyll-site/_games-zh-cn/connect-four.html
 ../jekyll-site/_games-zh-cn/guess-number.html 
@@ -39,6 +41,7 @@
 ../jekyll-site/_games-zh-cn/tic-tac-toe.html  
 ../jekyll-site/_games-zh-cn/whack-a-mole.html
 
+../jekyll-site/_games-zh-tw/chess.html         # 2025-10-30
 ../jekyll-site/_games-zh-tw/checkers.html      # 2025-10-23
 ../jekyll-site/_games-zh-tw/connect-four.html  # 2025-10-09
 ../jekyll-site/_games-zh-tw/guess-number.html  # 2025-08-17
@@ -48,6 +51,7 @@
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html   # 2025-08-29
 ../jekyll-site/_games-zh-tw/whack-a-mole.html  # 2025-10-02
 
+../jekyll-site/_includes/games/chess.html
 ../jekyll-site/_includes/games/checkers.html
 ../jekyll-site/_includes/games/connect-four.html
 ../jekyll-site/_includes/games/reversi.html

@@ -1,0 +1,651 @@
+{% assign locale = site.data.locales[page.lang] %}
+{% assign game = locale.games.chess %}
+{% assign player1 = locale.white %}
+{% assign player2 = locale.black %}
+{% assign status_checkmate = game.checkmate | append: locale.exc | append: locale.sep | append: "${opponentPlayer}" | append: locale.sep | append: locale.win | append: locale.exc %}
+{% assign status_turn = locale.current_player_turn | append: "${kingInCheck? '" | append: locale.sep | append: locale.left_parenthesses | append: game.in_check | append: locale.right_parenthesses | append: "' : ''}" %}
+
+<style>
+  .game-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  #status {
+    font-size: 24px;
+    font-weight: bold;
+    min-height: 1.2em;
+  }
+
+  #board {
+    display: grid;
+    grid-template-columns: repeat(8, 60px);
+    grid-template-rows: repeat(8, 60px);
+    width: 480px; /* 8 * 60px */
+    height: 480px; /* 8 * 60px */
+    border: 3px solid #3a3a3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  .square {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box; /* 確保 padding/border 不影響大小 */
+  }
+
+  .light {
+    background-color: #f0d9b5;
+  }
+
+  .dark {
+    background-color: #b58863;
+  }
+
+  .piece {
+    font-size: 50px; /* 棋子大小 */
+    cursor: pointer;
+    user-select: none; /* 防止選取文字 */
+    text-shadow: 0 0 3px rgba(0,0,0,0.3);
+    line-height: 1;
+    color: #000; /* 預設黑色 */
+  }
+
+  .white-piece {
+    color: #ffffff; /* 白色棋子 */
+  }
+
+  .black-piece {
+    color: #111111; /* 黑色棋子 */
+  }
+
+  /* 選中棋子的方格 */
+  .selected {
+    background-color: #6495ED !important; /* 亮藍色 */
+    opacity: 0.8;
+  }
+
+  /* 標示可能移動的點 */
+  .possible-move {
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* 空白格的移動點 */
+  .possible-move::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(40, 40, 40, 0.3);
+  }
+
+  /* 可吃子的移動點 */
+  .possible-move.capture::after {
+    background: none;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    border: 5px solid rgba(255, 60, 60, 0.5);
+    border-radius: 50%;
+  }
+
+  #resetButton {
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #4a7d4a;
+    color: white;
+    font-weight: bold;
+  }
+
+  #resetButton:hover {
+    background-color: #5a9d5a;
+  }
+</style>
+
+<div class="game-container">
+  <div id="status">Initializing...</div>
+  <div id="board"></div>
+  <button id="resetButton">{{ locale.reset_game }}</button>
+</div>
+
+<script>
+  // DOM 元素
+  const boardElement = document.getElementById('board');
+  const statusElement = document.getElementById('status');
+  const resetButton = document.getElementById('resetButton');
+
+  // 棋子 Unicode
+  const PIECES = {
+    wR: '♖', wN: '♘', wB: '♗', wQ: '♕', wK: '♔', wP: '♙',
+    bR: '♜', bN: '♞', bB: '♝', bQ: '♛', bK: '♚', bP: '♟',
+  };
+
+  // --- 遊戲狀態變數 ---
+  let board = []; // 8x8 棋盤陣列
+  let currentPlayer = '{{ player1 }}'; // white 或 black
+  let selectedPiece = null; // { row, col, piece }
+  let possibleMoves = []; // [[r, c], [r, c], ...]
+  let gameActive = true;
+
+  // 用於王車易位 (Castling)
+  let castlingRights = {
+    '{{ player1 }}': { kingSide: true, queenSide: true },
+    '{{ player2 }}': { kingSide: true, queenSide: true }
+  };
+  // 用於吃過路兵 (En Passant)
+  let enPassantTarget = null; // [row, col]
+
+  // --- 核心函式 ---
+
+  /**
+   * 初始化/重設棋盤
+   */
+  function initializeBoard() {
+    board = [
+      ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+      ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+      ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+    ];
+    currentPlayer = '{{ player1 }}';
+    selectedPiece = null;
+    possibleMoves = [];
+    gameActive = true;
+    enPassantTarget = null;
+    castlingRights = {
+      '{{ player1 }}': { kingSide: true, queenSide: true },
+      '{{ player2 }}': { kingSide: true, queenSide: true }
+    };
+    kingInCheck = false;
+    updateStatus(`{{ status_turn }}`);
+    renderBoard();
+  }
+
+  /**
+   * 將棋盤狀態繪製到畫面上
+   */
+  function renderBoard() {
+    boardElement.innerHTML = ''; // 清空棋盤
+    clearHighlights();
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const square = document.createElement('div');
+        square.classList.add('square');
+        square.classList.add((r + c) % 2 === 0 ? 'light' : 'dark');
+        square.dataset.row = r;
+        square.dataset.col = c;
+
+        const piece = board[r][c];
+        if (piece) {
+          const pieceElement = document.createElement('span');
+          pieceElement.classList.add('piece');
+          pieceElement.classList.add(piece[0] === 'w' ? 'white-piece' : 'black-piece');
+          pieceElement.innerHTML = PIECES[piece];
+          square.appendChild(pieceElement);
+        }
+        boardElement.appendChild(square);
+      }
+    }
+
+    // 繪製高亮
+    if (selectedPiece) {
+      const selectedSquare = getSquareEl(selectedPiece.row, selectedPiece.col);
+      if (selectedSquare) selectedSquare.classList.add('selected');
+    }
+    possibleMoves.forEach(([r, c]) => {
+      const moveSquare = getSquareEl(r, c);
+      if (moveSquare) {
+        moveSquare.classList.add('possible-move');
+        if (board[r][c]) {
+          moveSquare.classList.add('capture'); // 可吃子
+        }
+      }
+    });
+  }
+
+  /**
+   * 方格點擊事件處理
+   */
+  function handleSquareClick(event) {
+    if (!gameActive) return;
+
+    const square = event.target.closest('.square');
+    if (!square) return;
+
+    const row = parseInt(square.dataset.row);
+    const col = parseInt(square.dataset.col);
+    const piece = board[row][col];
+    const piecePlayer = piece ? getPiecePlayer(piece) : null;
+
+    if (selectedPiece) {
+      // 檢查是否為合法移動
+      const isPossibleMove = possibleMoves.some(([r, c]) => r === row && c === col);
+
+      if (isPossibleMove) {
+        movePiece(selectedPiece.row, selectedPiece.col, row, col);
+        // 後續邏輯在 movePiece 中處理
+      } else if (piece && piecePlayer === currentPlayer) {
+        // 選擇同色的另一顆棋子
+        selectPiece(row, col);
+        renderBoard(); // 重繪高亮
+      } else {
+        // 點擊無效，取消選擇
+        unselectPiece();
+        renderBoard();
+      }
+    } else if (piece && piecePlayer === currentPlayer) {
+      // 尚未選擇棋子，且點擊的是當前玩家的棋子
+      selectPiece(row, col);
+      renderBoard();
+    }
+  }
+
+  /**
+   * 選擇棋子
+   */
+  function selectPiece(r, c) {
+    const piece = board[r][c];
+    if (!piece || getPiecePlayer(piece) !== currentPlayer) return;
+
+    selectedPiece = { row: r, col: c, piece: piece };
+    // 產生所有 *合法* 移動 (會過濾掉導致國王被將軍的步)
+    possibleMoves = generateLegalMoves(r, c, piece);
+  }
+
+  /**
+   * 取消選擇
+   */
+  function unselectPiece() {
+    selectedPiece = null;
+    possibleMoves = [];
+  }
+
+  /**
+   * 移動棋子 (核心邏輯)
+   */
+  function movePiece(fromR, fromC, toR, toC) {
+    const piece = board[fromR][fromC];
+    
+    // --- 特殊移動處理 ---
+
+    // 1. 吃過路兵 (En Passant)
+    if (getPieceType(piece) === 'P' && enPassantTarget && toR === enPassantTarget[0] && toC === enPassantTarget[1]) {
+      const captureRow = currentPlayer === '{{ player1 }}' ? toR + 1 : toR - 1;
+      board[captureRow][toC] = null; // 移除被吃掉的兵
+    }
+
+    // 2. 王車易位 (Castling)
+    if (getPieceType(piece) === 'K' && Math.abs(fromC - toC) === 2) {
+      // 移動城堡
+      const rookCol = toC > fromC ? 7 : 0; // 城堡原始位置
+      const newRookCol = toC > fromC ? 5 : 3; // 城堡新位置
+      const rook = board[fromR][rookCol];
+      board[fromR][newRookCol] = rook;
+      board[fromR][rookCol] = null;
+    }
+
+    // --- 更新棋盤 ---
+    board[toR][toC] = piece;
+    board[fromR][fromC] = null;
+
+    // --- 更新特殊狀態 ---
+
+    // 1. 設定新的 "吃過路兵" 目標
+    enPassantTarget = null; // 預設清除
+    if (getPieceType(piece) === 'P' && Math.abs(fromR - toR) === 2) {
+      enPassantTarget = [currentPlayer === '{{ player1 }}' ? fromR - 1 : fromR + 1, fromC];
+    }
+
+    // 2. 兵的升變 (Pawn Promotion) - 自動升變為皇后
+    if (getPieceType(piece) === 'P') {
+      if (piece === 'wP' && toR === 0) {
+        board[toR][toC] = 'wQ';
+      } else if (piece === 'bP' && toR === 7) {
+        board[toR][toC] = 'bQ';
+      }
+    }
+
+    // 3. 更新王車易位權限
+    updateCastlingRights(piece, fromR, fromC);
+
+    // --- 換邊 & 檢查遊戲狀態 ---
+    switchPlayer();
+    unselectPiece();
+
+    const kingInCheck = isKingInCheck(currentPlayer, board);
+    const allLegalMoves = generateAllLegalMovesForPlayer(currentPlayer, board);
+
+    if (allLegalMoves.length === 0) {
+      if (kingInCheck) {
+        opponentPlayer = (currentPlayer === '{{ player1 }}' ? '{{ player2 }}' : '{{ player1 }}');
+        updateStatus(`{{ status_checkmate }}`)
+        gameActive = false;
+      } else {
+        updateStatus("{{ game.status_tie }}");
+        gameActive = false;
+      }
+    } else {
+      updateStatus(`{{ status_turn }}`);
+    }
+
+    renderBoard();
+  }
+
+  /**
+   * 換邊
+   */
+  function switchPlayer() {
+    currentPlayer = (currentPlayer === '{{ player1 }}' ? '{{ player2 }}' : '{{ player1 }}');
+  }
+
+  /**
+   * 更新狀態顯示
+   */
+  function updateStatus(message) {
+    statusElement.textContent = message;
+  }
+
+  /**
+   * 移動後，更新王車易位權限
+   */
+  function updateCastlingRights(piece, r, c) {
+    const player = getPiecePlayer(piece);
+    if (getPieceType(piece) === 'K') {
+      castlingRights[player].kingSide = false;
+      castlingRights[player].queenSide = false;
+    }
+    if (getPieceType(piece) === 'R') {
+      if (player === '{{ player1 }}') {
+        if (r === 7 && c === 0) castlingRights['{{ player1 }}'].queenSide = false;
+        if (r === 7 && c === 7) castlingRights['{{ player1 }}'].kingSide = false;
+      } else {
+        if (r === 0 && c === 0) castlingRights['{{ player2 }}'].queenSide = false;
+        if (r === 0 && c === 7) castlingRights['{{ player2 }}'].kingSide = false;
+      }
+    }
+    // (如果城堡被吃掉也該更新，但這在實作上較複雜，目前規則已足夠)
+  }
+
+  // --- 移動規則產生器 ---
+
+  /**
+   * 產生一顆棋子的所有 "合法" 移動
+   * (過濾掉會導致自己國王被將軍的步)
+   */
+  function generateLegalMoves(r, c, piece) {
+    // 1. 獲取所有 "偽合法" 移動 (只看棋子本身規則，不考慮將軍)
+    const pseudoMoves = getPseudoLegalMoves(r, c, piece, board);
+    const legalMoves = [];
+    const player = getPiecePlayer(piece);
+
+    // 2. 模擬每一步，檢查是否會導致自己被將軍
+    for (const [toR, toC] of pseudoMoves) {
+      // 模擬棋盤
+      const tempBoard = board.map(row => [...row]);
+      
+      // 模擬特殊移動 (吃過路兵)
+      if (getPieceType(piece) === 'P' && enPassantTarget && toR === enPassantTarget[0] && toC === enPassantTarget[1]) {
+        const captureRow = player === '{{ player1 }}' ? toR + 1 : toR - 1;
+        tempBoard[captureRow][toC] = null;
+      }
+
+      // 模擬一般移動
+      tempBoard[toR][toC] = tempBoard[r][c];
+      tempBoard[r][c] = null;
+      
+      // 3. 如果模擬後國王 *沒有* 處於被將軍狀態，才是合法移動
+      if (!isKingInCheck(player, tempBoard)) {
+        legalMoves.push([toR, toC]);
+      }
+    }
+    return legalMoves;
+  }
+
+  /**
+   * 產生某位玩家 "所有" 的合法移動 (用於檢查將死/逼和)
+   */
+  function generateAllLegalMovesForPlayer(player, currentBoard) {
+    let allMoves = [];
+    const playerChar = player === '{{ player1 }}' ? 'w': 'b';
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = currentBoard[r][c];
+        if (piece && piece[0] === playerChar) {
+          // generateLegalMoves 已經會檢查 "將軍"
+          const moves = generateLegalMoves(r, c, piece);
+          if (moves.length > 0) {
+            allMoves.push(...moves);
+          }
+        }
+      }
+    }
+    return allMoves;
+  }
+
+  /**
+   * 獲取 "偽合法" 移動 (只看棋子規則，不看是否會被將軍)
+   */
+  function getPseudoLegalMoves(r, c, piece, currentBoard) {
+    const moves = [];
+    const type = getPieceType(piece);
+    const player = getPiecePlayer(piece);
+    const colorChar = player === '{{ player1 }}' ? 'w' : 'b';
+
+    const isOpponent = (tr, tc) => currentBoard[tr][tc] && currentBoard[tr][tc][0] !== colorChar;
+    const isEmpty = (tr, tc) => !currentBoard[tr][tc];
+    const isInside = (tr, tc) => tr >= 0 && tr < 8 && tc >= 0 && tc < 8;
+    const isTarget = (tr, tc) => isInside(tr, tc) && (isEmpty(tr, tc) || isOpponent(tr, tc));
+
+    switch (type) {
+      case 'P': // 兵
+        const dir = player === '{{ player1 }}' ? -1 : 1;
+        const startRow = player === '{{ player1 }}' ? 6 : 1;
+        
+        // 前進 1
+        if (isInside(r + dir, c) && isEmpty(r + dir, c)) {
+          moves.push([r + dir, c]);
+          // 從起始位置前進 2
+          if (r === startRow && isEmpty(r + 2 * dir, c)) {
+            moves.push([r + 2 * dir, c]);
+          }
+        }
+        // 吃子
+        if (isInside(r + dir, c - 1) && isOpponent(r + dir, c - 1)) {
+          moves.push([r + dir, c - 1]);
+        }
+        if (isInside(r + dir, c + 1) && isOpponent(r + dir, c + 1)) {
+          moves.push([r + dir, c + 1]);
+        }
+        // 吃過路兵
+        if (enPassantTarget) {
+          const [epR, epC] = enPassantTarget;
+          if (epR === r + dir && (epC === c - 1 || epC === c + 1)) {
+            moves.push([epR, epC]);
+          }
+        }
+        break;
+
+      case 'R': // 城堡
+      case 'B': // 主教
+      case 'Q': // 皇后
+        let dirs = [];
+        if (type === 'R') dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        if (type === 'B') dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+        if (type === 'Q') dirs = [[-1, 0], [1, 0], [0, -1], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
+
+        for (const [dr, dc] of dirs) {
+          let tr = r + dr, tc = c + dc;
+          while (isInside(tr, tc)) {
+            if (isEmpty(tr, tc)) {
+              moves.push([tr, tc]);
+            } else if (isOpponent(tr, tc)) {
+              moves.push([tr, tc]);
+              break; // 被對方棋子擋住
+            } else {
+              break; // 被己方棋子擋住
+            }
+            tr += dr; tc += dc;
+          }
+        }
+        break;
+
+      case 'N': // 騎士
+        const knightMoves = [
+          [r - 2, c - 1], [r - 2, c + 1], [r - 1, c - 2], [r - 1, c + 2],
+          [r + 1, c - 2], [r + 1, c + 2], [r + 2, c - 1], [r + 2, c + 1]
+        ];
+        for (const [tr, tc] of knightMoves) {
+          if (isTarget(tr, tc)) {
+            moves.push([tr, tc]);
+          }
+        }
+        break;
+
+      case 'K': // 國王
+        const kingMoves = [
+          [r - 1, c - 1], [r - 1, c], [r - 1, c + 1],
+          [r, c - 1],             [r, c + 1],
+          [r + 1, c - 1], [r + 1, c], [r + 1, c + 1]
+        ];
+        for (const [tr, tc] of kingMoves) {
+          if (isTarget(tr, tc)) {
+            moves.push([tr, tc]);
+          }
+        }
+        
+        // 王車易位 (Castling)
+        const cr = castlingRights[player];
+        // 國王必須在 (r, 4)
+        if (c === 4) {
+          // 短易位 (King-side)
+          if (cr.kingSide && isEmpty(r, 5) && isEmpty(r, 6) && currentBoard[r][7] === colorChar + 'R') {
+            // 檢查路徑是否被攻擊
+            if (!isSquareAttacked(r, 4, player, currentBoard) && 
+                !isSquareAttacked(r, 5, player, currentBoard) && 
+                !isSquareAttacked(r, 6, player, currentBoard)) {
+              moves.push([r, 6]);
+            }
+          }
+          // 長易位 (Queen-side)
+          if (cr.queenSide && isEmpty(r, 3) && isEmpty(r, 2) && isEmpty(r, 1) && currentBoard[r][0] === colorChar + 'R') {
+            // 檢查路徑是否被攻擊
+            if (!isSquareAttacked(r, 4, player, currentBoard) && 
+                !isSquareAttacked(r, 3, player, currentBoard) && 
+                !isSquareAttacked(r, 2, player, currentBoard)) {
+              moves.push([r, 2]);
+            }
+          }
+        }
+        break;
+    }
+    return moves;
+  }
+
+  // --- 將軍 (Check) 偵測 ---
+
+  /**
+   * 尋找指定顏色的國王位置
+   */
+  function findKing(player, currentBoard) {
+    const kingChar = (player == '{{ player1 }}' ? 'w' : 'b') + 'K';
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (currentBoard[r][c] === kingChar) {
+          return [r, c];
+        }
+      }
+    }
+    return null; // 國王不在了 (理論上不該發生)
+  }
+
+  /**
+   * 檢查指定顏色的國王是否被將軍
+   */
+  function isKingInCheck(player, currentBoard) {
+    const kingPos = findKing(player, currentBoard);
+    if (!kingPos) return false;
+    // 檢查是否有 *對方* 棋子可以攻擊國王的位置
+    return isSquareAttacked(kingPos[0], kingPos[1], player, currentBoard);
+  }
+
+  /**
+   * 檢查 (r, c) 這個方格是否被 "player" 的 *對手* 攻擊
+   */
+  function isSquareAttacked(r, c, player, currentBoard) {
+    const opponent = player === '{{ player1 }}' ? '{{ player2 }}' : '{{ player1 }}';
+    const opponentChar = opponent === '{{ player1 }}' ? 'w' : 'b';
+    
+    // 遍歷棋盤，尋找所有 *對手* 的棋子
+    for (let tr = 0; tr < 8; tr++) {
+      for (let tc = 0; tc < 8; tc++) {
+        const piece = currentBoard[tr][tc];
+        if (piece && piece[0] === opponentChar) {
+          // 獲取該對手棋子的 "偽合法" 移動
+          // 這裡不能用 generateLegalMoves (會無限遞迴)
+          // 這裡必須用 getPseudoLegalMoves，因為 "被釘住" (pinned) 的棋子仍然可以 "攻擊" (造成將軍)
+          const attackerPseudoMoves = getPseudoLegalMoves(tr, tc, piece, currentBoard);
+          
+          // 檢查攻擊範圍是否包含 (r, c)
+          for (const [mr, mc] of attackerPseudoMoves) {
+            // 對於兵的攻擊，要特別注意
+            // getPseudoLegalMoves 對兵的 "移動" 和 "吃子" 是分開的
+            if (getPieceType(piece) === 'P') {
+              const dir = opponent === '{{ player1 }}' ? -1 : 1;
+              if (tr + dir === r && (tc + 1 === c || tc - 1 === c)) {
+                return true; // 兵的斜向攻擊
+              }
+            } else if (mr === r && mc === c) {
+              return true; // 其他棋子
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  // --- 輔助函式 ---
+  function getPiecePlayer(piece) {
+    return piece[0] === 'w' ? '{{ player1 }}' : '{{ player2 }}';
+  }
+
+  function getPieceType(piece) {
+    return piece[1]; // 'P', 'R', 'N', 'B', 'Q', 'K'
+  }
+
+  function getSquareEl(r, c) {
+    return boardElement.querySelector(`.square[data-row="${r}"][data-col="${c}"]`);
+  }
+
+  function clearHighlights() {
+    document.querySelectorAll('.selected').forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('.possible-move').forEach(s => s.classList.remove('possible-move', 'capture'));
+  }
+
+  function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  // --- 事件監聽 ---
+  resetButton.addEventListener('click', initializeBoard);
+  boardElement.addEventListener('click', handleSquareClick);
+
+  // --- 啟動遊戲 ---
+  initializeBoard();
+
+</script>
