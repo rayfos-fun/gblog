@@ -138,6 +138,7 @@
 ../jekyll-site/_posts/2025-10-29-en.md
 ../jekyll-site/_posts/2025-10-29-zh-cn.md
 ../jekyll-site/_posts/2025-10-29-zh-tw.md  # Wed AI是N人，程式是S人
+../jekyll-site/_posts/2025-10-31-en.md
 ../jekyll-site/_posts/2025-10-31-zh-cn.md
 ../jekyll-site/_posts/2025-10-31-zh-tw.md  # Fri 萬聖節
 
@@ -154,6 +155,7 @@
 ../jekyll-site/_stories-en/0009.md
 ../jekyll-site/_stories-en/0010.md
 ../jekyll-site/_stories-en/0011.md
+../jekyll-site/_stories-en/0012.md
 ../jekyll-site/_stories-zh-cn/0001.md
 ../jekyll-site/_stories-zh-cn/0002.md
 ../jekyll-site/_stories-zh-cn/0003.md
@@ -165,6 +167,7 @@
 ../jekyll-site/_stories-zh-cn/0009.md
 ../jekyll-site/_stories-zh-cn/0010.md
 ../jekyll-site/_stories-zh-cn/0011.md
+../jekyll-site/_stories-zh-cn/0012.md
 ../jekyll-site/_stories-zh-tw/0001.md  # 三英戰呂布
 ../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
 ../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
@@ -176,6 +179,8 @@
 ../jekyll-site/_stories-zh-tw/0009.md  # 諜中諜
 ../jekyll-site/_stories-zh-tw/0010.md  # 投名狀
 ../jekyll-site/_stories-zh-tw/0011.md  # 公瑾的凝視
+../jekyll-site/_stories-zh-tw/0012.md  # 一士之試
+
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
 
