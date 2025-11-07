@@ -1,0 +1,363 @@
+{% assign locale = site.data.locales[page.lang] %}
+{% assign game = locale.games.gomoku %}
+{% assign gomoku_title = game.title %}
+{% assign player_black = game.player1 %}
+{% assign player_white = game.player2 %}
+{% assign turn_indicator = locale.turn_indicator %}
+{% assign win_message = game.win_message %}
+{% assign draw_message = locale.draw_message %}
+{% assign restart_button = locale.restart %}
+
+<div id="gomoku-game-strings" style="display: none;">
+  <span id="s-player-black">{{ player_black }}</span>
+  <span id="s-player-white">{{ player_white }}</span>
+  <span id="s-turn-indicator">{{ turn_indicator }}</span>
+  <span id="s-win-message">{{ win_message }}</span>
+  <span id="s-draw-message">{{ draw_message }}</span>
+</div>
+
+<div class="gomoku-game-container">
+  <h2>{{ gomoku_title }}</h2>
+  <div id="gomoku-status-display"></div>
+  <div id="gomoku-board"></div>
+  <button id="gomoku-restart-button">{{ restart_button }}</button>
+</div>
+
+<style>
+  /* Use a more specific container to avoid conflicts */
+  .gomoku-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .gomoku-game-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  #gomoku-status-display {
+    font-size: 18px;
+    margin-bottom: 15px;
+    min-height: 1.2em; /* Prevent layout shift */
+  }
+
+  #gomoku-board {
+    display: grid;
+    /* --- MODIFICATION: Changed from 15 to 19 --- */
+    grid-template-columns: repeat(19, 30px);
+    grid-template-rows: repeat(19, 30px);
+    /* --- End Modification --- */
+    
+    border: 2px solid #5a3d2b;
+    background-color: #d2b48c; /* Wood color */
+
+    /* Draw grid lines using background gradients */
+    background-image:
+      linear-gradient(to right, #666 1px, transparent 1px),
+      linear-gradient(to bottom, #666 1px, transparent 1px);
+    
+    /* Set size to match cell size */
+    background-size: 30px 30px;
+
+    /* Offset by half a cell to center the lines on the intersections */
+    background-position: 15px 15px;
+    
+    position: relative;
+  }
+
+  .gomoku-cell {
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    cursor: pointer;
+    /* For centering the piece */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gomoku-piece {
+    width: 26px; /* Slightly smaller than the cell */
+    height: 26px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .gomoku-piece.black {
+    background: #000;
+  }
+
+  .gomoku-piece.white {
+    background: #fff;
+  }
+
+  /* --- MODIFICATION: Star points (tenketsu) for 19x19 board --- */
+  /* (Coordinates are 0-indexed: 3, 9, 15) */
+  .gomoku-cell[data-row="3"][data-col="3"]::before,
+  .gomoku-cell[data-row="3"][data-col="9"]::before,
+  .gomoku-cell[data-row="3"][data-col="15"]::before,
+  .gomoku-cell[data-row="9"][data-col="3"]::before,
+  .gomoku-cell[data-row="9"][data-col="9"]::before, /* Tengen (Center) */
+  .gomoku-cell[data-row="9"][data-col="15"]::before,
+  .gomoku-cell[data-row="15"][data-col="3"]::before,
+  .gomoku-cell[data-row="15"][data-col="9"]::before,
+  .gomoku-cell[data-row="15"][data-col="15"]::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #333;
+    border-radius: 50%;
+    position: absolute;
+  }
+  /* --- End Modification --- */
+
+  #gomoku-restart-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #4a7c59;
+    color: white;
+    border-radius: 5px;
+  }
+
+  #gomoku-restart-button:hover {
+    background-color: #5a9c6f;
+  }
+</style>
+
+<script>
+  // Wrap in an IIFE to avoid polluting the global scope
+  (function() {
+    // --- Constants ---
+    
+    /* --- MODIFICATION: Changed from 15 to 19 --- */
+    const BOARD_SIZE = 19;
+    /* --- End Modification --- */
+
+    const EMPTY = 0;
+    const BLACK = 1;
+    const WHITE = 2;
+
+    // --- DOM Elements ---
+    const boardElement = document.getElementById('gomoku-board');
+    const statusElement = document.getElementById('gomoku-status-display');
+    const restartButton = document.getElementById('gomoku-restart-button');
+
+    // --- Localized Strings ---
+    const STRINGS = {
+      PLAYER_BLACK: document.getElementById('s-player-black').textContent,
+      PLAYER_WHITE: document.getElementById('s-player-white').textContent,
+      TURN: document.getElementById('s-turn-indicator').textContent,
+      WIN: document.getElementById('s-win-message').textContent,
+      DRAW: document.getElementById('s-draw-message').textContent
+    };
+
+    // --- Game State ---
+    let boardState;
+    let currentPlayer;
+    let gameActive;
+    let movesMade;
+
+    // --- Functions ---
+
+    /**
+     * Initializes the game state and renders the board.
+     */
+    function initializeGame() {
+      boardState = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(EMPTY));
+      currentPlayer = BLACK; // Black always goes first
+      gameActive = true;
+      movesMade = 0;
+
+      // Clear the board DOM
+      boardElement.innerHTML = '';
+
+      // Create cells
+      for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'gomoku-cell';
+          cell.setAttribute('data-row', r);
+          cell.setAttribute('data-col', c);
+          cell.addEventListener('click', handleCellClick);
+          boardElement.appendChild(cell);
+        }
+      }
+
+      updateStatus();
+    }
+
+    /**
+     * Handles the click event on a cell.
+     * @param {Event} event - The click event.
+     */
+    function handleCellClick(event) {
+      if (!gameActive) return;
+
+      const cell = event.currentTarget; // Use currentTarget
+      const row = parseInt(cell.dataset.row);
+      const col = parseInt(cell.dataset.col);
+
+      // Check if cell is already occupied
+      if (boardState[row][col] !== EMPTY) {
+        return;
+      }
+
+      // Place the piece
+      placePiece(cell, row, col);
+
+      // Check for win
+      if (checkWin(row, col)) {
+        endGame(false, currentPlayer);
+        return;
+      }
+
+      // Check for draw
+      movesMade++;
+      // Check against the BOARD_SIZE constant
+      if (movesMade === BOARD_SIZE * BOARD_SIZE) {
+        endGame(true, null);
+        return;
+      }
+
+      // Switch player
+      switchPlayer();
+      updateStatus();
+    }
+
+    /**
+     * Updates the board state and DOM with a new piece.
+     * @param {HTMLElement} cell - The DOM element of the cell.
+     * @param {number} row - The row index.
+     * @param {number} col - The column index.
+     */
+    function placePiece(cell, row, col) {
+      // Update state
+      boardState[row][col] = currentPlayer;
+
+      // Update DOM
+      const piece = document.createElement('div');
+      piece.className = 'gomoku-piece ' + (currentPlayer === BLACK ? 'black' : 'white');
+      cell.appendChild(piece);
+
+      // Make cell unclickable
+      cell.style.cursor = 'default';
+      cell.removeEventListener('click', handleCellClick);
+    }
+
+    /**
+     * Switches the current player.
+     */
+    function switchPlayer() {
+      currentPlayer = (currentPlayer === BLACK) ? WHITE : BLACK;
+    }
+
+    /**
+     * Updates the status display text.
+     */
+    function updateStatus() {
+      if (gameActive) {
+        const playerName = (currentPlayer === BLACK) ? STRINGS.PLAYER_BLACK : STRINGS.PLAYER_WHITE;
+        statusElement.textContent = playerName + STRINGS.TURN;
+      }
+    }
+
+    /**
+     * Checks if the last move resulted in a win.
+     * @param {number} row - The row of the last placed piece.
+     * @param {number} col - The column of the last placed piece.
+     * @returns {boolean} - True if the current player has won.
+     */
+    function checkWin(row, col) {
+      const player = boardState[row][col];
+      
+      // Directions: [dr, dc]
+      // (Horizontal, Vertical, Diagonal \, Diagonal /)
+      const directions = [
+        [0, 1],
+        [1, 0],
+        [1, 1],
+        [1, -1]
+      ];
+
+      for (const [dr, dc] of directions) {
+        let count = 1; // Count the piece just placed
+
+        // Check in the positive direction (e.g., right, down, etc.)
+        for (let i = 1; i < 5; i++) {
+          const r = row + dr * i;
+          const c = col + dc * i;
+          if (isInBounds(r, c) && boardState[r][c] === player) {
+            count++;
+          } else {
+            break; // Stop counting in this direction
+          }
+        }
+
+        // Check in the negative direction (e.g., left, up, etc.)
+        for (let i = 1; i < 5; i++) {
+          const r = row - dr * i;
+          const c = col - dc * i;
+          if (isInBounds(r, c) && boardState[r][c] === player) {
+            count++;
+          } else {
+            break; // Stop counting in this direction
+          }
+        }
+
+        // Check if we have 5 or more in a row
+        if (count >= 5) {
+          return true;
+        }
+      }
+
+      return false; // No win found
+    }
+
+    /**
+     * Helper function to check if coordinates are within the board.
+     * @param {number} r - Row index.
+     * @param {number} c - Column index.
+     * @returns {boolean} - True if (r, c) is on the board.
+     */
+    function isInBounds(r, c) {
+      // Check against the BOARD_SIZE constant
+      return r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE;
+    }
+
+    /**
+     * Ends the game, displaying the result.
+     * @param {boolean} isDraw - True if the game is a draw.
+     * @param {number|null} winner - The player (BLACK or WHITE) who won, or null for a draw.
+     */
+    function endGame(isDraw, winner) {
+      gameActive = false;
+
+      if (isDraw) {
+        statusElement.textContent = STRINGS.DRAW;
+      } else {
+        const winnerName = (winner === BLACK) ? STRINGS.PLAYER_BLACK : STRINGS.PLAYER_WHITE;
+        statusElement.textContent = winnerName + STRINGS.WIN;
+      }
+      
+      // Remove hover effect from all cells
+      const cells = boardElement.getElementsByClassName('gomoku-cell');
+      for (const cell of cells) {
+        if (!cell.hasChildNodes()) {
+          cell.style.cursor = 'default';
+        }
+      }
+    }
+
+    // --- Event Listeners ---
+    restartButton.addEventListener('click', initializeGame);
+
+    // --- Initial Game Start ---
+    initializeGame();
+
+  })();
+</script>
