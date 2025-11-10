@@ -61,4 +61,13 @@ function toEn() {
 }
 {% endif %}
   </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']], // 設定行內公式的符號
+      displayMath: [['$$', '$$']] // 設定區塊公式的符號
+    }
+  };
+  </script>
 </header>
