@@ -181,6 +181,7 @@
 ../jekyll-site/_stories-zh-cn/0010.md
 ../jekyll-site/_stories-zh-cn/0011.md
 ../jekyll-site/_stories-zh-cn/0012.md
+../jekyll-site/_stories-zh-cn/0013.md
 ../jekyll-site/_stories-zh-tw/0001.md  # 三英戰呂布
 ../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
 ../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
@@ -193,6 +194,7 @@
 ../jekyll-site/_stories-zh-tw/0010.md  # 投名狀
 ../jekyll-site/_stories-zh-tw/0011.md  # 公瑾的凝視
 ../jekyll-site/_stories-zh-tw/0012.md  # 一士之試
+../jekyll-site/_stories-zh-tw/0013.md  # 核心數據與緩兵之計
 
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
