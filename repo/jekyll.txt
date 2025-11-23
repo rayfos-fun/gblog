@@ -7,3 +7,9 @@ $ gem install bundler jekyll
 $ bundle exec jekyll serve --livereload
 
 $ jekyll serve  => _sites
+
+
+
+{% assign var=value %}
+
+| append: value

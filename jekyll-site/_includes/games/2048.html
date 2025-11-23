@@ -1,0 +1,534 @@
+{% assign locale = site.data.locales[page.lang] %}
+{% assign game = locale.games.chess %}
+{% assign g2048_title = '2048' %}
+{% assign g2048_score_label = locale.score %}
+{% assign g2048_best_label = locale.best %}
+{% assign g2048_new_game_btn = locale.reset_game %}
+{% assign g2048_game_over_msg = locale.gameover | append: locale.exc %}
+{% assign g2048_win_msg = locale.you_win %}
+{% assign g2048_try_again_btn = locale.try_again %}
+
+<style>
+  /* Game Container and Layout */
+  .g2048-wrapper {
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #faf8ef;
+    color: #776e65;
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .g2048-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .g2048-title {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0;
+    color: #776e65;
+  }
+
+  .g2048-scores {
+    display: flex;
+    gap: 5px;
+  }
+
+  .g2048-score-box {
+    background: #bbada0;
+    padding: 5px 15px;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    min-width: 60px;
+  }
+
+  .g2048-score-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    display: block;
+    color: #eee4da;
+  }
+
+  .g2048-score-val {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .g2048-controls {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .g2048-btn {
+    background: #8f7a66;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .g2048-btn:hover {
+    background: #7f6a56;
+  }
+
+  /* The Game Grid */
+  .g2048-grid-container {
+    position: relative;
+    background: #bbada0;
+    width: 100%;
+    padding-bottom: 100%; /* Aspect ratio 1:1 */
+    border-radius: 6px;
+    cursor: default;
+    touch-action: none; /* Prevent scrolling while playing on mobile */
+  }
+
+  .g2048-grid-inner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .g2048-cell-bg {
+    background: rgba(238, 228, 218, 0.35);
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .g2048-tile-layer {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  /* Individual Tile Styling */
+  .g2048-tile {
+    position: absolute;
+    width: calc(25% - 7.5px); /* accounting for gap */
+    height: calc(25% - 7.5px);
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 30px;
+    transition: transform 0.1s ease-in-out, top 0.1s ease-in-out, left 0.1s ease-in-out;
+    z-index: 10;
+  }
+
+  /* Tile Colors */
+  .g2048-tile-2 { background: #eee4da; color: #776e65; }
+  .g2048-tile-4 { background: #ede0c8; color: #776e65; }
+  .g2048-tile-8 { background: #f2b179; color: #f9f6f2; }
+  .g2048-tile-16 { background: #f59563; color: #f9f6f2; }
+  .g2048-tile-32 { background: #f67c5f; color: #f9f6f2; }
+  .g2048-tile-64 { background: #f65e3b; color: #f9f6f2; }
+  .g2048-tile-128 { background: #edcf72; color: #f9f6f2; font-size: 26px; }
+  .g2048-tile-256 { background: #edcc61; color: #f9f6f2; font-size: 26px; }
+  .g2048-tile-512 { background: #edc850; color: #f9f6f2; font-size: 26px; }
+  .g2048-tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 20px; }
+  .g2048-tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 20px; }
+  .g2048-tile-super { background: #3c3a32; color: #f9f6f2; font-size: 18px; }
+
+  /* Animation classes */
+  .g2048-new-tile {
+    animation: g2048-appear 0.2s ease;
+  }
+  
+  .g2048-merged-tile {
+    animation: g2048-pop 0.2s ease;
+  }
+
+  @keyframes g2048-appear {
+    0% { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes g2048-pop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Overlay for Game Over / Win */
+  .g2048-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(238, 228, 218, 0.73);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .g2048-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .g2048-message {
+    font-size: 40px;
+    font-weight: bold;
+    color: #776e65;
+    margin-bottom: 20px;
+  }
+
+  /* Mobile responsiveness */
+  @media screen and (max-width: 400px) {
+    .g2048-wrapper { padding: 10px; }
+    .g2048-title { font-size: 28px; }
+    .g2048-tile { font-size: 20px; }
+  }
+</style>
+
+<div class="g2048-wrapper">
+  <div class="g2048-header">
+    <h1 class="g2048-title">{{ g2048_title }}</h1>
+    <div class="g2048-scores">
+      <div class="g2048-score-box">
+        <span class="g2048-score-label">{{ g2048_score_label }}</span>
+        <span class="g2048-score-val" id="g2048-score">0</span>
+      </div>
+      <div class="g2048-score-box">
+        <span class="g2048-score-label">{{ g2048_best_label }}</span>
+        <span class="g2048-score-val" id="g2048-best">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2048-controls">
+    <button class="g2048-btn" onclick="game2048.restart()">{{ g2048_new_game_btn }}</button>
+  </div>
+
+  <div class="g2048-grid-container" id="g2048-touch-area">
+    <div class="g2048-grid-inner">
+      <div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div>
+      <div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div>
+      <div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div>
+      <div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div><div class="g2048-cell-bg"></div>
+    </div>
+    
+    <div class="g2048-tile-layer" id="g2048-tiles"></div>
+
+    <div class="g2048-overlay" id="g2048-overlay">
+      <div class="g2048-message" id="g2048-msg-text"></div>
+      <button class="g2048-btn" onclick="game2048.restart()">{{ g2048_try_again_btn }}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Game Logic
+  const game2048 = (function() {
+    const size = 4;
+    let grid = [];
+    let score = 0;
+    let bestScore = localStorage.getItem('g2048-best') || 0;
+    let won = false;
+    let gameOver = false;
+    
+    // UI Strings from Jekyll
+    const STR_GAME_OVER = "{{ g2048_game_over_msg }}";
+    const STR_YOU_WIN = "{{ g2048_win_msg }}";
+
+    const tileContainer = document.getElementById('g2048-tiles');
+    const scoreEl = document.getElementById('g2048-score');
+    const bestEl = document.getElementById('g2048-best');
+    const overlay = document.getElementById('g2048-overlay');
+    const msgText = document.getElementById('g2048-msg-text');
+
+    function init() {
+      bestEl.textContent = bestScore;
+      restart();
+      setupInput();
+    }
+
+    function restart() {
+      grid = Array(size * size).fill(0);
+      score = 0;
+      won = false;
+      gameOver = false;
+      
+      // Hide overlay
+      overlay.classList.remove('active');
+      
+      // Add two initial tiles
+      addRandomTile();
+      addRandomTile();
+      
+      updateView();
+    }
+
+    // Returns true if tile added, false if no space
+    function addRandomTile() {
+      const available = [];
+      for (let i = 0; i < grid.length; i++) {
+        if (grid[i] === 0) available.push(i);
+      }
+
+      if (available.length > 0) {
+        const randomCell = available[Math.floor(Math.random() * available.length)];
+        // 90% chance of 2, 10% chance of 4
+        grid[randomCell] = Math.random() < 0.9 ? 2 : 4;
+        
+        // Add animation marker (optional logic could be added here for precise DOM handling,
+        // but simple redraw works for this scale)
+        return true;
+      }
+      return false;
+    }
+
+    // Core logic: 1D array index to Row/Col
+    function getRow(index) { return Math.floor(index / size); }
+    function getCol(index) { return index % size; }
+    function getIndex(r, c) { return r * size + c; }
+
+    // Movement Logic
+    function move(direction) {
+      // 0:Up, 1:Right, 2:Down, 3:Left
+      if (gameOver) return;
+
+      let moved = false;
+      let newGrid = [...grid]; // Copy grid
+      let mergedIndices = new Set();
+
+      // Process logic varies by direction.
+      // We iterate through columns (for up/down) or rows (for left/right)
+      
+      if (direction === 0) { // Up
+        for (let c = 0; c < size; c++) {
+          let col = [newGrid[getIndex(0,c)], newGrid[getIndex(1,c)], newGrid[getIndex(2,c)], newGrid[getIndex(3,c)]];
+          let res = compressAndMerge(col);
+          if (res.changed) moved = true;
+          for (let r = 0; r < size; r++) newGrid[getIndex(r,c)] = res.arr[r];
+          score += res.score;
+        }
+      } else if (direction === 2) { // Down
+        for (let c = 0; c < size; c++) {
+          let col = [newGrid[getIndex(3,c)], newGrid[getIndex(2,c)], newGrid[getIndex(1,c)], newGrid[getIndex(0,c)]];
+          let res = compressAndMerge(col);
+          if (res.changed) moved = true;
+          for (let r = 0; r < size; r++) newGrid[getIndex(3-r,c)] = res.arr[r];
+          score += res.score;
+        }
+      } else if (direction === 3) { // Left
+        for (let r = 0; r < size; r++) {
+          let row = [newGrid[getIndex(r,0)], newGrid[getIndex(r,1)], newGrid[getIndex(r,2)], newGrid[getIndex(r,3)]];
+          let res = compressAndMerge(row);
+          if (res.changed) moved = true;
+          for (let c = 0; c < size; c++) newGrid[getIndex(r,c)] = res.arr[c];
+          score += res.score;
+        }
+      } else if (direction === 1) { // Right
+        for (let r = 0; r < size; r++) {
+          let row = [newGrid[getIndex(r,3)], newGrid[getIndex(r,2)], newGrid[getIndex(r,1)], newGrid[getIndex(r,0)]];
+          let res = compressAndMerge(row);
+          if (res.changed) moved = true;
+          for (let c = 0; c < size; c++) newGrid[getIndex(r,3-c)] = res.arr[c];
+          score += res.score;
+        }
+      }
+
+      if (moved) {
+        grid = newGrid;
+        addRandomTile();
+        updateView();
+        checkGameStatus();
+      }
+    }
+
+    // Helper: Processes a line (row or col) of 4 numbers
+    // Returns { arr: [x,x,x,x], score: int, changed: bool }
+    function compressAndMerge(line) {
+      let nonZero = line.filter(x => x !== 0);
+      let merged = [];
+      let scoreGain = 0;
+      let skip = false;
+
+      for (let i = 0; i < nonZero.length; i++) {
+        if (skip) {
+          skip = false;
+          continue;
+        }
+        // Check next
+        if (i + 1 < nonZero.length && nonZero[i] === nonZero[i+1]) {
+          let val = nonZero[i] * 2;
+          merged.push(val);
+          scoreGain += val;
+          skip = true;
+        } else {
+          merged.push(nonZero[i]);
+        }
+      }
+
+      // Pad with zeros
+      while (merged.length < 4) merged.push(0);
+
+      // Check if changed
+      let changed = false;
+      for (let i = 0; i < 4; i++) {
+        if (line[i] !== merged[i]) changed = true;
+      }
+
+      return { arr: merged, score: scoreGain, changed: changed };
+    }
+
+    function checkGameStatus() {
+      // Check Win
+      if (!won && grid.includes(2048)) {
+        won = true;
+        msgText.textContent = STR_YOU_WIN;
+        overlay.classList.add('active');
+        return;
+      }
+
+      // Check Loss (Board full and no moves possible)
+      if (!grid.includes(0)) {
+        // Check neighbors
+        for (let r = 0; r < size; r++) {
+          for (let c = 0; c < size; c++) {
+            let val = grid[getIndex(r, c)];
+            // Check right
+            if (c < size - 1 && grid[getIndex(r, c+1)] === val) return;
+            // Check down
+            if (r < size - 1 && grid[getIndex(r+1, c)] === val) return;
+          }
+        }
+        // If here, game over
+        gameOver = true;
+        msgText.textContent = STR_GAME_OVER;
+        overlay.classList.add('active');
+      }
+    }
+
+    function updateView() {
+      // Update Scores
+      scoreEl.textContent = score;
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem('g2048-best', bestScore);
+        bestEl.textContent = bestScore;
+      }
+
+      // Render Grid
+      // Note: Simply rebuilding the DOM is cleaner for a single-file structure 
+      // than complex position tracking.
+      tileContainer.innerHTML = '';
+      
+      for (let i = 0; i < grid.length; i++) {
+        let val = grid[i];
+        if (val === 0) continue;
+
+        let r = getRow(i);
+        let c = getCol(i);
+
+        const tile = document.createElement('div');
+        tile.classList.add('g2048-tile');
+        
+        // Dynamic Class based on value
+        if (val <= 2048) {
+          tile.classList.add('g2048-tile-' + val);
+        } else {
+          tile.classList.add('g2048-tile-super');
+        }
+
+        // Positioning (percentages)
+        // 25% per cell. 10px gap is handled in css width calc, 
+        // here we just set top/left based on 0-3 index
+        tile.style.top = (r * 25) + '%';
+        tile.style.left = (c * 25) + '%';
+        
+        // Add "g2048-new-tile" class if needed? 
+        // For simpler implementation we just render. 
+        // (Refined animation requires tracking IDs, omitted for brevity/single-file simplicity)
+        
+        tile.textContent = val;
+        tileContainer.appendChild(tile);
+      }
+    }
+
+    function setupInput() {
+      // Keyboard
+      document.addEventListener('keydown', (e) => {
+        // prevent scrolling with arrows
+        if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+            e.preventDefault();
+        }
+        
+        switch (e.key) {
+          case 'ArrowUp': case 'w': move(0); break;
+          case 'ArrowRight': case 'd': move(1); break;
+          case 'ArrowDown': case 's': move(2); break;
+          case 'ArrowLeft': case 'a': move(3); break;
+        }
+      });
+
+      // Touch (Swipes)
+      const touchArea = document.getElementById('g2048-touch-area');
+      let startX, startY;
+
+      touchArea.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, {passive: false});
+
+      touchArea.addEventListener('touchend', (e) => {
+        if (!startX || !startY) return;
+        let diffX = e.changedTouches[0].clientX - startX;
+        let diffY = e.changedTouches[0].clientY - startY;
+        
+        // Threshold for swipe
+        if (Math.abs(diffX) > 30 || Math.abs(diffY) > 30) {
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal
+            if (diffX > 0) move(1); // Right
+            else move(3); // Left
+          } else {
+            // Vertical
+            if (diffY > 0) move(2); // Down
+            else move(0); // Up
+          }
+        }
+        startX = null;
+        startY = null;
+      });
+    }
+
+    // Public API
+    return {
+      init: init,
+      restart: restart
+    };
+  })();
+
+  // Start Game
+  game2048.init();
+</script>
