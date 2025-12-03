@@ -1,0 +1,662 @@
+{% assign locale = site.data.locales[page.lang] %}
+{% assign game = locale.games.g18 %}
+{% assign game_title = game.title %}
+{% assign txt_banker = locale.banker %}
+{% assign txt_player = locale.banker_opposite %}
+{% assign txt_wallet = locale.balance | append: ": $" %}
+{% assign txt_bet = locale.bet | append: ": $" %}
+{% assign txt_status_start = locale.please_bet %}
+{% assign txt_status_banker_turn = locale.banker_rolling %}
+{% assign txt_status_player_turn = locale.your_turn_to_roll %} %}
+{% assign txt_status_game_over = "💸" | append: locale.you_went_bankrupt | append: locale.try_again2 %}
+{% assign txt_btn_roll = locale.btn_roll_dice %}
+{% assign txt_btn_next = locale.btn_next_round %}
+{% assign txt_btn_restart_game = locale.btn_bankruptcy_reset | append: " ($1000)" %}
+{% assign txt_msg_invalid = game.msg_invalid | append: locale.please_reroll %}
+{% assign txt_msg_banker_win_imm = game.msg_banker_win_imm %}
+{% assign txt_msg_banker_lose_imm = game.msg_banker_lose_imm %}
+{% assign txt_msg_banker_point = game.msg_banker_point %}
+{% assign txt_msg_player_leopard = game.msg_player_leopard %}
+{% assign txt_msg_player_456 = game.msg_player_456 %}
+{% assign txt_msg_player_win = game.msg_player_win %}
+{% assign txt_msg_player_lose_123 = game.msg_player_lose_123 %}
+{% assign txt_msg_player_lose_1pt = game.msg_player_lose_1pt %}
+{% assign txt_msg_player_lose_cmp = game.msg_player_lose_cmp %}
+{% assign txt_rule_title = game.txt_rule_title %}
+{% assign txt_rule_1 = game.txt_rule_1 %}
+{% assign txt_rule_2 = game.txt_rule_2 %}
+{% assign txt_rule_3 = game.txt_rule_3 %}
+{% assign txt_rule_4 = game.txt_rule_4 %}
+
+<style>
+  /* Game Container Styles */
+  .game-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2e7d32; /* Casino Green */
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .game-header h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #81c784;
+    padding-bottom: 10px;
+  }
+
+  /* Info Panel (Wallet & Bet) */
+  .info-panel {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+
+  /* Dice Section */
+  .dice-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin: 20px 0;
+    min-height: 180px;
+  }
+
+  .player-zone {
+    width: 45%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+
+  .player-zone.active {
+    background: rgba(255, 215, 0, 0.2); /* Gold highlight */
+    box-shadow: 0 0 10px #ffd700;
+  }
+
+  .player-name {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+  }
+
+  .dice-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* CSS Dice - Realistic Layout */
+  .die {
+    width: 44px;
+    height: 44px;
+    background-color: #fdfdfd;
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1), 2px 2px 5px rgba(0,0,0,0.4);
+    display: grid;
+    /* 3x3 Grid for precise dot placement */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  .dot {
+    align-self: center;
+    justify-self: center;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #222; /* Default Black */
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+    visibility: hidden; /* Hidden by default */
+  }
+
+  /* Red Dot styling (Asian style: 1 and 4 are red) */
+  .die[data-value="1"] .dot,
+  .die[data-value="4"] .dot {
+    background-color: #d32f2f;
+  }
+
+  /* Big Dot for One */
+  .die[data-value="1"] .dot:nth-child(5) {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Dot Visibility Mapping based on 3x3 Grid (Indices 1-9) */
+  .die[data-value="1"] .dot:nth-child(5) { visibility: visible; }
+
+  .die[data-value="2"] .dot:nth-child(3),
+  .die[data-value="2"] .dot:nth-child(7) { visibility: visible; }
+
+  .die[data-value="3"] .dot:nth-child(3),
+  .die[data-value="3"] .dot:nth-child(5),
+  .die[data-value="3"] .dot:nth-child(7) { visibility: visible; }
+
+  .die[data-value="4"] .dot:nth-child(1),
+  .die[data-value="4"] .dot:nth-child(3),
+  .die[data-value="4"] .dot:nth-child(7),
+  .die[data-value="4"] .dot:nth-child(9) { visibility: visible; }
+
+  .die[data-value="5"] .dot:nth-child(1),
+  .die[data-value="5"] .dot:nth-child(3),
+  .die[data-value="5"] .dot:nth-child(5),
+  .die[data-value="5"] .dot:nth-child(7),
+  .die[data-value="5"] .dot:nth-child(9) { visibility: visible; }
+
+  .die[data-value="6"] .dot:nth-child(1),
+  .die[data-value="6"] .dot:nth-child(3),
+  .die[data-value="6"] .dot:nth-child(4),
+  .die[data-value="6"] .dot:nth-child(6),
+  .die[data-value="6"] .dot:nth-child(7),
+  .die[data-value="6"] .dot:nth-child(9) { visibility: visible; }
+
+  /* Animation */
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
+  .shaking {
+    animation: shake 0.5s infinite;
+  }
+
+  .score-display {
+    min-height: 24px;
+    font-size: 0.9em;
+    color: #ffeb3b;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  /* Controls */
+  .controls {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .status-message {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+    min-height: 1.2em;
+  }
+
+  .bet-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+
+  .btn-bet {
+    background-color: #0288d1;
+    color: white;
+  }
+  .btn-bet:hover { background-color: #039be5; }
+  .btn-bet:disabled { background-color: #555; cursor: not-allowed; opacity: 0.6; }
+
+  .btn-action {
+    background-color: #ffb300;
+    color: #333;
+    width: 100%;
+    max-width: 220px;
+    font-size: 1.2em;
+  }
+  .btn-action:hover { background-color: #ffca28; }
+  .btn-action:disabled { background-color: #666; color: #aaa; cursor: not-allowed; }
+  
+  .game-over-modal {
+    background-color: #d32f2f !important;
+    color: white !important;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(211, 47, 47, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+  }
+
+  /* Rules Section */
+  .rules-section {
+    text-align: left;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+  .rules-section h4 { margin-top: 0; color: #ffeb3b; }
+  .rules-section ul { padding-left: 20px; margin-bottom: 0; }
+  .rules-section li { margin-bottom: 5px; }
+</style>
+
+<div class="game-container">
+  <div class="game-header">
+    <h2>{{ game_title }}</h2>
+  </div>
+
+  <div class="info-panel">
+    <span id="wallet-display">{{ txt_wallet }}1000</span>
+    <span id="bet-display">{{ txt_bet }}0</span>
+  </div>
+
+  <div class="dice-section">
+    <div class="player-zone" id="banker-zone">
+      <span class="player-name">{{ txt_banker }}</span>
+      <div class="dice-container" id="banker-dice"></div>
+      <div class="score-display" id="banker-score"></div>
+    </div>
+
+    <div class="player-zone" id="player-zone">
+      <span class="player-name">{{ txt_player }}</span>
+      <div class="dice-container" id="player-dice"></div>
+      <div class="score-display" id="player-score"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="status-message" id="status-msg">{{ txt_status_start }}</div>
+    
+    <div class="bet-controls" id="bet-controls">
+      <button class="btn-bet" onclick="game.adjustBet(10)">$10</button>
+      <button class="btn-bet" onclick="game.adjustBet(50)">$50</button>
+      <button class="btn-bet" onclick="game.adjustBet(100)">$100</button>
+      <button class="btn-bet" onclick="game.clearBet()" style="background-color: #ef5350;">CLR</button>
+    </div>
+
+    <button id="action-btn" class="btn-action" onclick="game.handleAction()">{{ txt_btn_roll }}</button>
+  </div>
+
+  <div class="rules-section">
+    <h4>{{ txt_rule_title }}</h4>
+    <ul>
+      <li>{{ txt_rule_1 }}</li>
+      <li>{{ txt_rule_2 }}</li>
+      <li>{{ txt_rule_3 }}</li>
+      <li>{{ txt_rule_4 }}</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  /**
+   * Sibala Game Logic
+   */
+  const GameConfig = {
+    txt: {
+      wallet: '{{ txt_wallet }}',
+      bet: '{{ txt_bet }}',
+      start: '{{ txt_status_start }}',
+      bankerTurn: '{{ txt_status_banker_turn }}',
+      playerTurn: '{{ txt_status_player_turn }}',
+      gameOver: '{{ txt_status_game_over }}',
+      btnRoll: '{{ txt_btn_roll }}',
+      btnNext: '{{ txt_btn_next }}',
+      btnRestart: '{{ txt_btn_restart_game }}',
+      invalid: '{{ txt_msg_invalid }}',
+      bankerWinImm: '{{ txt_msg_banker_win_imm }}',
+      bankerLoseImm: '{{ txt_msg_banker_lose_imm }}',
+      bankerPoint: '{{ txt_msg_banker_point }}',
+      playerLeopard: '{{ txt_msg_player_leopard }}',
+      player456: '{{ txt_msg_player_456 }}',
+      playerWin: '{{ txt_msg_player_win }}',
+      playerLose123: '{{ txt_msg_player_lose_123 }}',
+      playerLose1pt: '{{ txt_msg_player_lose_1pt }}',
+      playerLoseCmp: '{{ txt_msg_player_lose_cmp }}'
+    }
+  };
+
+  class SibalaGame {
+    constructor() {
+      this.wallet = 1000;
+      this.currentBet = 0;
+      this.gameState = 'IDLE'; // IDLE, BANKER_ROLL, PLAYER_ROLL, END, GAME_OVER
+      this.bankerPoint = null;
+      
+      this.dom = {
+        wallet: document.getElementById('wallet-display'),
+        bet: document.getElementById('bet-display'),
+        bankerZone: document.getElementById('banker-zone'),
+        playerZone: document.getElementById('player-zone'),
+        bankerDice: document.getElementById('banker-dice'),
+        playerDice: document.getElementById('player-dice'),
+        bankerScore: document.getElementById('banker-score'),
+        playerScore: document.getElementById('player-score'),
+        status: document.getElementById('status-msg'),
+        betControls: document.getElementById('bet-controls'),
+        actionBtn: document.getElementById('action-btn')
+      };
+
+      // Initial Render
+      this.renderDice(this.dom.bankerDice, [1,1,1]);
+      this.renderDice(this.dom.playerDice, [1,1,1]);
+      this.updateUI();
+    }
+
+    // Helper: Generate dice (1-6)
+    rollDice() {
+      return [
+        Math.floor(Math.random() * 6) + 1,
+        Math.floor(Math.random() * 6) + 1,
+        Math.floor(Math.random() * 6) + 1
+      ];
+    }
+
+    // Helper: Render dice HTML (Updated for realistic look)
+    renderDice(container, values) {
+      container.innerHTML = '';
+      values.forEach(val => {
+        const die = document.createElement('div');
+        die.className = 'die';
+        die.dataset.value = val;
+        
+        // Create 9 dots (corresponding to 3x3 grid)
+        for(let i=1; i<=9; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'dot';
+          die.appendChild(dot);
+        }
+        container.appendChild(die);
+      });
+    }
+
+    // Core Logic: Calculate Score
+    calculateScore(dice) {
+      const d = [...dice].sort((a, b) => a - b);
+
+      // 1. Leopard
+      if (d[0] === d[1] && d[1] === d[2]) {
+        return { type: 'leopard', points: d[0], label: '豹子' };
+      }
+      // 2. 4-5-6
+      if (d[0] === 4 && d[1] === 5 && d[2] === 6) {
+        return { type: 'straight_big', points: 100, label: '4-5-6' };
+      }
+      // 3. 1-2-3
+      if (d[0] === 1 && d[1] === 2 && d[2] === 3) {
+        return { type: 'straight_small', points: 0, label: '1-2-3' };
+      }
+      // 4. Pairs
+      if (d[0] === d[1]) return { type: 'point', points: d[2], label: `${d[2]}點` };
+      if (d[1] === d[2]) return { type: 'point', points: d[0], label: `${d[0]}點` };
+      if (d[0] === d[2]) return { type: 'point', points: d[1], label: `${d[1]}點` };
+
+      // 5. Invalid
+      return { type: 'invalid', points: -1, label: '' };
+    }
+
+    updateUI() {
+      this.dom.wallet.textContent = GameConfig.txt.wallet + this.wallet;
+      this.dom.bet.textContent = GameConfig.txt.bet + this.currentBet;
+      
+      const bets = this.dom.betControls.querySelectorAll('button');
+      this.dom.actionBtn.classList.remove('game-over-modal');
+
+      if (this.gameState === 'IDLE') {
+        bets.forEach(b => b.disabled = false);
+        this.dom.actionBtn.textContent = GameConfig.txt.btnRoll;
+        this.dom.actionBtn.disabled = (this.currentBet <= 0);
+      } else if (this.gameState === 'END') {
+        bets.forEach(b => b.disabled = true);
+        this.dom.actionBtn.textContent = GameConfig.txt.btnNext;
+        this.dom.actionBtn.disabled = false;
+      } else if (this.gameState === 'GAME_OVER') {
+        bets.forEach(b => b.disabled = true);
+        this.dom.actionBtn.textContent = GameConfig.txt.btnRestart;
+        this.dom.actionBtn.classList.add('game-over-modal');
+        this.dom.actionBtn.disabled = false;
+      } else {
+        // Rolling states (BANKER_ROLL, PLAYER_ROLL)
+        bets.forEach(b => b.disabled = true); // Disable betting
+        this.dom.actionBtn.textContent = GameConfig.txt.btnRoll;
+      }
+    }
+
+    adjustBet(amount) {
+      // FIX: Prevent betting if game is not in IDLE state
+      if (this.gameState !== 'IDLE') return;
+
+      if (this.wallet >= amount) {
+        this.wallet -= amount;
+        this.currentBet += amount;
+        this.updateUI();
+        this.dom.status.textContent = GameConfig.txt.start;
+      }
+    }
+
+    clearBet() {
+      // FIX: Prevent clearing bet if game is not in IDLE state
+      if (this.gameState !== 'IDLE') return;
+      
+      this.wallet += this.currentBet;
+      this.currentBet = 0;
+      this.updateUI();
+    }
+
+    handleAction() {
+      if (this.gameState === 'IDLE') {
+        if (this.currentBet === 0) return;
+        this.startBankerTurn();
+      } else if (this.gameState === 'BANKER_ROLL') {
+        this.rollBanker(); // Manual trigger or re-roll
+      } else if (this.gameState === 'PLAYER_ROLL') {
+        this.rollPlayer();
+      } else if (this.gameState === 'END') {
+        this.resetRound();
+      } else if (this.gameState === 'GAME_OVER') {
+        this.hardResetGame();
+      }
+    }
+
+    // --- Phase 1: Banker ---
+    startBankerTurn() {
+      this.gameState = 'BANKER_ROLL';
+      
+      // FIX: Immediately update UI to disable betting buttons
+      this.updateUI(); 
+
+      this.dom.status.textContent = GameConfig.txt.bankerTurn;
+      this.dom.bankerZone.classList.add('active');
+      this.dom.playerZone.classList.remove('active');
+      this.dom.playerScore.textContent = '';
+      this.dom.bankerScore.textContent = '';
+      
+      // Temporarily disable action button while animating
+      this.dom.actionBtn.disabled = true; 
+      
+      this.animateDice(this.dom.bankerDice, () => {
+        this.rollBanker();
+      });
+    }
+
+    rollBanker() {
+      const dice = this.rollDice();
+      this.renderDice(this.dom.bankerDice, dice);
+      const result = this.calculateScore(dice);
+
+      if (result.type === 'invalid') {
+        this.dom.bankerScore.textContent = GameConfig.txt.invalid;
+        this.dom.status.textContent = GameConfig.txt.invalid;
+        setTimeout(() => {
+           this.animateDice(this.dom.bankerDice, () => this.rollBanker());
+        }, 1200);
+        return;
+      }
+
+      this.dom.bankerScore.textContent = result.label;
+
+      // Check Immediate Win/Loss for Banker
+      if (result.type === 'leopard' || result.type === 'straight_big' || (result.type === 'point' && result.points === 6)) {
+        this.endRound('BANKER_WIN', result.label);
+      } 
+      else if (result.type === 'straight_small' || (result.type === 'point' && result.points === 1)) {
+        this.endRound('BANKER_LOSE', result.label);
+      } 
+      else {
+        this.bankerPoint = result.points;
+        this.dom.status.textContent = GameConfig.txt.bankerPoint.replace('%s', result.points);
+        this.gameState = 'PLAYER_ROLL';
+        this.dom.actionBtn.disabled = false; // Enable button for player to roll
+        this.dom.bankerZone.classList.remove('active');
+        this.dom.playerZone.classList.add('active');
+        // Note: We do NOT call updateUI() here because we want betting buttons to remain disabled (state is PLAYER_ROLL)
+      }
+    }
+
+    // --- Phase 2: Player ---
+    rollPlayer() {
+      this.dom.actionBtn.disabled = true;
+      this.animateDice(this.dom.playerDice, () => {
+        const dice = this.rollDice();
+        this.renderDice(this.dom.playerDice, dice);
+        const result = this.calculateScore(dice);
+
+        if (result.type === 'invalid') {
+          this.dom.playerScore.textContent = GameConfig.txt.invalid;
+          this.dom.status.textContent = GameConfig.txt.invalid;
+          this.dom.actionBtn.disabled = false;
+          return;
+        }
+
+        this.dom.playerScore.textContent = result.label;
+        this.evaluatePlayer(result);
+      });
+    }
+
+    evaluatePlayer(pResult) {
+      if (pResult.type === 'leopard') {
+        this.payout(3, GameConfig.txt.playerLeopard);
+      }
+      else if (pResult.type === 'straight_big') {
+        this.payout(2, GameConfig.txt.player456);
+      }
+      else if (pResult.type === 'straight_small') {
+        this.payout(0, GameConfig.txt.playerLose123);
+      }
+      else if (pResult.type === 'point') {
+        if (pResult.points === 1) {
+          this.payout(0, GameConfig.txt.playerLose1pt);
+        } else if (pResult.points > this.bankerPoint) {
+          this.payout(1, GameConfig.txt.playerWin.replace('%s', pResult.points));
+        } else {
+          this.payout(0, GameConfig.txt.playerLoseCmp.replace('%s', pResult.points));
+        }
+      }
+    }
+
+    // --- Utilities ---
+    payout(multiplier, message) {
+      if (multiplier > 0) {
+        const winnings = this.currentBet * multiplier;
+        this.wallet += (this.currentBet + winnings);
+        this.dom.playerZone.style.boxShadow = '0 0 20px #4caf50';
+      } else {
+        this.dom.playerZone.style.boxShadow = '0 0 20px #ef5350';
+      }
+      this.dom.status.textContent = message;
+      this.concludeTurn();
+    }
+
+    endRound(type, label) {
+      if (type === 'BANKER_WIN') {
+        this.dom.status.textContent = GameConfig.txt.bankerWinImm.replace('%s', label);
+        this.dom.bankerZone.style.boxShadow = '0 0 20px #4caf50';
+      } else if (type === 'BANKER_LOSE') {
+        this.dom.status.textContent = GameConfig.txt.bankerLoseImm.replace('%s', label);
+        this.wallet += (this.currentBet * 2);
+        this.dom.bankerZone.style.boxShadow = '0 0 20px #ef5350';
+      }
+      this.concludeTurn();
+    }
+    
+    concludeTurn() {
+      this.currentBet = 0;
+      
+      if (this.wallet < 10) {
+        this.gameState = 'GAME_OVER';
+        this.dom.status.textContent = GameConfig.txt.gameOver;
+      } else {
+        this.gameState = 'END';
+      }
+      this.updateUI();
+    }
+
+    resetRound() {
+      this.gameState = 'IDLE';
+      this.bankerPoint = null;
+      this.dom.bankerScore.textContent = '';
+      this.dom.playerScore.textContent = '';
+      this.dom.status.textContent = GameConfig.txt.start;
+      
+      this.dom.bankerZone.classList.remove('active');
+      this.dom.playerZone.classList.remove('active');
+      this.dom.bankerZone.style.boxShadow = 'none';
+      this.dom.playerZone.style.boxShadow = 'none';
+      
+      this.renderDice(this.dom.bankerDice, [1,1,1]);
+      this.renderDice(this.dom.playerDice, [1,1,1]);
+
+      this.updateUI();
+    }
+    
+    hardResetGame() {
+      this.wallet = 1000;
+      this.resetRound();
+    }
+
+    animateDice(container, callback) {
+      container.classList.add('shaking');
+      const interval = setInterval(() => {
+        const randomDice = this.rollDice();
+        this.renderDice(container, randomDice);
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        container.classList.remove('shaking');
+        callback();
+      }, 800);
+    }
+  }
+
+  // Initialize Game
+  const game = new SibalaGame();
+</script>

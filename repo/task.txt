@@ -21,6 +21,7 @@
 ../jekyll-site/_data/locales/zh-cn.yml
 ../jekyll-site/_data/locales/zh-tw.yml
 
+../jekyll-site/_games-en/18.html
 ../jekyll-site/_games-en/2048.html
 ../jekyll-site/_games-en/chess.html
 ../jekyll-site/_games-en/checkers.html
@@ -34,6 +35,7 @@
 ../jekyll-site/_games-en/tic-tac-toe.html  
 ../jekyll-site/_games-en/whack-a-mole.html
 
+../jekyll-site/_games-zh-cn/18.html
 ../jekyll-site/_games-zh-cn/2048.html
 ../jekyll-site/_games-zh-cn/chess.html
 ../jekyll-site/_games-zh-cn/checkers.html
@@ -47,6 +49,7 @@
 ../jekyll-site/_games-zh-cn/tic-tac-toe.html  
 ../jekyll-site/_games-zh-cn/whack-a-mole.html
 
+../jekyll-site/_games-zh-tw/18.html            # 2025-11-27
 ../jekyll-site/_games-zh-tw/2048.html          # 2025-11-20
 ../jekyll-site/_games-zh-tw/chess.html         # 2025-10-30
 ../jekyll-site/_games-zh-tw/checkers.html      # 2025-10-23
@@ -60,6 +63,7 @@
 ../jekyll-site/_games-zh-tw/tic-tac-toe.html   # 2025-08-29
 ../jekyll-site/_games-zh-tw/whack-a-mole.html  # 2025-10-02
 
+../jekyll-site/_includes/games/18.html
 ../jekyll-site/_includes/games/2048.html
 ../jekyll-site/_includes/games/chess.html
 ../jekyll-site/_includes/games/checkers.html
