@@ -28,6 +28,7 @@
 ../jekyll-site/_games-en/connect-four.html
 ../jekyll-site/_games-en/gomoku.html 
 ../jekyll-site/_games-en/guess-number.html
+../jekyll-site/_games-en/minesweeper.html
 ../jekyll-site/_games-en/nine-rings.html
 ../jekyll-site/_games-en/reversi.html
 ../jekyll-site/_games-en/snake.html
@@ -42,6 +43,7 @@
 ../jekyll-site/_games-zh-cn/connect-four.html
 ../jekyll-site/_games-zh-cn/gomoku.html 
 ../jekyll-site/_games-zh-cn/guess-number.html 
+../jekyll-site/_games-zh-cn/minesweeper.html
 ../jekyll-site/_games-zh-cn/nine-rings.html
 ../jekyll-site/_games-zh-cn/snake.html
 ../jekyll-site/_games-zh-cn/reversi.html
@@ -56,6 +58,7 @@
 ../jekyll-site/_games-zh-tw/connect-four.html  # 2025-10-09
 ../jekyll-site/_games-zh-tw/gomoku.html        # 2025-11-06
 ../jekyll-site/_games-zh-tw/guess-number.html  # 2025-08-17
+../jekyll-site/_games-zh-tw/minesweeper.html   # 2025-12-04
 ../jekyll-site/_games-zh-tw/nine-rings.html    # 2025-09-25
 ../jekyll-site/_games-zh-tw/reversi.html       # 2025-10-16
 ../jekyll-site/_games-zh-tw/snake.html         # 2025-11-13
@@ -69,6 +72,7 @@
 ../jekyll-site/_includes/games/checkers.html
 ../jekyll-site/_includes/games/connect-four.html
 ../jekyll-site/_includes/games/gomoku.html
+../jekyll-site/_includes/games/minesweeper.html
 ../jekyll-site/_includes/games/reversi.html
 ../jekyll-site/_includes/games/snake.html
 ../jekyll-site/_includes/header.html  # copied from minima
