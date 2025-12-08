@@ -7,3 +7,9 @@ name = "rayfos"
 version = "1.0.0"
 description = "tool"
 dependencies = []
+
+[pytest]
+pythonpath = "repo/rayfos"
+
+[tool.pytest.ini_options]
+python_files = "*_test.py"
