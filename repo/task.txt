@@ -241,6 +241,7 @@
 ../jekyll-site/_stories-zh-cn/0014.md
 ../jekyll-site/_stories-zh-cn/0015.md
 ../jekyll-site/_stories-zh-cn/0016.md
+../jekyll-site/_stories-zh-cn/0017.md
 ../jekyll-site/_stories-zh-tw/0001.md  # 三英戰呂布
 ../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
 ../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
@@ -257,6 +258,7 @@
 ../jekyll-site/_stories-zh-tw/0014.md  # 鋼索上的舞步
 ../jekyll-site/_stories-zh-tw/0015.md  # 烈火中的數據鏈
 ../jekyll-site/_stories-zh-tw/0016.md  # 拉普拉斯的微小擾動
+../jekyll-site/_stories-zh-tw/0017.md  # 荊州機關林
 
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
