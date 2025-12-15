@@ -3,7 +3,7 @@ layout: default
 title: 剧情
 lang: zh-cn
 permalink: /zh-cn/story/
-order: 4
+order: 5
 ---
 # 剧情
 

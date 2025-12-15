@@ -3,7 +3,7 @@ layout: default
 title: 劇情
 lang: zh-tw
 permalink: /zh-tw/story/
-order: 4
+order: 5
 ---
 # 劇情
 

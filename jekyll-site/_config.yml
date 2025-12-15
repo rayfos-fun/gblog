@@ -51,6 +51,12 @@ collections:
     output: true
   stories-zh-tw:
     output: true
+  tools-en:
+    output: true
+  tools-zh-cn:
+    output: true
+  tools-zh-tw:
+    output: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.

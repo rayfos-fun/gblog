@@ -5,12 +5,6 @@ lang: en
 permalink: /en/home/
 order: 1
 ---
-# Motto
-
-<sub>[history]({{ '/en/motto/' | relative_url }})</sub>
-
-FRUGALITY. Make no expense but to do good to others or yourself; i.e., waste nothing. --by Benjamin Franklin
-
 # Recent games
 
 <sub>[history]({{ '/en/game/' | relative_url }})</sub>
@@ -18,6 +12,16 @@ FRUGALITY. Make no expense but to do good to others or yourself; i.e., waste not
 {% assign games = site.games-en | reverse %}
 {% for game in games limit: 3 %}
 * [{{ game.date | date: "%Y-%m-%d" }}: {{ game.title }}]({{ game.url | relative_url }})
+{% endfor %}
+* ...
+
+# Recent tools
+
+<sub>[history]({{ '/en/tool/' | relative_url }})</sub>
+
+{% assign tools = site.tools-en | reverse %}
+{% for tool in tools limit: 3 %}
+* [{{ tool.date | date: "%Y-%m-%d" }}: {{ tool.title }}]({{ tool.url | relative_url }})
 {% endfor %}
 * ...
 
@@ -45,11 +49,13 @@ FRUGALITY. Make no expense but to do good to others or yourself; i.e., waste not
 
 <sub>[history]({{ '/en/log/' | relative_url }})</sub>
 
-{% assign collections = games | concat: posts | concat: stories | sort: "date" | reverse %}
+{% assign collections = games | concat: tools | concat: posts | concat: stories | sort: "date" | reverse %}
 {% for collection in collections limit: 3 %}
   {% assign paths = collection.url | split: '/' %}
   {% if paths[2] == "game" %}
     {% assign type = "GAME" %}
+  {% elsif paths[2] == "tool" %}
+    {% assign type = "TOOL" %}
   {% elsif paths[2] == "post" %}
     {% assign type = "POST" %}
   {% elsif paths[2] == "story" %}

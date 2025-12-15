@@ -5,12 +5,6 @@ lang: zh-tw
 permalink: /zh-tw/home/
 order: 1
 ---
-# 本日金句 
-
-<sub>[金句大全]({{ '/zh-tw/motto/' | relative_url }})</sub>
-
-思想決定行為，行為決定習慣，習慣決定品格，品格決定命運。 --by 好多人(培根，威廉·詹姆士，史蒂芬柯維，聖雄甘地…等可能都有說過類似的格言)
-
 # 最近更新遊戲
 
 <sub>[遊戲列表]({{ '/zh-tw/game/' | relative_url }})</sub>
@@ -18,6 +12,16 @@ order: 1
 {% assign games = site.games-zh-tw | reverse %}
 {% for game in games limit: 3 %}
 * [{{ game.date | date: "%Y-%m-%d" }}: {{ game.title }}]({{ game.url | relative_url }})
+{% endfor %}
+* ...
+
+# 最近更新工具
+
+<sub>[工具列表]({{ '/zh-tw/tool/' | relative_url }})</sub>
+
+{% assign tools = site.tools-zh-tw | reverse %}
+{% for tool in tools limit: 3 %}
+* [{{ tool.date | date: "%Y-%m-%d" }}: {{ tool.title }}]({{ tool.url | relative_url }})
 {% endfor %}
 * ...
 
@@ -45,11 +49,13 @@ order: 1
 
 <sub>[日誌大全]({{ '/zh-tw/log/' | relative_url }})</sub>
 
-{% assign collections = games | concat: posts | concat: stories | sort: "date" | reverse %}
+{% assign collections = games | concat: tools | concat: posts | concat: stories | sort: "date" | reverse %}
 {% for collection in collections limit: 3 %}
   {% assign paths = collection.url | split: '/' %}
   {% if paths[2] == "game" %}
     {% assign type = "遊戲" %}
+  {% elsif paths[2] == "tool" %}
+    {% assign type = "工具" %}
   {% elsif paths[2] == "post" %}
     {% assign type = "文章" %}
   {% elsif paths[2] == "story" %}

@@ -3,7 +3,7 @@ layout: default
 title: 部落格
 lang: zh-cn
 permalink: /zh-cn/post/
-order: 3
+order: 4
 ---
 # 文章列表
 
