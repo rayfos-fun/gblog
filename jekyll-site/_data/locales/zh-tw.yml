@@ -99,6 +99,8 @@ tools:
     btn_clear: "清除所有設定"
     label_color: "背景色"
     label_seconds: "秒數 (例如: 30)"
+    msg_please_enter: "請輸入有效的秒數"
+    text_empty_list: "尚未設定任何階段"
     text_loop_count: "循環次數"
     text_phase: "階段"
     title: "循環計時器"
