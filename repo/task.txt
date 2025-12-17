@@ -239,6 +239,7 @@
 ../jekyll-site/_stories-en/0015.md
 ../jekyll-site/_stories-en/0016.md
 ../jekyll-site/_stories-en/0017.md
+../jekyll-site/_stories-en/0018.md
 ../jekyll-site/_stories-zh-cn/0001.md
 ../jekyll-site/_stories-zh-cn/0002.md
 ../jekyll-site/_stories-zh-cn/0003.md
@@ -256,6 +257,7 @@
 ../jekyll-site/_stories-zh-cn/0015.md
 ../jekyll-site/_stories-zh-cn/0016.md
 ../jekyll-site/_stories-zh-cn/0017.md
+../jekyll-site/_stories-zh-cn/0018.md
 ../jekyll-site/_stories-zh-tw/0001.md  # 三英戰呂布
 ../jekyll-site/_stories-zh-tw/0002.md  # 馬失前蹄
 ../jekyll-site/_stories-zh-tw/0003.md  # 急轉直下
@@ -273,6 +275,7 @@
 ../jekyll-site/_stories-zh-tw/0015.md  # 烈火中的數據鏈
 ../jekyll-site/_stories-zh-tw/0016.md  # 拉普拉斯的微小擾動
 ../jekyll-site/_stories-zh-tw/0017.md  # 荊州機關林
+../jekyll-site/_stories-zh-tw/0018.md  # 雷獸與丟失的代碼
 
 ../jekyll-site/_tools-en/loop-timer.html
 ../jekyll-site/_tools-zh-cn/loop-timer.html
