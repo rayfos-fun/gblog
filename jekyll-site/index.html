@@ -10,7 +10,7 @@ lang: en
 </head>
 <script>
   const lang = navigator.language || navigator.userLanguage;
-  const langCode = lang.toLowerCase().substring(0, 2);
+  const langCode = lang.toLowerCase();
   const validLangs = ['zh-cn', 'zh-tw'];
   const redirectPath = validLangs.includes(langCode) ? langCode : 'en';
   window.location.replace('/' + redirectPath + '/home/');
