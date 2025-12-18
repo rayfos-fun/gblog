@@ -9,8 +9,7 @@ app = Flask(__name__, static_folder=STATIC_FOLDER)
 logging.basicConfig(level=logging.INFO)
 
 @app.route('/', defaults={'url': ''})
-@app.route('/gblog', defaults={'url': ''})
-@app.route('/gblog/<path:url>')
+@app.route('/<path:url>')
 def serve_index(url):
   logging.info(f'!serve_index(url={url})')
   filepath = os.path.join(app.static_folder, url)
