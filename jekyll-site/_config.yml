@@ -78,3 +78,5 @@ collections:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+google_analytics: "G-48X3DR14PR"
