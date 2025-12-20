@@ -81,6 +81,7 @@
 ../jekyll-site/_includes/games/snake.html
 ../jekyll-site/_includes/tools/loop-timer.html
 ../jekyll-site/_includes/header.html  # copied from minima
+../jekyll-site/_layouts/itch.html  # used to upload to itch.io
 ../jekyll-site/_layouts/post.html  # copied from minima
 
 ../jekyll-site/_others-en/log.md
@@ -292,6 +293,8 @@
 ../jekyll-site/_tools-zh-tw/loop-timer.html   # 2025-12-11
 
 ../jekyll-site/index.html  # /gblog; redirect to /gblog/$LANG/home/
+
+../jekyll-site/itch/memory.html  # games to upload to itch.io
 
 ../jekyll-site/pages-en/index.md  # home
 ../jekyll-site/pages-en/game.md

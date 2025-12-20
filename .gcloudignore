@@ -10,3 +10,4 @@
 !jekyll-site/
 jekyll-site/*
 !jekyll-site/_site/
+jekyll-site/_site/itch/*
