@@ -13,10 +13,13 @@ logging.basicConfig(level=logging.INFO)
 def serve_index(url):
   logging.info(f'!serve_index(url={url})')
   filepath = os.path.join(app.static_folder, url)
-  if not os.path.isfile(filepath):
-    url = os.path.join(url, 'index.html')
-  logging.info(f'url={url}')
-  return send_from_directory(app.static_folder, url)
+  if os.path.isfile(filepath):
+    return send_from_directory(app.static_folder, url)
+  elif os.path.isdir(filepath):
+    index_filepath = os.path.join(filepath, 'index.html')
+    if os.path.isfile(index_filepath):
+      return send_from_directory(filepath, 'index.html')
+  return send_from_directory(app.static_folder, '404.html'), 404
 
 
 if __name__ == '__main__':
