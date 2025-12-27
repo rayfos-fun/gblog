@@ -1,0 +1,15 @@
+itch.io
+
+index.html => right click => Compress
+
+Upload New Project
+  title
+  Short description or tagline
+  Classification
+  Uploads
+    This file will be played in the browser
+  Tags
+
+screenshot
+  chrome ctrl+shift+i (developer tools) => ctrl+shift+p (command: screenshot)
+cover
