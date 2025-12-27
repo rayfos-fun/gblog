@@ -75,6 +75,13 @@ games:
     tie: "TIE!"
   snake:
     title: "SNAKE"
+  tower_of_hanoi:
+    disks_label: "Disk Count"
+    moves: "Moves"
+    msg_empty: "This tower is empty."
+    msg_warn: "Invalid move: Larger disks cannot be placed on smaller ones!"
+    msg_win: "Congratulations! You won!"
+    title: "Tower of Hanoi"
 balance: "Balance"
 banker: "Banker"
 banker_opposite: "You"

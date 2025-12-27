@@ -75,6 +75,13 @@ games:
     tie: "平手！"
   snake:
     title: "貪食蛇"
+  tower_of_hanoi:
+    disks_label: "盤子數量"
+    moves: "步數"
+    msg_empty: "這根柱子沒有盤子可以拿取。"
+    msg_warn: "違規移動：大盤子不能放在小盤子上面！"
+    msg_win: "恭喜！你完成了！"
+    title: "漢諾塔"
 balance: "餘額"
 banker: "莊家"
 banker_opposite: "閒家"
