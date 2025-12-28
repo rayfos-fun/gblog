@@ -2,7 +2,7 @@
 layout: default
 title: Home
 lang: en
-permalink: /en/home/
+permalink: /en/
 order: 1
 ---
 # Recent games

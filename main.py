@@ -1,4 +1,4 @@
-from flask import Flask, redirect, make_response, send_from_directory
+from flask import Flask, redirect, make_response, request, send_from_directory
 
 import logging
 import os
@@ -11,11 +11,28 @@ logging.basicConfig(level=logging.INFO)
 @app.route('/gblog/')
 @app.route('/gblog/<path:subpath>')
 def redirect_old_gblog(subpath=''):
+  # /gblog/* => /*
   return redirect(f'/{subpath}', code=301)
 
 @app.route('/', defaults={'url': ''})
 @app.route('/<path:url>')
 def serve_index(url):
+  target_langs = ['en', 'zh-cn', 'zh-tw']
+  if any(url.startswith(lang + '/') or url == lang for lang in target_langs):
+    # /LANG/*
+    pass
+  elif os.path.isfile(os.path.join(app.static_folder, url)):
+    # isfile e.g. robots.txt, sitemap.xml, ...et.
+    pass
+  else:  # not /LANG/* and not isfile
+    # => redirect * to /LANG/*
+    best = request.accept_languages.best_match(['zh-CN', 'zh-TW', 'en'])
+    if best:
+      prefix = best.lower()
+    else:
+      prefix = 'en'
+    return redirect(f'/{prefix}/{url}', code=302)
+
   target_file = '404.html'
   status_code = 404
 

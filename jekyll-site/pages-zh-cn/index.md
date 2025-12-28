@@ -2,7 +2,7 @@
 layout: default
 title: 首页
 lang: zh-cn
-permalink: /zh-cn/home/
+permalink: /zh-cn/
 order: 1
 ---
 # 最近更新游戏

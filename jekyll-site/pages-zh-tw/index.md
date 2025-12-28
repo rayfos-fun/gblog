@@ -2,7 +2,7 @@
 layout: default
 title: 首頁
 lang: zh-tw
-permalink: /zh-tw/home/
+permalink: /zh-tw/
 order: 1
 ---
 # 最近更新遊戲
