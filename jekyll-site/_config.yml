@@ -24,7 +24,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   以遊戲方式呈現的部落格。
   A blog representing in games.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://rayfos.fun" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://rayfos.fun" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  rayfos-fun
 
 # Build settings
