@@ -1,10 +1,11 @@
+*.egg-info/
 venv/
 node_modules/
-_site
-.sass-cache
+*.py[cod]
+.env
 .jekyll-cache
 .jekyll-metadata
+.sass-cache
+_site
 vendor
 __pycache__
-*.py[cod]
-*.egg-info/

@@ -1,2 +1,6 @@
+authlib
 Flask
+google-cloud-secret-manager
 gunicorn
+python-dotenv
+requests
