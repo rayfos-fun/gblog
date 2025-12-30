@@ -1,6 +1,8 @@
 client secret and secret key: 
   suggest not to submit to git/drive... etc.
   secret manager (google cloud)
+    or store in .env for local testing
+  python -c 'import secrets; print(secrets.token_hex(32))' => secret_key (for authentication)
 
 gauth = authlib.integrations.flask_client.OAuth(app).register(... server_metadata_url='https://accounts.google.com/.well-known/openid-configuration')
 normal flow:
@@ -22,3 +24,7 @@ normal flow:
     /api/me 
   api_me() (../main.py)
     return jsonify {user}
+
+
+
+
