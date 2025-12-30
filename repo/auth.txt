@@ -1,0 +1,24 @@
+client secret and secret key: 
+  suggest not to submit to git/drive... etc.
+  secret manager (google cloud)
+
+gauth = authlib.integrations.flask_client.OAuth(app).register(... server_metadata_url='https://accounts.google.com/.well-known/openid-configuration')
+normal flow:
+  startGoogleLogin() (../jekyll-site/_includes/header.html)
+    => /login?mode=popup (normal flow)
+    => /login?next=${pathname} (mobile flow)
+  login() (../main.py)
+    session['auth_mode'] = 'popup' (normal flow)
+    session['auth_mode'] = 'redirect' (mobile flow)
+    session['next_url'] = request.args.get('next') or request.referrer or '/' (mobile flow)
+    gauth.authorize_redirect(auth)
+  auth() (../main.py)
+    token = gauth.authorize_access_token()
+    session['user'] = token.get('userinfo')
+    return render_template_string("""... window.opener.postMessage(...); window.close(); ...""")  (normal flow)
+    return redirect(session['next_url']) (mobile flow)
+  window.addEventListener("message",   receive postMessage (../jekyll-site/_includes/header.html)
+    update UI
+    /api/me 
+  api_me() (../main.py)
+    return jsonify {user}
