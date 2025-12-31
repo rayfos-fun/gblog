@@ -152,11 +152,6 @@ def serve_index(url):
 
   response = make_response(send_from_directory(app.static_folder, target_file))
   response.status_code = status_code
-
-  if target_file.endswith('.xml'):
-    response.headers['Content-Type'] = 'application/xml; charset=utf-8'
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-
   return response
 
 if __name__ == '__main__':

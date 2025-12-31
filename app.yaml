@@ -6,3 +6,12 @@ automatic_scaling:
   min_instances: 0
   target_cpu_utilization: 0.6
   max_concurrent_requests: 80
+handlers:
+- url: /sitemap.xml
+  static_files: jekyll-site/_site/sitemap.xml
+  upload: jekyll-site/_site/sitemap.xml
+- url: /robots.txt
+  static_files: jekyll-site/_site/robots.txt
+  upload: jekyll-site/_site/robots.txt
+- url: .*
+  script: auto
