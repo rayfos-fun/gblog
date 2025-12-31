@@ -3,6 +3,8 @@
 
 git add .  to add all files into stage 
 git add file  to add the specific file into stage
+git checkout -b xxx   # create a new branch xxx
 git commit --amend  to add touched files into current commit
 git diff --staged  to show diff of the commit before and after
+git reset  to undo git add .
 git restore .  to restore all unstaged files

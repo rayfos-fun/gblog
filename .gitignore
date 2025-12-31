@@ -1,4 +1,5 @@
 *.egg-info/
+emulator-data/
 venv/
 node_modules/
 *.py[cod]
