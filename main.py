@@ -4,9 +4,17 @@ import os
 from datetime import timedelta
 
 from authlib.integrations.flask_client import OAuth
-from flask import (Flask, jsonify, make_response, redirect,
-                   render_template_string, request, send_from_directory,
-                   session, url_for)
+from flask import (
+    Flask,
+    jsonify,
+    make_response,
+    redirect,
+    render_template_string,
+    request,
+    send_from_directory,
+    session,
+    url_for,
+)
 from google.cloud import firestore, secretmanager
 
 STATIC_FOLDER = "jekyll-site/_site"
