@@ -1,15 +1,46 @@
 .gitignore
   venv/
 
-git add .  to add all files into stage 
-git add file  to add the specific file into stage
-git checkout -b xxx   # create a new branch xxx
+git add .  # to add all files into stage 
+git add $FILE  # to add the specific file into stage
+git branch $BRANCH  # create branch and migrate all existing commits into it
+git checkout $BRANCH  # switch to branch
+git checkout -b $BRANCH   # create and switch to branch
 git checkout --ours xxx  # override using ours (current branch) to resolve conflict
-git commit --amend  to add touched files into current commit
-git config --global push.autoSetupRemote true  => "git push" in branch could work without "-u origin ..."
-git diff --staged  to show diff of the commit before and after
-git push -u origin feature/comments  origin: cloud repo e.g. github; -u=--set-upstream: track local feature/comments with origin (same name feature/comments)
-git rebase main   cut this branch, rebase it to main
-git reset  to undo git add .
-git reset --soft HEAD~2  to undo 2 unpushed commits
-git restore .  to restore all unstaged files
+git clone https://github.com/rayfos-fun/gblog.git   # -b branch_name
+git commit --amend  # to add touched files into current commit
+git config --global push.autoSetupRemote true  # "git push" in branch could work without "-u origin ..."
+git diff --staged  # to show diff of the commit before and after
+git fetch  # sync origin status to local
+git log  # show logs
+git pull   # git fetch + git merge
+git push -u origin feature/comments  # origin: cloud repo e.g. github; -u=--set-upstream: track local feature/comments with origin (same name feature/comments)
+git rebase main  # cut this branch, rebase it to main
+git reset  # to undo git add .
+git reset --hard HEAD~1  # --hard: !!discard!! all changes
+git reset --soft HEAD~2  # to undo 2 unpushed commits
+git restore .  # to restore all unstaged files
+git stash  # save current changes temporarily
+git stach pop  # load previous stashed changes
+git switch -c $BRANCH  # create and switch to branch
+
+
+# terminology
+
+init => edit => modified (existing file) or untracked (new file) @[working directory]
+=> git add ... => staged @[staging area]
+=> git commit ... => commited @[local repository]
+=> git push ... => pushed / synced @[remote repository] 
+
+# scenario
+
+## init
+git clone https://github.com/rayfos-fun/gblog.git
+cd gblog
+
+## edit on main, no other branches
+git add .
+git commit -m 'commit meesage'
+git push
+
+## 
