@@ -89,6 +89,9 @@ def add_comment():
     if not data or "content" not in data or "slug" not in data:
         return jsonify({"error": "Missing content or slug"}), 400
 
+    if len(data["content"].encode("utf-8")) > 1000:
+        return jsonify({"error": "Comment too long (max 1000 bytes)"}), 400
+
     try:
         comment_data = {
             "slug": data["slug"],

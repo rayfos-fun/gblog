@@ -3,9 +3,9 @@
     <div id="comments-list">Thinking...</div>
 
     <div id="comment-form-container" style="display:none; margin-top: 20px;">
-        <textarea id="comment-content" rows="4"
+        <textarea id="comment-content" rows="4" maxlength="1000"
             style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 4px;"
-            placeholder="Write a comment..."></textarea>
+            placeholder="Write a comment... (max 1000 bytes)"></textarea>
         <div style="margin-top: 10px; text-align: right;">
             <button id="submit-comment"
                 style="background-color: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Post
@@ -94,6 +94,13 @@
         submitBtn.addEventListener('click', function () {
             const content = contentInput.value.trim();
             if (!content) return;
+
+            // Simple byte length check (approximate for UTF-8)
+            const encoder = new TextEncoder();
+            if (encoder.encode(content).length > 1000) {
+                alert('Comment is too long (max 1000 bytes).');
+                return;
+            }
 
             submitBtn.disabled = true;
             submitBtn.innerText = 'Posting...';

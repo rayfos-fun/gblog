@@ -105,6 +105,25 @@ def test_add_comment_missing_fields(client, mock_db):
     mock_db.collection("comments").add.assert_not_called()
 
 
+def test_add_comment_too_long(client, mock_db):
+    """
+    Test adding a comment that exceeds the length limit.
+    Should return 400.
+    """
+    with client.session_transaction() as sess:
+        sess["user"] = {"name": "Test User"}
+
+    # Create a string that encodes to > 1000 bytes
+    long_content = "a" * 1001
+    payload = {"slug": "/test", "content": long_content}
+
+    response = client.post("/api/comments", json=payload)
+    assert response.status_code == 400
+    assert "too long" in response.json["error"]
+
+    mock_db.collection("comments").add.assert_not_called()
+
+
 # --- GET /api/comments Tests ---
 
 
