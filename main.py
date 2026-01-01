@@ -7,7 +7,7 @@ from authlib.integrations.flask_client import OAuth
 from flask import (Flask, jsonify, make_response, redirect,
                    render_template_string, request, send_from_directory,
                    session, url_for)
-from google.cloud import secretmanager
+from google.cloud import firestore, secretmanager
 
 STATIC_FOLDER = "jekyll-site/_site"
 app = Flask(__name__, static_folder=STATIC_FOLDER)
@@ -67,6 +67,37 @@ google = oauth.register(
     client_kwargs={"scope": "openid email profile"},
 )
 
+# Initialize Firestore. It could connect to cloud or emulator (requiring GOOGLE_CLOUD_PROJECT and FIRESTORE_EMULATOR_HOST) accordingly
+db = firestore.Client()
+
+
+@app.route("/api/comments", methods=["POST"])
+def add_comment():
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json()
+    if not data or "content" not in data or "slug" not in data:
+        return jsonify({"error": "Missing content or slug"}), 400
+
+    try:
+        comment_data = {
+            "slug": data["slug"],
+            "content": data["content"],
+            "author_name": user.get("name"),
+            "author_picture": user.get("picture"),
+            "author_id": user.get("sub"),
+            "created_at": firestore.SERVER_TIMESTAMP,
+        }
+
+        db.collection("comments").add(comment_data)
+
+        return jsonify({"status": "success", "message": "Comment added"}), 201
+    except Exception as e:
+        print(f"Error adding comment: {e}")
+        return jsonify({"error": "Failed to add comment"}), 500
+
 
 @app.route("/api/me")
 def api_me():
@@ -82,19 +113,6 @@ def api_me():
         )
     else:
         return jsonify({"authed": False})
-
-
-@app.route("/login")
-def login():
-    if request.args.get("mode") == "popup":
-        session["auth_mode"] = "popup"
-    else:
-        session["auth_mode"] = "redirect"
-        session["next_url"] = request.args.get("next") or request.referrer or "/"
-    redirect_uri = url_for(
-        "auth", _external=True
-    )  # i.e. https://rayfos.fun/auth/callback based on the method "auth"
-    return google.authorize_redirect(redirect_uri)
 
 
 @app.route("/auth/callback")
@@ -129,6 +147,46 @@ def auth():
     else:
         next_url = session.pop("next_url", "/")
         return redirect(next_url)
+
+
+@app.route("/api/comments", methods=["GET"])
+def get_comments():
+    page_slug = request.args.get("slug")
+    if not page_slug:
+        return jsonify({"error": "Missing slug parameter"}), 400
+
+    try:
+        comments_ref = db.collection("comments")
+        query = comments_ref.where("slug", "==", page_slug).order_by(
+            "created_at", direction=firestore.Query.DESCENDING
+        )
+        docs = query.stream()
+
+        comments = []
+        for doc in docs:
+            comment_data = doc.to_dict()
+            # Convert timestamp to string for JSON serialization
+            if "created_at" in comment_data and comment_data["created_at"]:
+                comment_data["created_at"] = comment_data["created_at"].isoformat()
+            comments.append(comment_data)
+
+        return jsonify(comments)
+    except Exception as e:
+        print(f"Error fetching comments: {e}")
+        return jsonify({"error": "Failed to fetch comments"}), 500
+
+
+@app.route("/login")
+def login():
+    if request.args.get("mode") == "popup":
+        session["auth_mode"] = "popup"
+    else:
+        session["auth_mode"] = "redirect"
+        session["next_url"] = request.args.get("next") or request.referrer or "/"
+    redirect_uri = url_for(
+        "auth", _external=True
+    )  # i.e. https://rayfos.fun/auth/callback based on the method "auth"
+    return google.authorize_redirect(redirect_uri)
 
 
 @app.route("/logout")

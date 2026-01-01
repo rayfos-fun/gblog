@@ -1,12 +1,15 @@
+__pycache__/
 *.egg-info/
 emulator-data/
 venv/
 node_modules/
+venv/
 *.py[cod]
 .env
 .jekyll-cache
 .jekyll-metadata
 .sass-cache
 _site
+firebase-debug.log
+firestore-debug.log
 vendor
-__pycache__

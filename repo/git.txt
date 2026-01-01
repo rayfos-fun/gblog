@@ -4,7 +4,10 @@
 git add .  to add all files into stage 
 git add file  to add the specific file into stage
 git checkout -b xxx   # create a new branch xxx
+git checkout --ours xxx  # override using ours (current branch) to resolve conflict
 git commit --amend  to add touched files into current commit
 git diff --staged  to show diff of the commit before and after
+git rebase main   cut this branch, rebase it to main
 git reset  to undo git add .
+git reset --soft HEAD~2  to undo 2 unpushed commits
 git restore .  to restore all unstaged files
