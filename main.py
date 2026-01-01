@@ -4,17 +4,9 @@ import os
 from datetime import timedelta
 
 from authlib.integrations.flask_client import OAuth
-from flask import (
-    Flask,
-    jsonify,
-    make_response,
-    redirect,
-    render_template_string,
-    request,
-    send_from_directory,
-    session,
-    url_for,
-)
+from flask import (Flask, jsonify, make_response, redirect,
+                   render_template_string, request, send_from_directory,
+                   session, url_for)
 from google.cloud import firestore, secretmanager
 
 STATIC_FOLDER = "jekyll-site/_site"
@@ -96,7 +88,7 @@ def add_comment():
         comment_data = {
             "slug": data["slug"],
             "content": data["content"],
-            "author_name": user.get("name"),
+            "author_name": session.get("nickname", user.get("name")),
             "author_picture": user.get("picture"),
             "author_id": user.get("sub"),
             "created_at": firestore.SERVER_TIMESTAMP,
@@ -113,6 +105,7 @@ def add_comment():
 @app.route("/api/me")
 def api_me():
     user = session.get("user")
+    nickname = session.get("nickname", "Anonymous")
     if user:
         return jsonify(
             {
@@ -120,6 +113,7 @@ def api_me():
                 "name": user.get("name"),
                 "picture": user.get("picture"),
                 "sub": user.get("sub"),  # Google User Unique ID
+                "nickname": nickname,
             }
         )
     else:
@@ -131,8 +125,19 @@ def auth():
     token = google.authorize_access_token()
     user_info = token.get("userinfo")
 
+    # Load nickname
+    user_ref = db.collection("users").document(user_info["sub"])
+    user_doc = user_ref.get()
+
+    # Defaults
+    nickname = "Anonymous"
+    if user_doc.exists:
+        data = user_doc.to_dict()
+        nickname = data.get("nickname", "Anonymous")
+
     session.permanent = True
     session["user"] = user_info
+    session["nickname"] = nickname
 
     mode = session.pop("auth_mode", "redirect")
 
@@ -146,7 +151,8 @@ def auth():
         if (window.opener) {
           window.opener.postMessage({
             type: 'LOGIN_SUCCESS',
-            user: {{ user | tojson }}
+            user: {{ user | tojson }},
+            nickname: {{ nickname | tojson }}
           }, '*');
         }
         window.close();
@@ -154,10 +160,39 @@ def auth():
       </body></html>
     """,
             user=user_info,
+            nickname=nickname,
         )
     else:
         next_url = session.pop("next_url", "/")
         return redirect(next_url)
+
+
+@app.route("/api/user/nickname", methods=["POST"])
+def update_nickname():
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json()
+    if not data or "nickname" not in data:
+        return jsonify({"error": "Missing nickname"}), 400
+
+    new_nickname = data["nickname"].strip()
+    if len(new_nickname) < 1 or len(new_nickname) > 20:
+        return jsonify({"error": "Nickname must be between 1 and 20 characters"}), 400
+
+    try:
+        # Update Firestore
+        user_ref = db.collection("users").document(user["sub"])
+        user_ref.set({"nickname": new_nickname}, merge=True)
+
+        # Update Session
+        session["nickname"] = new_nickname
+
+        return jsonify({"status": "success", "nickname": new_nickname})
+    except Exception as e:
+        print(f"Error updating nickname: {e}")
+        return jsonify({"error": "Failed to update nickname"}), 500
 
 
 @app.route("/api/comments", methods=["GET"])

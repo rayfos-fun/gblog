@@ -1,6 +1,7 @@
-import pytest
 import sys
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 # Need to patch firestore.Client BEFORE importing main because it initializes 'db' at module level
 with patch("google.cloud.firestore.Client"):
@@ -195,7 +196,11 @@ def test_get_comments_db_error(client, mock_db):
     # Simulate Exception during query
     mock_db.collection.side_effect = Exception("Firestore is down")
 
-    response = client.get("/api/comments?slug=/test")
+    try:
+        response = client.get("/api/comments?slug=/test")
 
-    assert response.status_code == 500
-    assert "Failed to fetch" in response.json["error"]
+        assert response.status_code == 500
+        assert "Failed to fetch" in response.json["error"]
+    finally:
+        # Cleanup side effect so other tests aren't affected
+        mock_db.collection.side_effect = None
