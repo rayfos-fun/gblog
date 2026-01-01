@@ -1,20 +1,29 @@
 <div class="comments-section">
-    <h3>Comments</h3>
+    <h3>{% if page.lang == 'zh-tw' %}留言{% elsif page.lang == 'zh-cn' %}评论{% else %}Comments{% endif %}</h3>
     <div id="comments-list">Thinking...</div>
 
     <div id="comment-form-container" style="display:none; margin-top: 20px;">
         <textarea id="comment-content" rows="4" maxlength="1000"
             style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 4px;"
-            placeholder="Write a comment... (max 1000 bytes)"></textarea>
+            placeholder="{% if page.lang == 'zh-tw' %}寫下您的留言... (最多 1000 字節){% elsif page.lang == 'zh-cn' %}写下您的留言... (最多 1000 字节){% else %}Write a comment... (max 1000 bytes){% endif %}"></textarea>
         <div style="margin-top: 10px; text-align: right;">
             <button id="submit-comment"
-                style="background-color: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Post
-                Comment</button>
+                style="background-color: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                {% if page.lang == 'zh-tw' %}發布留言{% elsif page.lang == 'zh-cn' %}发布评论{% else %}Post Comment{% endif %}
+            </button>
         </div>
     </div>
 
     <div id="login-container" style="display:none; margin-top: 20px;">
-        <p>Please <a href="/login?next={{ page.url | relative_url }}">login</a> to leave a comment.</p>
+        <p>
+            {% if page.lang == 'zh-tw' %}
+            請 <a href="/login?next={{ page.url | relative_url }}">登入</a> 以發表留言。
+            {% elsif page.lang == 'zh-cn' %}
+            请 <a href="/login?next={{ page.url | relative_url }}">登录</a> 以发表评论。
+            {% else %}
+            Please <a href="/login?next={{ page.url | relative_url }}">login</a> to leave a comment.
+            {% endif %}
+        </p>
     </div>
 </div>
 
@@ -26,6 +35,19 @@
         const loginContainer = document.getElementById('login-container');
         const contentInput = document.getElementById('comment-content');
         const submitBtn = document.getElementById('submit-comment');
+
+        const uiText = {
+            loading: "{% if page.lang == 'zh-tw' %}載入留言中...{% elsif page.lang == 'zh-cn' %}加载评论中...{% else %}Loading comments...{% endif %}",
+            noComments: "{% if page.lang == 'zh-tw' %}尚無留言，成為第一個留言的人吧！{% elsif page.lang == 'zh-cn' %}暂无评论，成为第一个评论的人吧！{% else %}No comments yet. Be the first!{% endif %}",
+            anonymous: "{% if page.lang == 'zh-tw' %}無名{% elsif page.lang == 'zh-cn' %}无名{% else %}Anonymous{% endif %}",
+            toolLong: "{% if page.lang == 'zh-tw' %}留言過長 (最多 1000 字節)。{% elsif page.lang == 'zh-cn' %}评论过长 (最多 1000 字节)。{% else %}Comment is too long (max 1000 bytes).{% endif %}",
+            posting: "{% if page.lang == 'zh-tw' %}發布中...{% elsif page.lang == 'zh-cn' %}发布中...{% else %}Posting...{% endif %}",
+            postBtn: "{% if page.lang == 'zh-tw' %}發布留言{% elsif page.lang == 'zh-cn' %}发布评论{% else %}Post Comment{% endif %}",
+            postErrorPrefix: "{% if page.lang == 'zh-tw' %}發布留言錯誤：{% elsif page.lang == 'zh-cn' %}发布评论错误：{% else %}Error posting comment: {% endif %}",
+            postErrorGeneric: "{% if page.lang == 'zh-tw' %}發布留言失敗。{% elsif page.lang == 'zh-cn' %}发布评论失败。{% else %}Error posting comment.{% endif %}",
+            loadError: "{% if page.lang == 'zh-tw' %}載入留言失敗。{% elsif page.lang == 'zh-cn' %}加载评论失败。{% else %}Error loading comments.{% endif %}",
+            unknownError: "{% if page.lang == 'zh-tw' %}未知錯誤{% elsif page.lang == 'zh-cn' %}未知错误{% else %}Unknown error{% endif %}"
+        };
 
         // Fetch User Status
         fetch('/api/me')
@@ -41,12 +63,12 @@
 
         // Fetch Comments
         function loadComments() {
-            commentsList.innerHTML = 'Loading comments...';
+            commentsList.innerHTML = uiText.loading;
             fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
                 .then(response => response.json())
                 .then(comments => {
                     if (comments.length === 0) {
-                        commentsList.innerHTML = '<p>No comments yet. Be the first!</p>';
+                        commentsList.innerHTML = `<p>${uiText.noComments}</p>`;
                         return;
                     }
 
@@ -60,7 +82,13 @@
                         const author = document.createElement('div');
                         author.style.fontWeight = 'bold';
                         author.style.marginBottom = '4px';
-                        author.textContent = `${comment.author_name || 'Anonymous'} `;
+
+                        let authorName = comment.author_name || 'Anonymous';
+                        if (authorName === 'Anonymous') {
+                            authorName = uiText.anonymous;
+                        }
+
+                        author.textContent = `${authorName} `;
 
                         const dateSpan = document.createElement('span');
                         dateSpan.style.fontWeight = 'normal';
@@ -86,7 +114,7 @@
                 })
                 .catch(err => {
                     console.error('Error loading comments:', err);
-                    commentsList.innerHTML = '<p>Error loading comments.</p>';
+                    commentsList.innerHTML = `<p>${uiText.loadError}</p>`;
                 });
         }
 
@@ -98,12 +126,12 @@
             // Simple byte length check (approximate for UTF-8)
             const encoder = new TextEncoder();
             if (encoder.encode(content).length > 1000) {
-                alert('Comment is too long (max 1000 bytes).');
+                alert(uiText.toolLong);
                 return;
             }
 
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Posting...';
+            submitBtn.innerText = uiText.posting;
 
             fetch('/api/comments', {
                 method: 'POST',
@@ -121,16 +149,16 @@
                         contentInput.value = '';
                         loadComments(); // Refresh list
                     } else {
-                        alert('Error posting comment: ' + (data.error || 'Unknown error'));
+                        alert(uiText.postErrorPrefix + (data.error || uiText.unknownError));
                     }
                 })
                 .catch(err => {
                     console.error('Error posting comment:', err);
-                    alert('Error posting comment.');
+                    alert(uiText.postErrorGeneric);
                 })
                 .finally(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerText = 'Post Comment';
+                    submitBtn.innerText = uiText.postBtn;
                 });
         });
 
