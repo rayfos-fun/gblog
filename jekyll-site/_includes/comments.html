@@ -1,117 +1,134 @@
 <div class="comments-section">
-  <h3>Comments</h3>
-  <div id="comments-list">Thinking...</div>
-  
-  <div id="comment-form-container" style="display:none; margin-top: 20px;">
-    <textarea id="comment-content" rows="4" style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 4px;" placeholder="Write a comment..."></textarea>
-    <div style="margin-top: 10px; text-align: right;">
-        <button id="submit-comment" style="background-color: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Post Comment</button>
+    <h3>Comments</h3>
+    <div id="comments-list">Thinking...</div>
+
+    <div id="comment-form-container" style="display:none; margin-top: 20px;">
+        <textarea id="comment-content" rows="4"
+            style="width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 4px;"
+            placeholder="Write a comment..."></textarea>
+        <div style="margin-top: 10px; text-align: right;">
+            <button id="submit-comment"
+                style="background-color: #333; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Post
+                Comment</button>
+        </div>
     </div>
-  </div>
-  
-  <div id="login-container" style="display:none; margin-top: 20px;">
-     <p>Please <a href="/login?next={{ page.url | relative_url }}">login</a> to leave a comment.</p>
-  </div>
+
+    <div id="login-container" style="display:none; margin-top: 20px;">
+        <p>Please <a href="/login?next={{ page.url | relative_url }}">login</a> to leave a comment.</p>
+    </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const slug = window.location.pathname;
-    const commentsList = document.getElementById('comments-list');
-    const formContainer = document.getElementById('comment-form-container');
-    const loginContainer = document.getElementById('login-container');
-    const contentInput = document.getElementById('comment-content');
-    const submitBtn = document.getElementById('submit-comment');
+    document.addEventListener('DOMContentLoaded', function () {
+        const slug = window.location.pathname;
+        const commentsList = document.getElementById('comments-list');
+        const formContainer = document.getElementById('comment-form-container');
+        const loginContainer = document.getElementById('login-container');
+        const contentInput = document.getElementById('comment-content');
+        const submitBtn = document.getElementById('submit-comment');
 
-    // Fetch User Status
-    fetch('/api/me')
-        .then(response => response.json())
-        .then(user => {
-            if (user.authed) {
-                formContainer.style.display = 'block';
-            } else {
-                loginContainer.style.display = 'block';
-            }
-        })
-        .catch(err => console.error('Error checking auth:', err));
-
-    // Fetch Comments
-    function loadComments() {
-        commentsList.innerHTML = 'Loading comments...';
-        fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
+        // Fetch User Status
+        fetch('/api/me')
             .then(response => response.json())
-            .then(comments => {
-                if (comments.length === 0) {
-                    commentsList.innerHTML = '<p>No comments yet. Be the first!</p>';
-                    return;
+            .then(user => {
+                if (user.authed) {
+                    formContainer.style.display = 'block';
+                } else {
+                    loginContainer.style.display = 'block';
                 }
-                
-                commentsList.innerHTML = comments.map(c => `
-                    <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                        <div style="font-weight: bold; margin-bottom: 4px;">
-                            ${c.author_name || 'Anonymous'} 
-                            <span style="font-weight: normal; color: #888; font-size: 0.9em;">
-                                - ${new Date(c.created_at).toLocaleString()}
-                            </span>
-                        </div>
-                        <div style="white-space: pre-wrap;">${escapeHtml(c.content)}</div>
-                    </div>
-                `).join('');
             })
-            .catch(err => {
-                console.error('Error loading comments:', err);
-                commentsList.innerHTML = '<p>Error loading comments.</p>';
-            });
-    }
+            .catch(err => console.error('Error checking auth:', err));
 
-    // Submit Comment
-    submitBtn.addEventListener('click', function() {
-        const content = contentInput.value.trim();
-        if (!content) return;
+        // Fetch Comments
+        function loadComments() {
+            commentsList.innerHTML = 'Loading comments...';
+            fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
+                .then(response => response.json())
+                .then(comments => {
+                    if (comments.length === 0) {
+                        commentsList.innerHTML = '<p>No comments yet. Be the first!</p>';
+                        return;
+                    }
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Posting...';
+                    // Helper function to create a safe text element
+                    function createCommentElement(comment) {
+                        const div = document.createElement('div');
+                        div.style.borderBottom = '1px solid #eee';
+                        div.style.padding = '10px 0';
 
-        fetch('/api/comments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                slug: slug,
-                content: content
+                        // Use textContent to automatically handle all dangerous characters
+                        const author = document.createElement('div');
+                        author.style.fontWeight = 'bold';
+                        author.style.marginBottom = '4px';
+                        author.textContent = `${comment.author_name || 'Anonymous'} `;
+
+                        const dateSpan = document.createElement('span');
+                        dateSpan.style.fontWeight = 'normal';
+                        dateSpan.style.color = '#888';
+                        dateSpan.style.fontSize = '0.9em';
+                        dateSpan.textContent = `- ${new Date(comment.created_at).toLocaleString()}`;
+
+                        author.appendChild(dateSpan);
+
+                        const body = document.createElement('div');
+                        body.style.whiteSpace = 'pre-wrap';
+                        body.textContent = comment.content;
+
+                        div.appendChild(author);
+                        div.appendChild(body);
+                        return div;
+                    }
+
+                    commentsList.innerHTML = '';
+                    comments.forEach(c => {
+                        commentsList.appendChild(createCommentElement(c));
+                    });
+                })
+                .catch(err => {
+                    console.error('Error loading comments:', err);
+                    commentsList.innerHTML = '<p>Error loading comments.</p>';
+                });
+        }
+
+        // Submit Comment
+        submitBtn.addEventListener('click', function () {
+            const content = contentInput.value.trim();
+            if (!content) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Posting...';
+
+            fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    slug: slug,
+                    content: content
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                contentInput.value = '';
-                loadComments(); // Refresh list
-            } else {
-                alert('Error posting comment: ' + (data.error || 'Unknown error'));
-            }
-        })
-        .catch(err => {
-            console.error('Error posting comment:', err);
-            alert('Error posting comment.');
-        })
-        .finally(() => {
-            submitBtn.disabled = false;
-            submitBtn.innerText = 'Post Comment';
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        contentInput.value = '';
+                        loadComments(); // Refresh list
+                    } else {
+                        alert('Error posting comment: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Error posting comment:', err);
+                    alert('Error posting comment.');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Post Comment';
+                });
         });
+
+
+
+        loadComments();
     });
-
-    // Helper to prevent XSS
-    function escapeHtml(text) {
-        if (!text) return '';
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    loadComments();
-});
 </script>
