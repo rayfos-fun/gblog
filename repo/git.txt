@@ -3,7 +3,8 @@
 
 git add .  # to add all files into stage 
 git add $FILE  # to add the specific file into stage
-git branch $BRANCH  # create branch and migrate all existing commits into it
+git branch  # show all branches
+git branch $BRANCH  # create branch and migrate all existing commits into it (but stay in current branch)
 git checkout $BRANCH  # switch to branch
 git checkout -b $BRANCH   # create and switch to branch
 git checkout --ours xxx  # override using ours (current branch) to resolve conflict
@@ -19,10 +20,12 @@ git rebase main  # cut this branch, rebase it to main
 git reset  # to undo git add .
 git reset --hard HEAD~1  # --hard: !!discard!! all changes
 git reset --soft HEAD~2  # to undo 2 unpushed commits
-git restore .  # to restore all unstaged files
+git restore .  # to restore unstaged files to unmodified
+  # --staged  to restore staged files to modified (staging area => working directory)
+  # --source=$COMMIT  to restore commited files to staged (local repository => staging area)
 git stash  # save current changes temporarily
 git stach pop  # load previous stashed changes
-git switch -c $BRANCH  # create and switch to branch
+git switch -c $BRANCH  # witch to branch; -c: create
 
 
 # terminology
@@ -43,4 +46,17 @@ git add .
 git commit -m 'commit meesage'
 git push
 
-## 
+## work on local branch (branch not push)
+git checkout -b feature/xyz
+git add .; git commit -m 'commit meesage'; ...
+git checkout main
+git pull origin main
+git merge feature/xyz
+git push origin main
+git branch -d feature/xyz
+
+## cowork on branch
+git checkout -b feature/xyz
+git add .; git commit -m 'commit meesage'; git push -u origin feature/xyz
+goto github => pull request => merge
+
