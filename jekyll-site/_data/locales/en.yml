@@ -64,6 +64,11 @@ games:
     msg_lose: "Boom! Game Over."
     msg_start_hint: "Click to start, right-click to flag."
     title: "Minesweeper"
+  peg_solitaire:
+    msg_game_over: "Game Over. No moves left."
+    msg_select_peg: "Please select a peg."
+    txt_remaining: "Pegs Remaining: "
+    title: "Peg Solitaire"
   reversi:
     title: "Reversi"
     black: "BLACK"

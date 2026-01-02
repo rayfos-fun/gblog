@@ -31,6 +31,7 @@
 ../jekyll-site/_games-en/memory.html
 ../jekyll-site/_games-en/minesweeper.html
 ../jekyll-site/_games-en/nine-rings.html
+../jekyll-site/_games-en/peg-solitaire.html
 ../jekyll-site/_games-en/reversi.html
 ../jekyll-site/_games-en/snake.html
 ../jekyll-site/_games-en/three-heroes.html 
@@ -48,6 +49,7 @@
 ../jekyll-site/_games-zh-cn/memory.html 
 ../jekyll-site/_games-zh-cn/minesweeper.html
 ../jekyll-site/_games-zh-cn/nine-rings.html
+../jekyll-site/_games-zh-cn/peg-solitaire.html
 ../jekyll-site/_games-zh-cn/snake.html
 ../jekyll-site/_games-zh-cn/reversi.html
 ../jekyll-site/_games-zh-cn/three-heroes.html 
@@ -65,6 +67,7 @@
 ../jekyll-site/_games-zh-tw/memory.html          # 2025-12-18
 ../jekyll-site/_games-zh-tw/minesweeper.html     # 2025-12-04
 ../jekyll-site/_games-zh-tw/nine-rings.html      # 2025-09-25
+../jekyll-site/_games-zh-tw/peg-solitaire.html   # 2026-01-01
 ../jekyll-site/_games-zh-tw/reversi.html         # 2025-10-16
 ../jekyll-site/_games-zh-tw/snake.html           # 2025-11-13
 ../jekyll-site/_games-zh-tw/three-heroes.html    # 2025-08-28
@@ -80,6 +83,7 @@
 ../jekyll-site/_includes/games/gomoku.html
 ../jekyll-site/_includes/games/memory.html
 ../jekyll-site/_includes/games/minesweeper.html
+../jekyll-site/_includes/games/peg-solitaire.html
 ../jekyll-site/_includes/games/reversi.html
 ../jekyll-site/_includes/games/snake.html
 ../jekyll-site/_includes/games/tower-of-hanoi.html
