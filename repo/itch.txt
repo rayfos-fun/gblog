@@ -1,5 +1,7 @@
 itch.io
 
+add file in jekyll-site/itch
+
 index.html => right click => Compress
 
 Upload New Project
