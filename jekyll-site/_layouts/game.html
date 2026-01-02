@@ -1,0 +1,179 @@
+---
+layout: default
+---
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <header class="post-header">
+        <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+        <p class="post-meta">
+            <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+                {{ page.date | date: date_format }}
+            </time>
+            {%- if page.author -%}
+            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card"
+                    itemprop="name">{{ page.author }}</span></span>
+            {%- endif -%}
+        </p>
+    </header>
+
+    <!-- Game Music Controls -->
+    {% assign music_on_label = "Music: On" %}
+    {% assign music_off_label = "Music: Off" %}
+    {% assign volume_label = "Volume:" %}
+
+    {% if page.lang == 'zh-tw' %}
+    {% assign music_on_label = "音樂: 開啟" %}
+    {% assign music_off_label = "音樂: 關閉" %}
+    {% assign volume_label = "音量:" %}
+    {% elsif page.lang == 'zh-cn' %}
+    {% assign music_on_label = "音乐: 开启" %}
+    {% assign music_off_label = "音乐: 关闭" %}
+    {% assign volume_label = "音量:" %}
+    {% endif %}
+
+    <div class="game-music-controls"
+        style="margin-bottom: 20px; padding: 10px; background: #eee; border-radius: 8px; display: flex; align-items: center; gap: 15px;">
+        <button id="globalBgmToggle"
+            style="padding: 5px 15px; cursor: pointer; border: none; border-radius: 4px; color: white;">{{
+            music_off_label }}</button>
+        <label style="display: flex; align-items: center; gap: 5px;">
+            {{ volume_label }}
+            <input type="range" id="globalBgmVolume" min="0" max="1" step="0.1" value="0.5" style="width: 100px;">
+        </label>
+        <audio id="globalBgmAudio" loop>
+            <source src="https://storage.googleapis.com/rayfos-bucket/background.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        (function () {
+            const audio = document.getElementById('globalBgmAudio');
+            const btn = document.getElementById('globalBgmToggle');
+            const vol = document.getElementById('globalBgmVolume');
+
+            const uiText = {
+                on: "{{ music_on_label }}",
+                off: "{{ music_off_label }}"
+            };
+
+            if (!audio || !btn || !vol) return;
+
+            // Load settings from localStorage
+            // Default to false (off) per user request "initially music is off"
+            let enabled = localStorage.getItem('bgm_enabled') === 'true';
+            let volume = parseFloat(localStorage.getItem('bgm_volume') || '0.5');
+
+            // Apply initial state
+            audio.volume = volume;
+            vol.value = volume;
+            updateUI();
+
+            // If enabled is true (from previous session), try to auto-play
+            if (enabled) {
+                playAudio();
+            }
+
+            // Event Listeners
+            btn.addEventListener('click', () => {
+                enabled = !enabled;
+                localStorage.setItem('bgm_enabled', enabled);
+                updateUI();
+
+                if (enabled) {
+                    playAudio();
+                } else {
+                    audio.pause();
+                }
+            });
+
+            vol.addEventListener('input', (e) => {
+                volume = e.target.value;
+                audio.volume = volume;
+                localStorage.setItem('bgm_volume', volume);
+            });
+
+            function updateUI() {
+                if (enabled) {
+                    btn.innerText = uiText.on;
+                    btn.style.backgroundColor = '#27ae60';
+                } else {
+                    btn.innerText = uiText.off;
+                    btn.style.backgroundColor = '#7f8c8d';
+                }
+            }
+
+            function playAudio() {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Auto-play was prevented:', error);
+                        // Fallback: Wait for first user interaction
+                        const resumeAudio = () => {
+                            audio.play();
+                            document.removeEventListener('click', resumeAudio);
+                            document.removeEventListener('keydown', resumeAudio);
+                        };
+                        document.addEventListener('click', resumeAudio);
+                        document.addEventListener('keydown', resumeAudio);
+                    });
+                }
+            }
+        })();
+    </script>
+
+    <div class="post-content e-content" itemprop="articleBody">
+        {{ content }}
+    </div>
+
+    {%- if site.disqus.shortname -%}
+    {%- include disqus_comments.html -%}
+    {%- endif -%}
+
+    <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+</article>
+
+<hr>
+
+{% assign paths = page.url | split: '/' %}
+{% assign lang = paths[1] %}
+{% assign type = paths[2] %}
+{% if lang == 'zh-tw' and type == 'game' %}
+{% assign collections = site.games-zh-tw %}
+{% elsif lang == 'zh-tw' and type == 'post' %}
+{% assign collections = site.posts | where: 'lang', 'zh-tw' %}
+{% elsif lang == 'zh-tw' and type == 'story' %}
+{% assign collections = site.stories-zh-tw %}
+{% elsif lang == 'en' and type == 'game' %}
+{% assign collections = site.games-en %}
+{% elsif lang == 'en' and type == 'post' %}
+{% assign collections = site.posts | where: 'lang', 'en' %}
+{% elsif lang == 'en' and type == 'story' %}
+{% assign collections = site.stories-en %}
+{% endif %}
+
+{% for collection in collections %}
+{% if collection.url == page.url %}
+{% assign current_index = forloop.index0 %}
+{% endif %}
+{% endfor %}
+
+{% assign prev_index = current_index | minus: 1 %}
+{% assign next_index = current_index | plus: 1 %}
+{% assign prev_collection = collections[prev_index] %}
+{% assign next_collection = collections[next_index] %}
+
+
+<div class="collection-navigation" style="display: flex; justify-content: space-between;">
+    {% if prev_collection %}
+    <a href="{{ prev_collection.url | relative_url }}" class="previous-collection">
+        &laquo; <span>{{ prev_collection.title }}</span>
+    </a>
+    {% endif %}
+
+    {% if next_collection %}
+    <a href="{{ next_collection.url | relative_url }}" class="next-collection" style="text-align: right">
+        <span>{{ next_collection.title }}</span> &raquo;
+    </a>
+    {% endif %}
+</div>

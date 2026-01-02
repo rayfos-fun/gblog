@@ -18,8 +18,9 @@
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    user-select: none; /* Prevent text selection during rapid clicking */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    /* Prevent text selection during rapid clicking */
   }
 
   .hanoi-header {
@@ -70,7 +71,8 @@
     height: 300px;
     border-bottom: 10px solid #8e44ad;
     position: relative;
-    padding-top: 40px; /* Space for lifted disk */
+    padding-top: 40px;
+    /* Space for lifted disk */
   }
 
   .tower {
@@ -79,14 +81,15 @@
     height: 100%;
     cursor: pointer;
     display: flex;
-    flex-direction: column-reverse; /* Stack from bottom */
+    flex-direction: column-reverse;
+    /* Stack from bottom */
     align-items: center;
     transition: background-color 0.2s;
     border-radius: 4px 4px 0 0;
   }
 
   .tower:hover {
-    background-color: rgba(0,0,0,0.03);
+    background-color: rgba(0, 0, 0, 0.03);
   }
 
   /* The vertical pole */
@@ -107,16 +110,17 @@
     height: 25px;
     z-index: 1;
     border-radius: 12px;
-    border: 1px solid rgba(0,0,0,0.2);
-    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, margin-bottom 0.2s;
     margin-bottom: 2px;
   }
 
   /* Visual state for selected tower/disk */
   .tower.selected .disk:last-child {
-    transform: translateY(-30px); /* Lift the top disk */
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    transform: translateY(-30px);
+    /* Lift the top disk */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   }
 
   .tower.selected::after {
@@ -129,8 +133,13 @@
   }
 
   @keyframes bounce {
-    from { top: -20px; }
-    to { top: -25px; }
+    from {
+      top: -20px;
+    }
+
+    to {
+      top: -25px;
+    }
   }
 
   .hanoi-message {
@@ -146,15 +155,45 @@
   }
 
   /* Colors for disks (up to 8) */
-  .disk-1 { background-color: #ff7675; width: 30%; }
-  .disk-2 { background-color: #fab1a0; width: 40%; }
-  .disk-3 { background-color: #ffeaa7; width: 50%; }
-  .disk-4 { background-color: #55efc4; width: 60%; }
-  .disk-5 { background-color: #81ecec; width: 70%; }
-  .disk-6 { background-color: #74b9ff; width: 80%; }
-  .disk-7 { background-color: #a29bfe; width: 90%; }
-  .disk-8 { background-color: #fd79a8; width: 100%; }
+  .disk-1 {
+    background-color: #ff7675;
+    width: 30%;
+  }
 
+  .disk-2 {
+    background-color: #fab1a0;
+    width: 40%;
+  }
+
+  .disk-3 {
+    background-color: #ffeaa7;
+    width: 50%;
+  }
+
+  .disk-4 {
+    background-color: #55efc4;
+    width: 60%;
+  }
+
+  .disk-5 {
+    background-color: #81ecec;
+    width: 70%;
+  }
+
+  .disk-6 {
+    background-color: #74b9ff;
+    width: 80%;
+  }
+
+  .disk-7 {
+    background-color: #a29bfe;
+    width: 90%;
+  }
+
+  .disk-8 {
+    background-color: #fd79a8;
+    width: 100%;
+  }
 </style>
 
 <div class="hanoi-game-container">
@@ -168,35 +207,34 @@
       <input type="number" id="diskCount" class="hanoi-input" value="4" min="3" max="8">
     </div>
     <button id="restartBtn" class="hanoi-btn">{{ hanoi_restart }}</button>
-    <div class="hanoi-stat">
-      {{ hanoi_moves }}: <span id="moveCount">0</span>
-    </div>
+    {{ hanoi_moves }}: <span id="moveCount">0</span>
   </div>
+</div>
 
-  <div class="hanoi-board">
-    <div class="tower" id="tower-0" onclick="hanoiGame.handleTowerClick(0)">
-      <div class="pole"></div>
-      <div class="disk-container"></div>
-    </div>
-    <div class="tower" id="tower-1" onclick="hanoiGame.handleTowerClick(1)">
-      <div class="pole"></div>
-      <div class="disk-container"></div>
-    </div>
-    <div class="tower" id="tower-2" onclick="hanoiGame.handleTowerClick(2)">
-      <div class="pole"></div>
-      <div class="disk-container"></div>
-    </div>
+
+
+<div class="hanoi-board">
+  <div class="tower" id="tower-0" onclick="hanoiGame.handleTowerClick(0)">
+    <div class="pole"></div>
+    <div class="disk-container"></div>
   </div>
+  <div class="tower" id="tower-1" onclick="hanoiGame.handleTowerClick(1)">
+    <div class="pole"></div>
+    <div class="disk-container"></div>
+  </div>
+  <div class="tower" id="tower-2" onclick="hanoiGame.handleTowerClick(2)">
+    <div class="pole"></div>
+    <div class="disk-container"></div>
+  </div>
+</div>
 
-  <div id="gameMessage" class="hanoi-message"></div>
+<div id="gameMessage" class="hanoi-message"></div>
 </div>
 
 <script>
   // Game Logic Module
-  const hanoiGame = (function() {
+  const hanoiGame = (function () {
     // Configuration & State
-    let towers = [[], [], []]; // Array of arrays representing stacks
-    let selectedTowerIndex = -1;
     let moves = 0;
     let totalDisks = 4;
     let isGameFinished = false;
@@ -259,7 +297,7 @@
         // Remove all .disk elements
         const disks = el.querySelectorAll('.disk');
         disks.forEach(d => d.remove());
-        
+
         // Re-append disks from state
         towers[index].forEach(diskSize => {
           const diskDiv = document.createElement('div');
@@ -291,12 +329,12 @@
         // Select this tower
         selectedTowerIndex = towerIndex;
         towerEls[towerIndex].classList.add('selected');
-      } 
+      }
       // Scenario 2: Clicked the SAME tower (Deselect)
       else if (selectedTowerIndex === towerIndex) {
         selectedTowerIndex = -1;
         towerEls[towerIndex].classList.remove('selected');
-      } 
+      }
       // Scenario 3: Attempt to move to a different tower
       else {
         attemptMove(selectedTowerIndex, towerIndex);
@@ -309,7 +347,7 @@
     function attemptMove(fromIdx, toIdx) {
       const sourceTower = towers[fromIdx];
       const targetTower = towers[toIdx];
-      
+
       const diskToMove = sourceTower[sourceTower.length - 1]; // Top disk
       const topTargetDisk = targetTower.length > 0 ? targetTower[targetTower.length - 1] : 999;
 
@@ -320,11 +358,11 @@
         targetTower.push(diskToMove);
         moves++;
         elMoveCount.innerText = moves;
-        
+
         // Deselect
         towerEls[fromIdx].classList.remove('selected');
         selectedTowerIndex = -1;
-        
+
         render();
         checkWin();
       } else {
@@ -360,8 +398,9 @@
       }
     }
 
-    // Event Listener for Restart
     document.getElementById('restartBtn').addEventListener('click', init);
+
+
 
     // Initialize on load
     init();
