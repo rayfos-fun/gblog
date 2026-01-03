@@ -2,16 +2,24 @@ itch.io
 
 add file in jekyll-site/itch
 
+goto jekyll-site/_site/itch/xxx
 index.html => right click => Compress
 
 Upload New Project
   title
   Short description or tagline
-  Classification
+  Classification = Game
   Uploads
-    This file will be played in the browser
+    check This file will be played in the browser
+  Viewport dimensions
+check Mobile friendly
+check Automatically start on page load
+check Fullscreen button
+  Details
+  Genre: puzzle
   Tags
 
 screenshot
   chrome ctrl+shift+i (developer tools) => ctrl+shift+p (command: screenshot)
 cover
+  Recommended: 630x500
