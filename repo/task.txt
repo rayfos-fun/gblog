@@ -88,16 +88,20 @@
 ../jekyll-site/_includes/games/snake.html
 ../jekyll-site/_includes/games/tower-of-hanoi.html
 ../jekyll-site/_includes/tools/loop-timer.html
+../jekyll-site/_includes/footer.html  # copied from minima
 ../jekyll-site/_includes/header.html  # copied from minima
 ../jekyll-site/_layouts/itch.html  # used to upload to itch.io
 ../jekyll-site/_layouts/post.html  # copied from minima
 
 ../jekyll-site/_others-en/log.md
 ../jekyll-site/_others-en/motto.md
+../jekyll-site/_others-en/privacy-policy.md
 ../jekyll-site/_others-zh-cn/log.md
 ../jekyll-site/_others-zh-cn/motto.md
+../jekyll-site/_others-zh-cn/privacy-policy.md
 ../jekyll-site/_others-zh-tw/log.md
 ../jekyll-site/_others-zh-tw/motto.md
+../jekyll-site/_others-zh-tw/privacy-policy.md
 
 # file format under _posts must be YYYY-MM-DD-xxx.md|html
 ../jekyll-site/_posts/2025-05-21-en.md

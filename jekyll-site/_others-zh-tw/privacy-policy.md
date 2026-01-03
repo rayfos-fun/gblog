@@ -1,6 +1,7 @@
 ---
 layout: default
 title: 隱私權政策
+lang: zh-tw
 permalink: /zh-tw/privacy-policy/
 ---
 
@@ -60,5 +61,5 @@ permalink: /zh-tw/privacy-policy/
 ## 7. 聯絡我們
 
 如果您對本隱私權政策有任何疑問，請透過以下方式聯絡我們：
-* **Email：** rayfos.fun@gmail.com
-* **網站：** https://rayfos.fun
+* **Email：** [rayfos.fun@gmail.com](mailto:rayfos.fun@gmail.com)
+* **網站：** [https://rayfos.fun](https://rayfos.fun)
