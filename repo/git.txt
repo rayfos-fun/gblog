@@ -14,6 +14,7 @@ git config --global push.autoSetupRemote true  # "git push" in branch could work
 git diff --staged  # to show diff of the commit before and after
 git fetch  # sync origin status to local
 git log  # show logs
+  --graph --oneline --all --decorate
 git pull   # git fetch + git merge
 git push -u origin feature/comments  # origin: cloud repo e.g. github; -u=--set-upstream: track local feature/comments with origin (same name feature/comments)
 git rebase main  # cut this branch, rebase it to main
