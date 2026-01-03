@@ -18,6 +18,7 @@ git log  # show logs
 git pull   # git fetch + git merge
 git push -u origin feature/comments  # origin: cloud repo e.g. github; -u=--set-upstream: track local feature/comments with origin (same name feature/comments)
 git rebase main  # cut this branch, rebase it to main
+  -i HEAD~2  # -i: interactive; pick -> reword => edit commit message
 git reset  # to undo git add .
 git reset --hard HEAD~1  # --hard: !!discard!! all changes
 git reset --soft HEAD~2  # to undo 2 unpushed commits
@@ -47,13 +48,22 @@ git add .
 git commit -m 'commit meesage'
 git push
 
+## squash (all commits in branch) and merge (into single pushed commit) via Github
+git switch -c feature/xyz
+repeat git add .; git commit -m 'commit meesage'; 
+git rebase main  # optional; to keep main in sync
+Github => pull request => squash and merge => delete branch
+git switch main
+git pull
+git branch -D feature/xyz
+
 ## work on local branch (branch not push)
-git checkout -b feature/xyz
+git switch -c feature/xyz
 git add .; git commit -m 'commit meesage'; ...
-git checkout main
-git pull origin main
+git switch main
+git pull origin main  # or git pull; to make sure main is up-to-date
 git merge feature/xyz
-git push origin main
+git push origin main  # or git push
 git branch -d feature/xyz
 
 ## cowork on branch

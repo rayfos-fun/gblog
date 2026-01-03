@@ -1,5 +1,5 @@
 {%- comment -%}
-copied from .rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/minima-2.5.2/_includes/header.html
+copied from ~/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/minima-2.5.2/_includes/header.html
 updated:
 sort the default_paths by order
 filter with lang
@@ -15,6 +15,8 @@ added auth-container
       float: right;
       margin-left: 20px;
       margin-top: 12px;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     .btn-login-google {
@@ -164,12 +166,18 @@ added auth-container
     (function () {
       const container = document.getElementById('auth-container');
 
+      {% assign lang = page.lang | default: site.lang | default: "en" %}
+      {% assign locale = site.data.locales[lang] %}
       const uiText = {
         signIn: "{% if page.lang == 'zh-tw' %}登入{% elsif page.lang == 'zh-cn' %}登录{% else %}Sign in{% endif %}",
         logout: "{% if page.lang == 'zh-tw' %}登出{% elsif page.lang == 'zh-cn' %}登出{% else %}Logout{% endif %}",
         editNickname: "{% if page.lang == 'zh-tw' %}改名{% elsif page.lang == 'zh-cn' %}改名{% else %}Edit Name{% endif %}",
         promptNickname: "{% if page.lang == 'zh-tw' %}請輸入新的顯示名稱 (1-20字):{% elsif page.lang == 'zh-cn' %}请输入新的显示名称 (1-20字):{% else %}Enter new nickname (1-20 chars):{% endif %}",
-        anonymous: "{% if page.lang == 'zh-tw' %}無名{% elsif page.lang == 'zh-cn' %}无名{% else %}Anonymous{% endif %}"
+        anonymous: "{% if page.lang == 'zh-tw' %}無名{% elsif page.lang == 'zh-cn' %}无名{% else %}Anonymous{% endif %}",
+        disclaimerPrefix: "{{ locale.login_disclaimer_prefix }}",
+        disclaimerSuffix: "{{ locale.login_disclaimer_suffix }}",
+        privacyPolicy: "{{ locale.privacy_policy }}",
+        privacyPolicyUrl: "/{{ lang }}/privacy-policy/"
       };
 
       function renderAuthUI(user) {
@@ -200,6 +208,9 @@ added auth-container
           </svg>
           ${uiText.signIn}
         </button>
+        <div style="font-size: 0.75rem; color: #5f6368; margin-top: 8px; max-width: 200px; line-height: 1.2;">
+          ${uiText.disclaimerPrefix}<a href="${uiText.privacyPolicyUrl}" target="_blank" style="color: #1a73e8; text-decoration: none;">${uiText.privacyPolicy}</a>${uiText.disclaimerSuffix}
+        </div>
       `;
         }
       }
