@@ -49,17 +49,31 @@
             unknownError: "{% if page.lang == 'zh-tw' %}未知錯誤{% elsif page.lang == 'zh-cn' %}未知错误{% else %}Unknown error{% endif %}"
         };
 
+        // Helper to update UI based on auth state
+        function updateAuthUI(authed) {
+            if (authed) {
+                formContainer.style.display = 'block';
+                loginContainer.style.display = 'none';
+            } else {
+                formContainer.style.display = 'none';
+                loginContainer.style.display = 'block';
+            }
+        }
+
         // Fetch User Status
         fetch('/api/me')
             .then(response => response.json())
             .then(user => {
-                if (user.authed) {
-                    formContainer.style.display = 'block';
-                } else {
-                    loginContainer.style.display = 'block';
-                }
+                updateAuthUI(user.authed);
             })
             .catch(err => console.error('Error checking auth:', err));
+
+        // Listen for login success message from popup
+        window.addEventListener("message", function (event) {
+            if (event.data.type === 'LOGIN_SUCCESS') {
+                updateAuthUI(true);
+            }
+        });
 
         // Fetch Comments
         function loadComments() {
