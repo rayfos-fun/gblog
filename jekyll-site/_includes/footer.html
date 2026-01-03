@@ -43,9 +43,23 @@ added privacy-policy
         <span class="copyright">
           &copy; {{ site.time | date: '%Y' }} {{ site.title | escape }}.
         </span>
+
         <span class="privacy-policy-link" style="margin-left: 15px;">
           <a href="/{{ lang }}/privacy-policy/">{{ locale.privacy_policy | default: "Privacy Policy" }}</a>
         </span>
+
+        <span class="rss-link" style="margin-left: 15px;">
+          <a href="{{ "/feed.xml" | relative_url }}" target="_blank">
+            {%- if lang == "zh-tw" -%}
+              訂閱 RSS
+            {%- elsif lang == "zh-cn" -%}
+              订阅 RSS
+            {%- else -%}
+              RSS Feed
+            {%- endif -%}
+          </a>
+        </span>
+        
       </div>
     </div>
 
