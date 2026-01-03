@@ -64,6 +64,11 @@ games:
     msg_lose: "蹦！遊戲結束。"
     msg_start_hint: "點擊方塊開始，右鍵插旗。"
     title: "踩地雷"
+  peg_solitaire:
+    msg_game_over: "遊戲結束，無路可走。"
+    msg_select_peg: "請選擇一顆棋子"
+    txt_remaining: "剩餘棋子: "
+    title: "孔明棋"
   reversi:
     title: "黑白棋"
     black: "黑子"

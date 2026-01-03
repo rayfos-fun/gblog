@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title }}</title>
   <style>
-    body, html {
+    body,
+    html {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -36,13 +38,29 @@
     .dev-link:hover {
       color: rgba(255, 255, 255, 1);
       background-color: rgba(0, 0, 0, 0.5);
-    }    
+    }
   </style>
 </head>
+
 <body>
+  <style>
+    /* Overlay style for music controls in full-screen itch layout */
+    .game-music-controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+  {% include game_music_controls.html %}
   {{ content }}
-  <a href="https://rayfos.fun/en/game/?utm_source=itchio&utm_medium=game&utm_campaign={{ page.utm_campaign }}" target="_blank" class="dev-link">
+  <a href="https://rayfos.fun/en/game/?utm_source=itchio&utm_medium=game&utm_campaign={{ page.utm_campaign }}"
+    target="_blank" class="dev-link">
     Created by Rayfos.fun
   </a>
 </body>
+
 </html>
