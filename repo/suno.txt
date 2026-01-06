@@ -1,0 +1,64 @@
+tension
+https://www.beepbox.co/#9n31sbk0l00e03t2ra7g0ej07r1i0o432T1v1uf1f1102q0z10v321d07A1F0B0Q1845Pe354E4bj61362463aT1v1ua9f0qo1321d23A0F0B2Q2010Pf770E261278T1v1uf1f1102q0z10v321d07A1F0B0Q1845Pe354E4bj61362463aT2v1u15f10w4qw02d03w0E0b4xk00000004h000000004h000000004h00000000p21TFBMgJ0Gq_4AyZcK0bgbDn5_10J0JEJ0JEJ0JEJ0Khva5_1gJ0KrqnVEJ0KrqnQWV0I5TNpcmwmi5E5w1q1pcmwnvEb-4Mmwml5E5ANq1o0mwn4UiwL00000
+tempo: 155
+
+[1]
+            .
+22 6b 3 0 44 1 5
+--        --
+
+[2]
+..
+22 6b6b 33 44 4 1 5
+-- - -  -- --     .
+
+[5]
+..
+22 6b6b 33 44 1 5 5
+-- ---- -- --
+
+[1][2][1][5]
+
+style: 
+Dark Industrial, Horror Orchestral, Dissonant Avant-garde.
+Tension, Suspense, Atmostpheric, Creepy, Glitchy, Heartbeat rhythm.
+Distorted Bass, Screeching Strings
+
+Wierdness: 40%
+Sytle influence: 75%
+Audio influence: 70%
+
+
+sorrow 60
+https://www.beepbox.co/#9n31s6k0l00e03t0Ya7g0ej07r0i0o432T1v1uf1f1102q0z10v321d07A1F0B0Q1845Pe354E4bj61362463aT1v1ua9f0qo1321d23A0F0B2Q2010Pf770E261278T1v1uf1f1102q0z10v321d07A1F0B0Q1845Pe354E4bj61362463aT2v1u15f10w4qw02d03w0E0b4zk00000004h000000004h000000004h00000000p21vFFYz9IvjjjUC0pOrx_yuCDZ9IvT4Y0PtQDVHtPY_1Jk9Wtthx2FBMNpgmwmj5E5w1q1pcmwldvyk5_ACtaoFw69Zqjw0000
+
+.   ..  .   
+26- 34- 15-
+         
+
+.       .
+26- 34- 15-
+
+        .
+.   ..  ..
+26- 34- 15-
+        
+.
+26- 34- 15-
+         .
+Sad Piano Solo, Cinematic Emotional, Cello Solo
+Melancholic, Slow, Lonely, Sentimental, Minimalist
+Piano, Violin, Duduk
+
+Battle
+https://www.beepbox.co/#9n31s6k0l00e03t2Ga7g0fj07r1i0o432T1v1u60f0q0x10h51d19AbF8B7Q0471Peb9aE2b676T1v1u39f0qwx10l611d08A0F0B0Q38e0Pa610E3b8618626T1v1u9af0q0z10t531d08AcF8BeQ0259PffffE6b160861562463378T2v1u15f10w4qw02d03w0E0b4zg00000000h4g000000014h000000004h400000000p22bFBMgJ0J0J0Iabgbgbgb9yQ2M0J0JwJ0JEJ0K42Q2Q2Q2SyQ2Q2Q2SyQ2SyQ2TyQ2SyQ2XMJ0J0J0JEJ0J0J0JEJ0JEJ0JUJ0JEJ0KYbgbgbgbqbgbgbgb22Q2M0J0IAbgbqbga00000
+
+happy
+https://www.beepbox.co/#9n31sbk0l00e03t1Ka7g0fj07r1i0o432T1v1u77f10o9q011d03A1F9B4Q1003Pfb94E262963bT8v1u9cf20m80n2q0x11c21d25x513W6E1c06T1v1u44f0qwx10l511d03A1F0B7Q005dPd444E5b661862763677T4v1uf0f0q011z6666ji8k8k3jSBKSJJAArriiiiii07JCABrzrrrrrrr00YrkqHrsrrrrjr005zrAqzrjzrrqr1jRjrqGGrrzsrsA099ijrABJJJIAzrrtirqrqjqixzsrAjrqjiqaqqysttAJqjikikrizrHtBJJAzArzrIsRCITKSS099ijrAJS____Qg99habbCAYrDzh00E0bcA400000000h4g000000014h000000004h400000000p21YFBMgIab9Bc2bsbskMwJEJEJEJ0JUIEkUkbqbqkSyMoICkMwJEJEJ0JEICba5e52SySBdEI6b9Bc8bqbqbgbqbqbqb2yXMJMJNjsbsbskTySySySyQ2SySB800000
+Style: J-RPG Town Music, Folk, Bossa Nova, Chiptune Pop.
+Keywords: Playful, Upbeat, Cozy, Whimsical, Lighthearted.
+樂器： Flute, Acoustic Guitar, Accordion, Pizzicato Strings.
+25/75/65
+
+mystry
+https://www.beepbox.co/#9n31sbk0l00e03t1la7g0fj07r1i0o432T1v1u61f0qwx10v311d08A5F2B6Q0530Pf636E2b677T6v1ub8f0q0x10p71d23W7E2b925T3v1ud9f0q0x10l51d03SM005050wwpbaaihE1b2T4v1uf0f0q011z6666ji8k8k3jSBKSJJAArriiiiii07JCABrzrrrrrrr00YrkqHrsrrrrjr005zrAqzrjzrrqr1jRjrqGGrrzsrsA099ijrABJJJIAzrrtirqrqjqixzsrAjrqjiqaqqysttAJqjikikrizrHtBJJAzArzrIsRCITKSS099ijrAJS____Qg99habbCAYrDzh00E0b4zg00000000h4g000000014h000000004h400000000p216FEY4psapsD0gx7spu36nqptJIyhOFBUkptFBSSMF7a6nx1BSCnrqPhWd9E-IBraGF00000
