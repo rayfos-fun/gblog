@@ -1,0 +1,19 @@
+version: major.minor.patch
+
+commit message: <type>(<scope>): <subject>
+
+  type: feat, fix, chore, docs, style, refactor, perf, test
+  scope: optional e.g. blog, game, ui, deploy, ...
+
+
+$ git tag -m "release" v1.3.0
+$ git config push.followTags true
+
+Keep a Changelog
+  Added
+  Changed
+  Deprecated
+  Removed
+  Fixed
+  Security
+
