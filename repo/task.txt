@@ -361,6 +361,12 @@
 ../jekyll-site/pages-zh-tw/story.md
 ../jekyll-site/pages-zh-tw/tool.md
 
+../scripts/src/games/tower-of-hanoi.ts
+../scripts/package.json
+../scripts/package-lock.json
+../scripts/tsconfig.json
+../scripts/vite.config.ts
+
 ../README.md  # github project
 ../requirements.txt
 

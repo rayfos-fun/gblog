@@ -1,44 +1,65 @@
-// @ts-nocheck
 /**
  * Tower of Hanoi Game Logic
  * Extracted from jekyll-site/_includes/games/tower-of-hanoi.html
  */
-const hanoiGame = (function () {
+
+interface HanoiStrings {
+    win: string;
+    warn: string;
+    empty: string;
+}
+
+interface TowerOfHanoiConfig {
+    strings: HanoiStrings;
+}
+
+interface Window {
+    TowerOfHanoiConfig: TowerOfHanoiConfig;
+    hanoiGame: {
+        handleTowerClick: (towerIndex: number) => void;
+    };
+}
+
+const hanoiGame = window.hanoiGame = (function () {
     // Configuration & State
-    let moves = 0;
-    let totalDisks = 4;
-    let isGameFinished = false;
+    let moves: number = 0;
+    let totalDisks: number = 4;
+    let isGameFinished: boolean = false;
+    let towers: number[][] = [[], [], []];
+    let selectedTowerIndex: number = -1;
 
     // Localized Strings (Injected via global config)
-    const STRINGS = window.TowerOfHanoiConfig.strings;
+    const STRINGS: HanoiStrings = window.TowerOfHanoiConfig.strings;
 
     // DOM Elements
-    // We'll fetch these lazily or on init to ensure they exist
-    let elMoveCount;
-    let elMessage;
-    let elDiskInput;
-    let towerEls;
+    let elMoveCount: HTMLElement;
+    let elMessage: HTMLElement;
+    let elDiskInput: HTMLInputElement;
+    let towerEls: HTMLElement[];
 
     /**
      * Initialize the game board
      */
-    function init() {
+    function init(): void {
         // Initialize DOM references
-        elMoveCount = document.getElementById('moveCount');
-        elMessage = document.getElementById('gameMessage');
-        elDiskInput = document.getElementById('diskCount');
+        // We use non-null assertions (!) because these elements are hardcoded in the HTML template
+        // and are required for the game to function.
+        elMoveCount = document.getElementById('moveCount')!;
+        elMessage = document.getElementById('gameMessage')!;
+        elDiskInput = document.getElementById('diskCount') as HTMLInputElement;
+
         towerEls = [
-            document.getElementById('tower-0'),
-            document.getElementById('tower-1'),
-            document.getElementById('tower-2')
+            document.getElementById('tower-0')!,
+            document.getElementById('tower-1')!,
+            document.getElementById('tower-2')!
         ];
 
         // Get disk count from input
         let val = parseInt(elDiskInput.value);
-        if (val < 3) val = 3;
+        if (isNaN(val) || val < 3) val = 3;
         if (val > 8) val = 8;
         totalDisks = val;
-        elDiskInput.value = val;
+        elDiskInput.value = val.toString();
 
         // Reset state
         towers = [[], [], []];
@@ -52,8 +73,10 @@ const hanoiGame = (function () {
         // Remove selection styles
         towerEls.forEach(t => t.classList.remove('selected'));
 
-        // Fill first tower (Largest disk is 1, Smallest is N)
-        // Actually, easier logic: Larger number = Larger disk
+        // Fill first tower (Largest disk is 1, Smallest is N in UI logic??)
+        // Original logic: "Typically target is the last tower... Large number = Larger disk"
+        // Let's stick to: Larger number = Larger disk.
+        // Stack bottom to top: [4, 3, 2, 1]
         for (let i = totalDisks; i >= 1; i--) {
             towers[0].push(i);
         }
@@ -64,7 +87,7 @@ const hanoiGame = (function () {
     /**
      * Render the disks based on the towers array state
      */
-    function render() {
+    function render(): void {
         // Clear existing disks from DOM (keep pole)
         towerEls.forEach((el, index) => {
             // Remove all .disk elements
@@ -75,11 +98,9 @@ const hanoiGame = (function () {
             towers[index].forEach(diskSize => {
                 const diskDiv = document.createElement('div');
                 diskDiv.className = `disk disk-${diskSize}`;
-                // We prepend or append based on flex-direction.
-                // Since CSS is column-reverse, appending adds to the "bottom" visually?
-                // No, column-reverse means first child is at bottom.
-                // tower array: [4, 3, 2, 1] -> 4 is bottom. 
-                // So we should just append in order.
+                // tower array: [4, 3, 2, 1] -> 4 is bottom.
+                // We append in order, so bottom uses flex-direction or just order.
+                // The CSS is flex-direction: column-reverse, so first child is at bottom.
                 el.appendChild(diskDiv);
             });
         });
@@ -88,7 +109,7 @@ const hanoiGame = (function () {
     /**
      * Handle user click on a tower
      */
-    function handleTowerClick(towerIndex) {
+    function handleTowerClick(towerIndex: number): void {
         if (isGameFinished) return;
 
         elMessage.innerText = ''; // Clear messages
@@ -117,11 +138,12 @@ const hanoiGame = (function () {
     /**
      * Attempt to move top disk from source to target
      */
-    function attemptMove(fromIdx, toIdx) {
+    function attemptMove(fromIdx: number, toIdx: number): void {
         const sourceTower = towers[fromIdx];
         const targetTower = towers[toIdx];
 
         const diskToMove = sourceTower[sourceTower.length - 1]; // Top disk
+        // If target is empty, top disk size is effectively infinite (or max allowed)
         const topTargetDisk = targetTower.length > 0 ? targetTower[targetTower.length - 1] : 999;
 
         // Validation: Can only place smaller disk on larger disk
@@ -130,7 +152,7 @@ const hanoiGame = (function () {
             sourceTower.pop();
             targetTower.push(diskToMove);
             moves++;
-            elMoveCount.innerText = moves;
+            elMoveCount.innerText = moves.toString();
 
             // Deselect
             towerEls[fromIdx].classList.remove('selected');
@@ -141,7 +163,7 @@ const hanoiGame = (function () {
         } else {
             // Invalid move
             showMessage(STRINGS.warn, 'error');
-            // Shake animation could go here, but simple message for now
+            // Deselect on error? Or keep selected? Original code deselects.
             towerEls[fromIdx].classList.remove('selected');
             selectedTowerIndex = -1;
         }
@@ -150,9 +172,8 @@ const hanoiGame = (function () {
     /**
      * Check if the game is won (all disks on last tower)
      */
-    function checkWin() {
-        // Typically target is the last tower, but middle works too in some versions.
-        // Standard is usually rightmost.
+    function checkWin(): void {
+        // Typically target is the last tower (index 2)
         if (towers[2].length === totalDisks) {
             isGameFinished = true;
             showMessage(STRINGS.win, 'success');
@@ -162,7 +183,7 @@ const hanoiGame = (function () {
     /**
      * Helper to show messages
      */
-    function showMessage(text, type) {
+    function showMessage(text: string, type: 'success' | 'error'): void {
         elMessage.innerText = text;
         if (type === 'success') {
             elMessage.className = 'hanoi-message success-message';
@@ -172,15 +193,20 @@ const hanoiGame = (function () {
     }
 
     // Initialize on load (if DOM is ready, or when deferred script runs)
-    // 'defer' scripts execute after document parsing, so elements should exist.
-    // We'll add the event listener for restart here too.
-
-    // Note: We need to make sure we don't crash if Elements are missing (though unlikely in this flow)
     try {
-        init();
-        const restartBtn = document.getElementById('restartBtn');
-        if (restartBtn) {
-            restartBtn.addEventListener('click', init);
+        // Wait for DOMContentLoaded to be safe, although 'defer' usually handles this.
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGame);
+        } else {
+            initGame();
+        }
+
+        function initGame() {
+            init();
+            const restartBtn = document.getElementById('restartBtn');
+            if (restartBtn) {
+                restartBtn.addEventListener('click', () => init());
+            }
         }
     } catch (e) {
         console.error("Tower of Hanoi initialization failed:", e);
