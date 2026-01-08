@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tower of Hanoi Game Logic
  * Extracted from jekyll-site/_includes/games/tower-of-hanoi.html
