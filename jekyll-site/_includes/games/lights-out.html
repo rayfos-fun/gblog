@@ -1,0 +1,377 @@
+{% assign locale = site.data.locales[page.lang] %}
+{% assign game = locale.games.lights_out %}
+{% assign game_title = game.title %}
+{% assign game_desc = game.desc %}
+{% assign txt_moves = locale.moves_colon %}
+{% assign txt_sound_on = locale.sound_on %}
+{% assign txt_sound_off = locale.sound_off %}
+{% assign btn_start = locale.start_game %}
+{% assign btn_restart = locale.restart %}
+{% assign msg_win = game.msg_win %}
+
+<style>
+  /* Game Container Styling */
+  .game-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2c3e50;
+    border-radius: 10px;
+    color: #ecf0f1;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    position: relative;
+    user-select: none;
+  }
+
+  /* Header */
+  .game-header h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #e74c3c; /* Reddish for "Off" theme or just distinct */
+  }
+  
+  .game-desc {
+    font-size: 0.9em;
+    color: #bdc3c7;
+    margin-bottom: 15px;
+  }
+
+  /* Controls & Info */
+  .game-info {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  .btn {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #2980b9;
+  }
+
+  .btn-toggle {
+    background-color: #95a5a6;
+  }
+  
+  .btn-toggle.active {
+    background-color: #2ecc71;
+  }
+
+  /* Grid Layout */
+  .grid-board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    background-color: #34495e;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Cell Styling */
+  .cell {
+    background-color: #2c3e50; /* Dark/Off state */
+    border: 2px solid #34495e;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: inset 0 0 10px #000;
+  }
+
+  .cell:hover {
+    border-color: #7f8c8d;
+  }
+
+  .cell.is-on {
+    background-color: #f1c40f; /* On/Light state */
+    box-shadow: 0 0 15px #f1c40f, inset 0 0 5px rgba(255,255,255,0.8);
+    border-color: #f39c12;
+  }
+
+  /* Win Overlay */
+  .win-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+    z-index: 10;
+  }
+
+  .win-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .win-msg {
+    font-size: 1.5em;
+    color: #2ecc71;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+  }
+
+  @media (max-width: 400px) {
+    .game-container { padding: 10px; }
+    .grid-board { gap: 5px; }
+  }
+</style>
+
+<div class="game-container">
+  <div class="game-header">
+    <h2>{{ game_title }}</h2>
+    <p class="game-desc">{{ game_desc }}</p>
+  </div>
+
+  <div class="game-info">
+    <span id="move-counter">{{ txt_moves }} 0</span>
+    <button id="sound-toggle" class="btn btn-toggle">{{ txt_sound_off }}</button>
+  </div>
+
+  <div class="grid-board" id="grid-board">
+    </div>
+
+  <button id="btn-restart" class="btn">{{ btn_start }}</button>
+
+  <div id="win-overlay" class="win-overlay">
+    <div class="win-msg">{{ msg_win }}</div>
+    <button id="btn-play-again" class="btn">{{ btn_restart }}</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    /**
+     * Constants & State
+     */
+    const GRID_SIZE = 5;
+    const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
+    let boardState = []; // true = ON (Lit), false = OFF (Dark)
+    let moves = 0;
+    let isGameActive = false;
+    let isSoundEnabled = false;
+
+    // Strings for JS logic
+    const STRINGS = {
+      soundOn: '{{ txt_sound_on }}',
+      soundOff: '{{ txt_sound_off }}',
+      btnStart: '{{ btn_start }}',
+      btnRestart: '{{ btn_restart }}'
+    };
+
+    /**
+     * DOM References
+     */
+    const gridEl = document.getElementById('grid-board');
+    const moveEl = document.getElementById('move-counter');
+    const restartBtn = document.getElementById('btn-restart');
+    const playAgainBtn = document.getElementById('btn-play-again');
+    const soundBtn = document.getElementById('sound-toggle');
+    const winOverlay = document.getElementById('win-overlay');
+
+    /**
+     * Audio System (Web Audio API)
+     */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = new AudioContext();
+
+    const playSound = (type) => {
+      if (!isSoundEnabled) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'click') {
+        // Short mechanical click sound
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.05);
+        gainNode.gain.setValueAtTime(0.05, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } else if (type === 'win') {
+        // Victory chime
+        const notes = [440, 554, 659, 880]; // A Major
+        notes.forEach((freq, i) => {
+          const oscW = audioCtx.createOscillator();
+          const gainW = audioCtx.createGain();
+          oscW.connect(gainW);
+          gainW.connect(audioCtx.destination);
+          
+          oscW.type = 'sine';
+          oscW.frequency.value = freq;
+          
+          const startTime = now + (i * 0.1);
+          gainW.gain.setValueAtTime(0, startTime);
+          gainW.gain.linearRampToValueAtTime(0.1, startTime + 0.05);
+          gainW.gain.exponentialRampToValueAtTime(0.001, startTime + 1.5);
+          
+          oscW.start(startTime);
+          oscW.stop(startTime + 1.5);
+        });
+      }
+    };
+
+    /**
+     * Game Logic
+     */
+
+    // Create the grid HTML structure
+    const initGrid = () => {
+      gridEl.innerHTML = '';
+      for (let i = 0; i < TOTAL_CELLS; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        cell.addEventListener('click', handleCellClick);
+        gridEl.appendChild(cell);
+      }
+    };
+
+    // Toggle logic: switches self and neighbors
+    const toggleLights = (index, logicalOnly = false) => {
+      const row = Math.floor(index / GRID_SIZE);
+      const col = index % GRID_SIZE;
+
+      const targets = [
+        { r: row, c: col },
+        { r: row - 1, c: col },
+        { r: row + 1, c: col },
+        { r: row, c: col - 1 },
+        { r: row, c: col + 1 }
+      ];
+
+      targets.forEach(pos => {
+        if (pos.r >= 0 && pos.r < GRID_SIZE && pos.c >= 0 && pos.c < GRID_SIZE) {
+          const tIdx = pos.r * GRID_SIZE + pos.c;
+          boardState[tIdx] = !boardState[tIdx];
+          if (!logicalOnly) updateCellVisual(tIdx);
+        }
+      });
+    };
+
+    // Update CSS for a single cell
+    const updateCellVisual = (index) => {
+      const cell = gridEl.children[index];
+      if (boardState[index]) {
+        cell.classList.add('is-on');
+      } else {
+        cell.classList.remove('is-on');
+      }
+    };
+
+    // Render entire board
+    const renderBoard = () => {
+      for (let i = 0; i < TOTAL_CELLS; i++) {
+        updateCellVisual(i);
+      }
+    };
+
+    // Check Win Condition: All lights must be OFF (false)
+    const checkWin = () => {
+      const allOff = boardState.every(state => state === false);
+      
+      if (allOff) {
+        isGameActive = false;
+        playSound('win');
+        setTimeout(() => {
+          winOverlay.classList.add('show');
+        }, 300);
+      }
+    };
+
+    // Start a new game
+    const generateLevel = () => {
+      moves = 0;
+      moveEl.innerText = `{{ txt_moves }} ${moves}`;
+      isGameActive = true;
+      winOverlay.classList.remove('show');
+      restartBtn.innerText = STRINGS.btnRestart;
+
+      // 1. Target state: All OFF (false)
+      boardState = new Array(TOTAL_CELLS).fill(false);
+
+      // 2. Scramble: Apply random moves to the "solved" state.
+      // Since XOR is reversible, this guarantees a solvable board.
+      const scrambleMoves = 10 + Math.floor(Math.random() * 15);
+      
+      for (let i = 0; i < scrambleMoves; i++) {
+        const randomIdx = Math.floor(Math.random() * TOTAL_CELLS);
+        toggleLights(randomIdx, true); // Update state only, no UI yet
+      }
+
+      // 3. Render the scrambled board
+      renderBoard();
+    };
+
+    // Interaction Handler
+    const handleCellClick = (e) => {
+      if (!isGameActive) return;
+
+      const index = parseInt(e.target.dataset.index);
+      
+      playSound('click');
+      toggleLights(index);
+      
+      moves++;
+      moveEl.innerText = `{{ txt_moves }} ${moves}`;
+
+      checkWin();
+    };
+
+    // Sound Toggle
+    soundBtn.addEventListener('click', () => {
+      isSoundEnabled = !isSoundEnabled;
+      soundBtn.innerText = isSoundEnabled ? STRINGS.soundOn : STRINGS.soundOff;
+      soundBtn.classList.toggle('active', isSoundEnabled);
+      if (isSoundEnabled && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    });
+
+    // Buttons
+    restartBtn.addEventListener('click', generateLevel);
+    playAgainBtn.addEventListener('click', generateLevel);
+
+    // Initial Empty Grid
+    initGrid();
+    // Default state for visual (all off, but game not started until clicked)
+    boardState = new Array(TOTAL_CELLS).fill(false);
+    renderBoard();
+
+  })();
+</script>
