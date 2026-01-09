@@ -8,16 +8,23 @@ index.html => right click => Compress
 Upload New Project
   title
   Short description or tagline
-  Classification = Game
+  Classification = Game (by default)
+  Kind of project => HTML
+  Release status = Released (by default)
+  Pricing => No payments
   Uploads
     check This file will be played in the browser
   Viewport dimensions
-check Mobile friendly
-check Automatically start on page load
-check Fullscreen button
+    ...
+    check Mobile friendly
+    check Automatically start on page load
+    check Fullscreen button
   Details
+    ...
   Genre: puzzle
   Tags
+    ...
+  Community => comments
 
 screenshot
   chrome ctrl+shift+i (developer tools) => ctrl+shift+p (command: screenshot)
