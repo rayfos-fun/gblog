@@ -11,8 +11,19 @@
 ../requirements.txt
 ../venv
 
+../astro/.gitignore
+../astro/.vscode/extensions.json
+../astro/.vscode/launch.json
+../astro/README.md
 ../astro/astro.config.mjs
-
+../astro/package-lock.json
+../astro/package.json
+../astro/public/favicon.svg
+../astro/src/assets/astro.svg
+../astro/src/assets/background.svg
+../astro/src/components/Welcome.astro
+../astro/src/layouts/Layout.astro
+../astro/src/pages/index.astro
 
 ../jekyll-site/_config.yml
 ../jekyll-site/404.html
