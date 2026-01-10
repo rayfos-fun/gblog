@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "firebase-tools": "^15.1.0"
+    "@tailwindcss/vite": "^4.1.18",
+    "firebase-tools": "^15.1.0",
+    "tailwindcss": "^4.1.18"
   },
   "scripts": {
     "emu": "firebase emulators:start --import=./emulator-data --export-on-exit"
