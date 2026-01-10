@@ -11,6 +11,9 @@
 ../requirements.txt
 ../venv
 
+../astro/astro.config.mjs
+
+
 ../jekyll-site/_config.yml
 ../jekyll-site/404.html
 ../jekyll-site/Gemfile
