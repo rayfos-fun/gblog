@@ -19,21 +19,18 @@
 ../astro/src/components/Welcome.astro
 ../astro/src/components/ContentCard.astro
 ../astro/src/content/config.ts  # schema
-../astro/src/content/game/zh-tw/tower-of-hanoi.md
-../astro/src/content/post/en/2026-01-07.md
-../astro/src/content/post/en/2026-01-09.md
-../astro/src/content/post/zh-cn/2026-01-07.md
-../astro/src/content/post/zh-cn/2026-01-09.md
-../astro/src/content/post/zh-tw/2026-01-07.md
-../astro/src/content/post/zh-tw/2026-01-09.md
+../astro/src/content/games/zh-tw/tower-of-hanoi.md
+../astro/src/content/posts/en/2026-01-07.md
+../astro/src/content/posts/en/2026-01-09.md
+../astro/src/content/posts/zh-cn/2026-01-07.md
+../astro/src/content/posts/zh-cn/2026-01-09.md
+../astro/src/content/posts/zh-tw/2026-01-07.md
+../astro/src/content/posts/zh-tw/2026-01-09.md
+../astro/src/content/tools/zh-tw/loop-timer.md
 ../astro/src/layouts/BaseLayout.astro  # header, nav, footer, ...etc.
 ../astro/src/layouts/GameLayout.astro  # based on BaseLayout
 ../astro/src/layouts/PostLayout.astro  # based on BaseLayout
-../astro/src/pages/index.astro
-../astro/src/pages/[lang]/game/tower-of-hanoi/index.astro
-../astro/src/pages/[lang]/games/index.astro  # list game
-../astro/src/pages/[lang]/post/[...slug].astro
-../astro/src/pages/[lang]/posts/index.astro  # list post
+../astro/src/pages/[...slug].astro
 ../astro/.gitignore
 ../astro/README.md
 ../astro/astro.config.mjs
