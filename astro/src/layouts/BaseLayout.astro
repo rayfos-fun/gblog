@@ -69,6 +69,11 @@ function getLangLink(targetLang: string) {
       // Theme init
       const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'cupcake');
       document.documentElement.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
@@ -148,6 +153,11 @@ function getLangLink(targetLang: string) {
         themeController.addEventListener('change', (e) => {
            const newTheme = e.target.checked ? 'dark' : 'cupcake';
            document.documentElement.setAttribute('data-theme', newTheme);
+           if (newTheme === 'dark') {
+             document.documentElement.classList.add('dark');
+           } else {
+             document.documentElement.classList.remove('dark');
+           }
            localStorage.setItem('theme', newTheme);
         });
       }
