@@ -162,7 +162,6 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
         // 所有盤子都移到最後一根柱子 (或者第二根也可以)
         if (state.pegs[2].length === state.totalDisks) {
             showMessage(CONFIG.messages.win);
-            setTimeout(() => alert(CONFIG.messages.win), 100);
         } else {
             showMessage("");
         }
