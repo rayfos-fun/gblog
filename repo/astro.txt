@@ -1,0 +1,4 @@
+astro:content
+  defineCollection
+  z (zod)
+
