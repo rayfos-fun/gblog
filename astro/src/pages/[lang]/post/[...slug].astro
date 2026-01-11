@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('post');
+  const posts = await getCollection('posts');
 
   return posts.flatMap((post) => {
     const parts = post.slug.split('/');

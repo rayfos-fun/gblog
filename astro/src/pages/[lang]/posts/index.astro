@@ -4,7 +4,7 @@ import PostLayout from '@/layouts/PostLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('post');
+  const allPosts = await getCollection('posts');
   const languages = [...new Set(allPosts.map((post) => post.id.split('/')[0]))];
 
   return languages.map((lang) => {
