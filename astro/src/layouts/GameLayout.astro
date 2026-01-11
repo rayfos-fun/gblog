@@ -1,0 +1,161 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+interface Props {
+  title: string;
+  bgmSrc?: string;
+  lang?: 'zh-tw' | 'zh-cn' | 'en';
+}
+
+const { title, bgmSrc, lang = 'zh-tw' } = Astro.props;
+
+const i18n = {
+  'zh-tw': { bgmLabel: '音樂', sfxLabel: '音效', toggleOn: '開啟', toggleOff: '靜音' },
+  'zh-cn': { bgmLabel: '音乐', sfxLabel: '音效', toggleOn: '开启', toggleOff: '静音' },
+  'en': { bgmLabel: 'BGM', sfxLabel: 'SFX', toggleOn: 'On', toggleOff: 'Mute' }
+};
+
+const t = i18n[lang] || i18n['en'];
+---
+
+<BaseLayout title={title} lang={lang}>
+  <div class="bg-slate-800 text-white border-b-2 border-slate-700 py-2 px-4 shadow-sm">
+    <div class="max-w-4xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      
+      <h1 class="font-bold text-lg tracking-wide text-slate-100">
+        {title}
+      </h1>
+      
+      <div class="flex items-center gap-6 text-sm">
+        
+        <div class="flex items-center gap-2">
+          <label for="bgm-toggle" class="font-medium text-slate-300 cursor-pointer select-none">
+            {t.bgmLabel}
+          </label>
+          <button 
+            id="bgm-toggle" 
+            class="group flex items-center justify-center w-10 h-8 rounded border border-slate-500/50 bg-slate-700/30 hover:bg-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400"
+            aria-pressed="false"
+            title={t.bgmLabel}
+          >
+            <span class="text-lg leading-none hidden group-aria-[pressed=true]:block">🔊</span>
+            <span class="text-lg leading-none block group-aria-[pressed=true]:hidden">🔇</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label for="sfx-volume" class="font-medium text-slate-300 cursor-pointer select-none">
+            {t.sfxLabel}
+          </label>
+          <input 
+            type="range" 
+            id="sfx-volume" 
+            min="0" 
+            max="1" 
+            step="0.1" 
+            value="0.5"
+            aria-label={t.sfxLabel}
+            class="w-24 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+          >
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {bgmSrc && (
+    <audio id="layout-bgm-player" loop class="hidden">
+      <source src={bgmSrc} type="audio/mp3" />
+    </audio>
+  )}
+
+  <main class="max-w-4xl mx-auto my-8 px-4">
+    <slot />
+  </main>
+</BaseLayout>
+
+<script>
+  class GameAudioManager {
+    constructor() {
+      this.bgmToggle = document.getElementById('bgm-toggle') as HTMLButtonElement;
+      this.sfxSlider = document.getElementById('sfx-volume') as HTMLInputElement;
+      this.bgmPlayer = document.getElementById('layout-bgm-player') as HTMLAudioElement | null;
+      
+      this.state = {
+        bgmEnabled: localStorage.getItem('game_bgm_enabled') !== 'false',
+        sfxVolume: parseFloat(localStorage.getItem('game_sfx_volume') || '0.5')
+      };
+
+      this.init();
+    }
+
+    init() {
+      this.updateUI();
+
+      this.bgmToggle?.addEventListener('click', () => this.toggleBGM());
+      this.sfxSlider?.addEventListener('input', (e) => this.updateSFX((e.target as HTMLInputElement).value));
+
+      this.updateBGMPlayerState();
+      this.dispatchSettings();
+    }
+
+    updateUI() {
+      if (this.bgmToggle) {
+        this.bgmToggle.setAttribute('aria-pressed', this.state.bgmEnabled.toString());
+      }
+      if (this.sfxSlider) {
+        this.sfxSlider.value = this.state.sfxVolume.toString();
+        this.sfxSlider.style.setProperty('--value', `${this.state.sfxVolume * 100}%`);
+      }
+    }
+
+    toggleBGM() {
+      this.state.bgmEnabled = !this.state.bgmEnabled;
+      localStorage.setItem('game_bgm_enabled', this.state.bgmEnabled.toString());
+      
+      this.updateUI();
+      this.updateBGMPlayerState();
+      this.dispatchSettings();
+    }
+
+    updateSFX(val: string) {
+      const volume = parseFloat(val);
+      this.state.sfxVolume = volume;
+      localStorage.setItem('game_sfx_volume', volume.toString());
+      
+      this.dispatchSettings();
+    }
+
+    updateBGMPlayerState() {
+      if (!this.bgmPlayer) return;
+
+      if (this.state.bgmEnabled) {
+        const playPromise = this.bgmPlayer.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay prevented:", error);
+          });
+        }
+      } else {
+        this.bgmPlayer.pause();
+      }
+    }
+
+    dispatchSettings() {
+      const event = new CustomEvent('game-settings-change', {
+        detail: this.state
+      });
+      window.dispatchEvent(event);
+      // @ts-ignore
+      window.GAME_SETTINGS = this.state;
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    new GameAudioManager();
+  }, { once: false });
+  
+  if (!document.querySelector('script[data-astro-exec]')) { 
+     document.addEventListener('DOMContentLoaded', () => new GameAudioManager());
+  }
+</script>
