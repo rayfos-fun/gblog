@@ -26,7 +26,12 @@
 ../astro/src/content/posts/zh-cn/2026-01-09.md
 ../astro/src/content/posts/zh-tw/2026-01-07.md
 ../astro/src/content/posts/zh-tw/2026-01-09.md
+../astro/src/content/stories/en/0001.md
+../astro/src/content/stories/en/0021.md
+../astro/src/content/stories/zh-cn/0001.md
+../astro/src/content/stories/zh-cn/0021.md
 ../astro/src/content/stories/zh-tw/0001.md
+../astro/src/content/stories/zh-tw/0021.md
 ../astro/src/content/tools/en/loop-timer.md
 ../astro/src/content/tools/zh-cn/loop-timer.md
 ../astro/src/content/tools/zh-tw/loop-timer.md

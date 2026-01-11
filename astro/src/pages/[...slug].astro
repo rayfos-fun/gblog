@@ -24,13 +24,9 @@ export async function getStaticPaths() {
     const isEn = lang === 'en';
     const langPrefix = isEn ? '' : `${lang}/`;
 
-    // 1. Language Home
-    // For English, slug is undefined (matches root /).
-    // For others, slug is just the lang code.
-    paths.push({ 
-        params: { slug: isEn ? undefined : lang }, 
-        props: { type: 'home', lang } 
-    });
+    // 1. Language Home (Handled by [lang]/index.astro)
+    // Removed logic here
+
 
     // 2. Post List
     paths.push({ 
@@ -128,9 +124,7 @@ const GameComponent = type === 'game' ? getGameComponent(item.slug) : null;
 const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 ---
 
-{type === 'home' && (
-    <meta http-equiv="refresh" content={`0;url=${lang === 'en' ? '/posts' : `/${lang}/posts`}`} />
-)}
+
 
 {type === 'post-list' && (
     <PostList lang={lang} />
