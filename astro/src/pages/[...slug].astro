@@ -16,32 +16,35 @@ export async function getStaticPaths() {
   const allGames = await getCollection('games');
 
   for (const lang of languages) {
-    // 1. Language Home Redirect (Simplification: redirect to post-list or just rendering post list as home)
-    // Actually, traditionally /zh-tw is home. Let's make home render PostList for now (or a Welcome page).
-    // Based on previous BaseLayout, homeLink was /$lang.
+    const isEn = lang === 'en';
+    const langPrefix = isEn ? '' : `${lang}/`;
+
+    // 1. Language Home
+    // For English, slug is undefined (matches root /).
+    // For others, slug is just the lang code.
     paths.push({ 
-        params: { slug: lang }, 
+        params: { slug: isEn ? undefined : lang }, 
         props: { type: 'home', lang } 
     });
 
     // 2. Post List
     paths.push({ 
-        params: { slug: `${lang}/posts` }, 
+        params: { slug: isEn ? 'posts' : `${lang}/posts` }, 
         props: { type: 'post-list', lang } 
     });
 
     // 3. Game List
     paths.push({ 
-        params: { slug: `${lang}/games` }, 
+        params: { slug: isEn ? 'games' : `${lang}/games` }, 
         props: { type: 'game-list', lang } 
     });
 
     // 4. Individual Posts
     const postsInLang = allPosts.filter(p => p.id.startsWith(`${lang}/`));
     for (const post of postsInLang) {
-        const cleanSlug = post.slug.split('/').slice(1).join('/'); // remove lang prefix if present in slug
+        const cleanSlug = post.slug.split('/').slice(1).join('/'); // remove lang prefix
         paths.push({
-            params: { slug: `${lang}/post/${cleanSlug}` },
+            params: { slug: isEn ? `post/${cleanSlug}` : `${lang}/post/${cleanSlug}` },
             props: { type: 'post', lang, item: post }
         });
     }
@@ -51,7 +54,7 @@ export async function getStaticPaths() {
     for (const game of gamesInLang) {
         const cleanSlug = game.slug.split('/').slice(1).join('/');
         paths.push({
-            params: { slug: `${lang}/game/${cleanSlug}` },
+            params: { slug: isEn ? `game/${cleanSlug}` : `${lang}/game/${cleanSlug}` },
             props: { type: 'game', lang, item: game }
         });
     }
@@ -79,7 +82,7 @@ const GameComponent = type === 'game' ? getGameComponent(item.slug) : null;
 ---
 
 {type === 'home' && (
-    <meta http-equiv="refresh" content={`0;url=/${lang}/posts`} />
+    <meta http-equiv="refresh" content={`0;url=${lang === 'en' ? '/posts' : `/${lang}/posts`}`} />
 )}
 
 {type === 'post-list' && (

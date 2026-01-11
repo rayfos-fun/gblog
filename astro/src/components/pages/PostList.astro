@@ -56,7 +56,7 @@ const t = translations[lang] || translations['en'];
       {posts.map((post) => {
         // $LANG/xxx => xxx
         const cleanSlug = post.slug.split('/').slice(1).join('/');
-        const postUrl = `/${lang}/post/${cleanSlug}`;
+        const postUrl = lang === 'en' ? `/post/${cleanSlug}` : `/${lang}/post/${cleanSlug}`;
         
         return (
           <ContentCard 

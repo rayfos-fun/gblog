@@ -55,7 +55,7 @@ const t = translations[lang] || translations['en'];
       
       {games.map((game) => {
         const cleanSlug = game.slug.split('/').slice(1).join('/');
-        const gameUrl = `/${lang}/game/${cleanSlug}`;
+        const gameUrl = lang === 'en' ? `/game/${cleanSlug}` : `/${lang}/game/${cleanSlug}`;
         
         return (
           <ContentCard 

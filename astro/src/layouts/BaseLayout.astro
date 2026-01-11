@@ -7,9 +7,9 @@ interface Props {
 const { title, lang } = Astro.props;
 const { pathname } = Astro.url;
 
-const homeLink = `/${lang}`;
-const postLink = `/${lang}/posts`;
-const gameLink = `/${lang}/games`;
+const homeLink = lang === 'en' ? '/' : `/${lang}`;
+const postLink = lang === 'en' ? '/posts' : `/${lang}/posts`;
+const gameLink = lang === 'en' ? '/games' : `/${lang}/games`;
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -26,6 +26,24 @@ const navI18n = {
 const tNav = navI18n[lang] || navI18n['en'];
 
 const otherLanguages = languages.filter((l) => l.code !== lang);
+
+function getLangLink(targetLang: string) {
+  let cleanPath = pathname;
+  const currentLangPrefix = lang === 'en' ? '' : `/${lang}`;
+  
+  if (currentLangPrefix && pathname.startsWith(currentLangPrefix)) {
+    cleanPath = pathname.slice(currentLangPrefix.length);
+  }
+  
+  // Ensure we don't end up with //
+  if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
+  if (cleanPath === '/') cleanPath = ''; // special case for home to avoid /zh-tw/
+
+  if (targetLang === 'en') {
+     return cleanPath || '/';
+  }
+  return `/${targetLang}${cleanPath}`;
+}
 ---
 
 <!DOCTYPE html>
@@ -51,7 +69,7 @@ const otherLanguages = languages.filter((l) => l.code !== lang);
               <ul class="p-2 bg-base-100 rounded-t-none">
                 {otherLanguages.map((l) => (
                   <li>
-                    <a href={pathname.replace(`/${lang}`, `/${l.code}`)}>
+                    <a href={getLangLink(l.code)}>
                       {l.label}
                     </a>
                   </li>
