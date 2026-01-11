@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+const allStories = await getCollection('stories');
+const stories = allStories.filter((story) => story.id.startsWith(`${lang}/`));
+// sort (latest to oldest)
+stories.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const translations = {
+  'en': {
+    metaTitlePrefix: 'Story List',
+    pageName: 'Stories',
+    latestStories: 'Latest Stories',
+    readMore: 'Read',
+    defaultDesc: 'Click to read...',
+    locale: 'en-US'
+  },
+  'zh-tw': {
+    metaTitlePrefix: '故事列表',
+    pageName: '故事',
+    latestStories: '最新故事',
+    readMore: '閱讀',
+    defaultDesc: '點擊閱讀...',
+    locale: 'zh-TW'
+  },
+  'zh-cn': {
+    metaTitlePrefix: '故事列表',
+    pageName: '故事',
+    latestStories: '最新故事',
+    readMore: '阅读',
+    defaultDesc: '点击阅读...',
+    locale: 'zh-CN'
+  }
+};
+
+const t = translations[lang] || translations['en'];
+---
+
+<PostLayout title={`${t.metaTitlePrefix} | Rayfos`} lang={lang}>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">
+      {t.latestStories}
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {stories.map((story) => {
+        const cleanSlug = story.slug.split('/').slice(1).join('/');
+        const storyUrl = lang === 'en' ? `/story/${cleanSlug}` : `/${lang}/story/${cleanSlug}`;
+        
+        return (
+          <ContentCard 
+            title={story.data.title}
+            url={storyUrl}
+            date={story.data.date}
+            description={story.data.description}
+            isNew={Date.now() - new Date(story.data.date).getTime() < 7 * 24 * 60 * 60 * 1000} 
+            readMoreText={t.readMore}
+            locale={t.locale}
+            descriptionPlaceholder={t.defaultDesc}
+          />
+        );
+      })}
+    </div>
+  </div>
+
+</PostLayout>

@@ -3,6 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import PostList from '../components/pages/PostList.astro';
 import GameList from '../components/pages/GameList.astro';
 import ToolList from '../components/pages/ToolList.astro';
+import StoryList from '../components/pages/StoryList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
@@ -17,6 +18,7 @@ export async function getStaticPaths() {
   const allPosts = await getCollection('posts');
   const allGames = await getCollection('games');
   const allTools = await getCollection('tools');
+  const allStories = await getCollection('stories');
 
   for (const lang of languages) {
     const isEn = lang === 'en';
@@ -78,6 +80,22 @@ export async function getStaticPaths() {
              props: { type: 'tool', lang, item: tool }
         });
     }
+
+    // 7. Story List
+    paths.push({
+        params: { slug: isEn ? 'stories' : `${lang}/stories` },
+        props: { type: 'story-list', lang }
+    });
+
+    // 8. Individual Stories
+    const storiesInLang = allStories.filter(s => s.id.startsWith(`${lang}/`));
+    for (const story of storiesInLang) {
+        const cleanSlug = story.slug.split('/').slice(1).join('/');
+        paths.push({
+            params: { slug: isEn ? `story/${cleanSlug}` : `${lang}/story/${cleanSlug}` },
+            props: { type: 'story', lang, item: story }
+        });
+    }
   }
 
   return paths;
@@ -87,7 +105,7 @@ const { type, lang, item } = Astro.props;
 const { slug } = Astro.params;
 
 // Helper to render post content
-const { Content: PostContent } = (type === 'post' || type === 'tool') ? await item.render() : { Content: null };
+const { Content: PostContent } = (type === 'post' || type === 'tool' || type === 'story') ? await item.render() : { Content: null };
 
 // Helper to decide which game component to render
 const getGameComponent = (gameSlug: string) => {
@@ -126,7 +144,20 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
     <ToolList lang={lang} />
 )}
 
+{type === 'story-list' && (
+    <StoryList lang={lang} />
+)}
+
 {type === 'post' && (
+    <PostLayout title={item.data.title} lang={lang}>
+        <article class="prose lg:prose-xl mx-auto dark:prose-invert">
+            <h1>{item.data.title}</h1>
+            <PostContent />
+        </article>
+    </PostLayout>
+)}
+
+{type === 'story' && (
     <PostLayout title={item.data.title} lang={lang}>
         <article class="prose lg:prose-xl mx-auto dark:prose-invert">
             <h1>{item.data.title}</h1>

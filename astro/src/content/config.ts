@@ -27,8 +27,17 @@ const toolsCollection = defineCollection({
   }),
 });
 
+const storiesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+  }),
+});
+
 export const collections = {
   'games': gamesCollection,
   'posts': postsCollection,
   'tools': toolsCollection,
+  'stories': storiesCollection,
 };
