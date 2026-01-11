@@ -26,13 +26,14 @@
 ../astro/src/content/post/zh-cn/2026-01-09.md
 ../astro/src/content/post/zh-tw/2026-01-07.md
 ../astro/src/content/post/zh-tw/2026-01-09.md
-../astro/src/layouts/BaseLayout.astro
-../astro/src/layouts/GameLayout.astro
-../astro/src/layouts/PostLayout.astro
+../astro/src/layouts/BaseLayout.astro  # header, nav, footer, ...etc.
+../astro/src/layouts/GameLayout.astro  # based on BaseLayout
+../astro/src/layouts/PostLayout.astro  # based on BaseLayout
 ../astro/src/pages/index.astro
 ../astro/src/pages/[lang]/game/tower-of-hanoi/index.astro
+../astro/src/pages/[lang]/games/index.astro  # list game
 ../astro/src/pages/[lang]/post/[...slug].astro
-../astro/src/pages/[lang]/posts/index.astro
+../astro/src/pages/[lang]/posts/index.astro  # list post
 ../astro/.gitignore
 ../astro/README.md
 ../astro/astro.config.mjs

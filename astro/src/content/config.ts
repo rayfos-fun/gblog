@@ -8,7 +8,7 @@ const postCollection = defineCollection({
   }),
 });
 
-const gameCollection = defineCollection({
+const gamesCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
@@ -19,6 +19,6 @@ const gameCollection = defineCollection({
 });
 
 export const collections = {
-  'game': gameCollection,
+  'games': gamesCollection,
   'post': postCollection,
 };

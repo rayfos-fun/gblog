@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const game = await getEntry('game', `${lang}/tower-of-hanoi`);
+const game = await getEntry('games', `${lang}/tower-of-hanoi`);
 
 if (!game) {
   return Astro.redirect('/404');
