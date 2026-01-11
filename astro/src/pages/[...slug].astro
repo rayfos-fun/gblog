@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import PostList from '../components/pages/PostList.astro';
 import GameList from '../components/pages/GameList.astro';
+import ToolList from '../components/pages/ToolList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
@@ -41,7 +42,13 @@ export async function getStaticPaths() {
         props: { type: 'game-list', lang } 
     });
 
-    // 4. Individual Posts
+    // 4. Tool List
+    paths.push({
+        params: { slug: isEn ? 'tools' : `${lang}/tools` },
+        props: { type: 'tool-list', lang }
+    });
+
+    // 5. Individual Posts
     const postsInLang = allPosts.filter(p => p.id.startsWith(`${lang}/`));
     for (const post of postsInLang) {
         const cleanSlug = post.slug.split('/').slice(1).join('/'); // remove lang prefix
@@ -113,6 +120,10 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 
 {type === 'game-list' && (
     <GameList lang={lang} />
+)}
+
+{type === 'tool-list' && (
+    <ToolList lang={lang} />
 )}
 
 {type === 'post' && (
