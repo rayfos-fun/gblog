@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const games = await getCollection('game');
+
+  return games.flatMap((game) => {
+    const parts = game.slug.split('/');
+
+    const lang = parts[0];
+    const slug = parts.slice(1).join('/');
+
+    return [{
+      params: { 
+        lang: lang, 
+        slug: slug || undefined 
+      },
+      props: { game }, 
+    }];
+  });
+}
+
+const { game } = Astro.props;
+if (!game) {
+  throw new Error(`❌ Error：URL ${Astro.url.pathname} (game prop is missing)`);
+}
+
+const { Content } = await game.render();
+const { lang } = Astro.params;
+---
+
+<PostLayout title={game.data.title} lang={lang}>
+  <article class="max-w-4xl mx-auto">
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4">{game.data.title}</h1>
+      <div class="text-gray-500 flex justify-center gap-4 text-sm">
+        <span>📅 {game.data.date.toISOString().slice(0, 10)}</span>
+      </div>
+    </header>
+    <div class="divider"></div>
+    <div class="prose prose-lg max-w-none prose-img:rounded-xl">
+      <Content />
+    </div>
+  </article>
+</PostLayout>

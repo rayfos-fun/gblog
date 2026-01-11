@@ -2,6 +2,13 @@ astro:content
   defineCollection
   z (zod)
 
+Collection
+  id  // basename including extname
+  slug  // 
+  body
+  collection  // content/$COLLECITON
+  data: {... /* frontmatter */}
+
 
 public  [built-in] static files
 src
@@ -15,7 +22,7 @@ src
 
 
 # .astro
----
+---  // frontmatter
   export async function getStaticPaths() {...}
 ---
 
