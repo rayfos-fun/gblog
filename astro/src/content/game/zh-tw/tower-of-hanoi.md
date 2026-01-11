@@ -78,7 +78,8 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
         pegs: [[], [], []], // 三根柱子
         selectedPeg: -1,    // 目前選中的柱子索引 (-1 代表沒選)
         moves: 0,
-        totalDisks: 3
+        totalDisks: 3,
+        gameOver: false
     };
 
     // --- DOM 元素 ---
@@ -96,6 +97,7 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
         state.selectedPeg = -1;
         state.pegs = [[], [], []];
         state.totalDisks = parseInt(diskSelect.value);
+        state.gameOver = false;
         
         // 初始化第一根柱子的盤子 (大在下，小在上)
         for (let i = state.totalDisks; i >= 1; i--) {
@@ -108,6 +110,7 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
     }
 
     function handleInput(e) {
+        if (state.gameOver) return;
         const rect = canvas.getBoundingClientRect();
         // 取得點擊相對於 Canvas 的 X 座標 (考慮縮放)
         const scaleX = canvas.width / rect.width;
@@ -161,6 +164,7 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
     function checkWin() {
         // 所有盤子都移到最後一根柱子 (或者第二根也可以)
         if (state.pegs[2].length === state.totalDisks) {
+            state.gameOver = true;
             showMessage(CONFIG.messages.win);
         } else {
             showMessage("");
