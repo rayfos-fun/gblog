@@ -8,6 +8,15 @@ const postCollection = defineCollection({
   }),
 });
 
+const gameCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+  }),
+});
+
 export const collections = {
+  'game': gameCollection,
   'post': postCollection,
 };
