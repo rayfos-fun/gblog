@@ -9,6 +9,7 @@ const { pathname } = Astro.url;
 
 const homeLink = `/${lang}`;
 const postLink = `/${lang}/posts`;
+const gameLink = `/${lang}/games`;
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -43,7 +44,7 @@ const otherLanguages = languages.filter((l) => l.code !== lang);
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
           <li><a href={postLink}>{tNav.posts}</a></li>
-          <li><a href="#">{tNav.games}</a></li>
+          <li><a href={gameLink}>{tNav.games}</a></li>
           <li>
             <details>
               <summary>{tNav.language}</summary>
