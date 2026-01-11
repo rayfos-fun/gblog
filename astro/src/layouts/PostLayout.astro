@@ -5,15 +5,23 @@ interface Props {
 }
 
 const { title, lang } = Astro.props;
+const { pathname } = Astro.url;
 
 const homeLink = `/${lang}`;
 const postLink = `/${lang}/posts`;
-const switchLangLink = lang === 'en' ? '/zh-tw' : '/en';
-const switchLangLabel = lang === 'en' ? '中文' : 'English';
+
+const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'zh-tw', label: '繁體中文' },
+  { code: 'zh-cn', label: '简体中文' },
+];
+
+const otherLanguages = languages.filter((l) => l.code !== lang);
 ---
 
 <!DOCTYPE html>
-<html lang={lang} data-theme="cupcake"> <head>
+<html lang={lang} data-theme="cupcake">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title} | Rayfos</title>
@@ -27,11 +35,18 @@ const switchLangLabel = lang === 'en' ? '中文' : 'English';
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
           <li><a href={postLink}>Posts</a></li>
-          <li><a href="#">Games</a></li> <li>
+          <li><a href="#">Games</a></li>
+          <li>
             <details>
               <summary>Language</summary>
               <ul class="p-2 bg-base-100 rounded-t-none">
-                <li><a href={switchLangLink}>{switchLangLabel}</a></li>
+                {otherLanguages.map((l) => (
+                  <li>
+                    <a href={pathname.replace(`/${lang}`, `/${l.code}`)}>
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
