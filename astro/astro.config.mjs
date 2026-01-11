@@ -26,10 +26,9 @@ export default defineConfig({
 
   integrations: [react(), sitemap()],
 
-  output: 'hybrid',
   adapter: node({
     mode: 'standalone'
-  })
+  }),
 
   i18n: {
     defaultLocale: 'en',
