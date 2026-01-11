@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostLayout from '@/layouts/PostLayout.astro'; // 請確認路徑是否正確
+
+export async function getStaticPaths() {
+  const posts = await getCollection('post');
+
+  return posts.flatMap((post) => {
+    const parts = post.slug.split('/');
+    
+    // 1. 防呆機制：過濾掉不在語言資料夾內的檔案
+    if (parts.length < 2) {
+      console.warn(`⚠️ 跳過檔案 (路徑錯誤): ${post.id}`);
+      return [];
+    }
+
+    const lang = parts[0];
+    const slug = parts.slice(1).join('/');
+
+    return [{
+      params: { 
+        lang: lang, 
+        slug: slug || undefined 
+      },
+      // 2. 【關鍵修正】這裡一定要用 props 包起來！
+      props: { post }, 
+    }];
+  });
+}
+
+// 3. 接收資料
+const { post } = Astro.props; // 如果上面的 props 沒寫對，這裡的 post 就會是 undefined
+
+// 4. 防呆檢查 (如果 post 真的沒抓到，直接丟出錯誤，不要等到 render 才炸開)
+if (!post) {
+  throw new Error(`❌ 嚴重錯誤：網址 ${Astro.url.pathname} 找不到對應的文章資料 (post prop is missing)`);
+}
+
+// 5. 渲染內容
+const { Content } = await post.render(); // 剛剛報錯就是死在這一行
+const { lang } = Astro.params;
+---
+
+<BlogPostLayout title={post.data.title} lang={lang}>
+  <article class="max-w-4xl mx-auto">
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
+      <div class="text-gray-500 flex justify-center gap-4 text-sm">
+        <span>📅 {post.data.date.toISOString().slice(0, 10)}</span>
+      </div>
+    </header>
+    <div class="divider"></div>
+    <div class="prose prose-lg max-w-none prose-img:rounded-xl">
+      <Content />
+    </div>
+  </article>
+</BlogPostLayout>

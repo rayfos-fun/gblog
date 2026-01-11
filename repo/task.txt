@@ -22,8 +22,12 @@
 ../astro/src/assets/astro.svg
 ../astro/src/assets/background.svg
 ../astro/src/components/Welcome.astro
-../astro/src/layouts/Layout.astro
+../astro/src/content/config.ts  # schema
+../astro/src/content/post/zh-tw/2026-01-09.md
+../astro/src/layouts/PostLayout.astro
 ../astro/src/pages/index.astro
+../astro/src/pages/[lang]/post/[...slug].astro
+../astro/tsconfig.json
 
 ../jekyll-site/_config.yml
 ../jekyll-site/404.html
