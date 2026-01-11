@@ -36,7 +36,14 @@
     }
 
     var userLangs = navigator.languages || [navigator.language || navigator.userLanguage];
-    var targetLang = getBestLang(userLangs);
+    var storedLang = localStorage.getItem('preferred-lang');
+    var targetLang = defaultLang;
+
+    if (storedLang && supportedLangs.includes(storedLang)) {
+        targetLang = storedLang;
+    } else {
+        targetLang = getBestLang(userLangs);
+    }
     
     // Redirect
     window.location.replace('/' + targetLang + '/');
