@@ -10,9 +10,9 @@ interface Props {
 const { title, bgmSrc, lang = 'zh-tw' } = Astro.props;
 
 const i18n = {
-  'zh-tw': { bgmLabel: '音樂', sfxLabel: '音效', toggleOn: '開啟', toggleOff: '靜音' },
-  'zh-cn': { bgmLabel: '音乐', sfxLabel: '音效', toggleOn: '开启', toggleOff: '静音' },
-  'en': { bgmLabel: 'BGM', sfxLabel: 'SFX', toggleOn: 'On', toggleOff: 'Mute' }
+  'zh-tw': { bgmLabel: '音樂', volLabel: '音量', toggleOn: '開啟', toggleOff: '靜音' },
+  'zh-cn': { bgmLabel: '音乐', volLabel: '音量', toggleOn: '开启', toggleOff: '静音' },
+  'en': { bgmLabel: 'BGM', volLabel: 'Volume', toggleOn: 'On', toggleOff: 'Mute' }
 };
 
 const t = i18n[lang] || i18n['en'];
@@ -44,17 +44,17 @@ const t = i18n[lang] || i18n['en'];
         </div>
 
         <div class="flex items-center gap-2">
-          <label for="sfx-volume" class="font-medium text-slate-300 cursor-pointer select-none">
-            {t.sfxLabel}
+          <label for="bgm-volume" class="font-medium text-slate-300 cursor-pointer select-none">
+            {t.volLabel}
           </label>
           <input 
             type="range" 
-            id="sfx-volume" 
+            id="bgm-volume" 
             min="0" 
             max="1" 
-            step="0.1" 
+            step="0.05" 
             value="0.5"
-            aria-label={t.sfxLabel}
+            aria-label={t.volLabel}
             class="w-24 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
           >
         </div>
@@ -78,12 +78,12 @@ const t = i18n[lang] || i18n['en'];
   class GameAudioManager {
     constructor() {
       this.bgmToggle = document.getElementById('bgm-toggle') as HTMLButtonElement;
-      this.sfxSlider = document.getElementById('sfx-volume') as HTMLInputElement;
+      this.volumeSlider = document.getElementById('bgm-volume') as HTMLInputElement;
       this.bgmPlayer = document.getElementById('layout-bgm-player') as HTMLAudioElement | null;
       
       this.state = {
         bgmEnabled: localStorage.getItem('game_bgm_enabled') !== 'false',
-        sfxVolume: parseFloat(localStorage.getItem('game_sfx_volume') || '0.5')
+        volume: parseFloat(localStorage.getItem('game_bgm_volume') || '0.5')
       };
 
       this.init();
@@ -93,7 +93,7 @@ const t = i18n[lang] || i18n['en'];
       this.updateUI();
 
       this.bgmToggle?.addEventListener('click', () => this.toggleBGM());
-      this.sfxSlider?.addEventListener('input', (e) => this.updateSFX((e.target as HTMLInputElement).value));
+      this.volumeSlider?.addEventListener('input', (e) => this.updateVolume((e.target as HTMLInputElement).value));
 
       this.updateBGMPlayerState();
       this.dispatchSettings();
@@ -103,9 +103,9 @@ const t = i18n[lang] || i18n['en'];
       if (this.bgmToggle) {
         this.bgmToggle.setAttribute('aria-pressed', this.state.bgmEnabled.toString());
       }
-      if (this.sfxSlider) {
-        this.sfxSlider.value = this.state.sfxVolume.toString();
-        this.sfxSlider.style.setProperty('--value', `${this.state.sfxVolume * 100}%`);
+      if (this.volumeSlider) {
+        this.volumeSlider.value = this.state.volume.toString();
+        this.volumeSlider.style.setProperty('--value', `${this.state.volume * 100}%`);
       }
     }
 
@@ -118,11 +118,15 @@ const t = i18n[lang] || i18n['en'];
       this.dispatchSettings();
     }
 
-    updateSFX(val: string) {
+    updateVolume(val: string) {
       const volume = parseFloat(val);
-      this.state.sfxVolume = volume;
-      localStorage.setItem('game_sfx_volume', volume.toString());
+      this.state.volume = volume;
+      localStorage.setItem('game_bgm_volume', volume.toString());
       
+      if (this.bgmPlayer) {
+        this.bgmPlayer.volume = volume;
+      }
+
       this.dispatchSettings();
     }
 
@@ -130,6 +134,7 @@ const t = i18n[lang] || i18n['en'];
       if (!this.bgmPlayer) return;
 
       if (this.state.bgmEnabled) {
+        this.bgmPlayer.volume = this.state.volume;
         const playPromise = this.bgmPlayer.play();
         if (playPromise !== undefined) {
           playPromise.catch(error => {
