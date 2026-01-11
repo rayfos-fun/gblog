@@ -2,6 +2,7 @@
 title: "河內塔 (Tower of Hanoi)"
 date: "2024-01-11"
 description: "經典的數學遞迴益智遊戲"
+bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 ---
 
 <div class="game-wrapper flex flex-col items-center gap-6 p-4">
