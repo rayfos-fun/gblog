@@ -6,17 +6,37 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 ---
 
 <div class="game-wrapper flex flex-col items-center gap-6 p-4">
-    <div class="game-stats flex gap-8 text-lg font-bold text-gray-700 dark:text-gray-300">
-        <div id="move-count">移動次數: 0</div>
-        <div class="flex items-center gap-2">
-            <label for="disk-select">盤子數量:</label>
-            <select id="disk-select" class="select select-bordered select-sm">
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-            </select>
+    <!-- Stats Dashboard -->
+    <div class="grid grid-cols-2 gap-4 w-full max-w-lg mb-6">
+        <!-- Move Count Card -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-transform hover:scale-[1.02]">
+            <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+            </div>
+            <div>
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">移動次數</div>
+                <div id="move-count" class="text-2xl font-mono font-bold text-slate-800 dark:text-slate-100">0</div>
+            </div>
+        </div>
+        <!-- Difficulty Card -->
+        <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-transform hover:scale-[1.02]">
+            <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+            </div>
+            <div class="flex-1">
+                <label for="disk-select" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">盤子數量</label>
+                <select id="disk-select" class="select select-bordered select-xs w-full bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-purple-500">
+                    <option value="3">3 (簡單)</option>
+                    <option value="4">4 (普通)</option>
+                    <option value="5">5 (挑戰)</option>
+                    <option value="6">6 (困難)</option>
+                    <option value="7">7 (大師)</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="canvas-container relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
@@ -210,7 +230,7 @@ bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
     }
 
     function updateUI() {
-        moveDisplay.textContent = `移動次數: ${state.moves}`;
+        moveDisplay.textContent = state.moves;
     }
 
     function showMessage(msg) {
