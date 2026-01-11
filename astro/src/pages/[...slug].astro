@@ -48,11 +48,33 @@ export async function getStaticPaths() {
 
     // 5. Individual Posts
     const postsInLang = allPosts.filter(p => p.id.startsWith(`${lang}/`));
-    for (const post of postsInLang) {
+    // Sort by date descending (Newest first)
+    postsInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+    for (let i = 0; i < postsInLang.length; i++) {
+        const post = postsInLang[i];
         const cleanSlug = post.slug.split('/').slice(1).join('/'); // remove lang prefix
+        
+        // Next post (index - 1 because we are sorted desc) -> Newer post
+        const nextPost = i > 0 ? postsInLang[i - 1] : null;
+        // Prev post (index + 1) -> Older post
+        const prevPost = i < postsInLang.length - 1 ? postsInLang[i + 1] : null;
+
         paths.push({
             params: { slug: isEn ? `post/${cleanSlug}` : `${lang}/post/${cleanSlug}` },
-            props: { type: 'post', lang, item: post }
+            props: { 
+                type: 'post', 
+                lang, 
+                item: post,
+                prevPost: prevPost ? { 
+                    title: prevPost.data.title, 
+                    url: isEn ? `/post/${prevPost.slug.split('/').slice(1).join('/')}` : `/${lang}/post/${prevPost.slug.split('/').slice(1).join('/')}`
+                } : null,
+                nextPost: nextPost ? { 
+                    title: nextPost.data.title, 
+                    url: isEn ? `/post/${nextPost.slug.split('/').slice(1).join('/')}` : `/${lang}/post/${nextPost.slug.split('/').slice(1).join('/')}`
+                } : null
+            }
         });
     }
 
@@ -143,7 +165,7 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 )}
 
 {type === 'post' && (
-    <PostLayout title={item.data.title} lang={lang}>
+    <PostLayout title={item.data.title} lang={lang} prevPost={Astro.props.prevPost} nextPost={Astro.props.nextPost}>
         <article class="prose lg:prose-xl mx-auto dark:prose-invert">
             <h1>{item.data.title}</h1>
             <PostContent />
