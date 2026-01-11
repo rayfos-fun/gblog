@@ -4,7 +4,6 @@ import PostLayout from '@/layouts/PostLayout.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('post');
-
   const languages = [...new Set(allPosts.map((post) => post.id.split('/')[0]))];
 
   return languages.map((lang) => {
@@ -21,52 +20,80 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.params;
 const { posts } = Astro.props;
+
+const translations = {
+  'en': {
+    metaTitlePrefix: 'Blog List',
+    blogName: 'Blog',
+    latestPosts: 'Latest Posts',
+    readMore: 'Read More',
+    defaultDesc: 'Click to read more...',
+    locale: 'en-US'
+  },
+  'zh-tw': {
+    metaTitlePrefix: '文章列表',
+    blogName: '部落格',
+    latestPosts: '最新文章',
+    readMore: '閱讀全文',
+    defaultDesc: '點擊閱讀更多...',
+    locale: 'zh-TW'
+  },
+  'zh-cn': {
+    metaTitlePrefix: '文章列表',
+    blogName: '博客',
+    latestPosts: '最新文章',
+    readMore: '阅读全文',
+    defaultDesc: '点击阅读更多...',
+    locale: 'zh-CN'
+  }
+};
+
+const t = translations[lang] || translations['en'];
 ---
-<PostLayout title={`文章列表 | ${lang === 'en' ? 'Blog' : '部落格'}`} lang={lang}>
+
+<PostLayout title={`${t.metaTitlePrefix} | ${t.blogName}`} lang={lang}>
   
   <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold mb-8 text-center">
-      {lang === 'en' ? 'Latest Posts' : '最新文章'}
+      {t.latestPosts}
     </h1>
 
-    {/* 格狀佈局：手機單欄，平板以上雙欄 */}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       
       {posts.map((post) => {
-        // 處理 Slug：移除語言前綴
+        // $LANG/xxx => xxx
         const cleanSlug = post.slug.split('/').slice(1).join('/');
         const postUrl = `/${lang}/post/${cleanSlug}`;
         
         return (
-          // 使用 DaisyUI 的 Card 元件
+          // card of DaisyUI
           <div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl transition-shadow duration-300">
             <div class="card-body">
               
-              {/* 標題 */}
               <h2 class="card-title">
                 <a href={postUrl} class="hover:text-primary transition-colors">
                   {post.data.title}
                 </a>
-                {/* 如果是最近 7 天內的文章，顯示 NEW 標籤 (選用) */}
+                {/* show NEW for recent (7 days) posts */}
                 {Date.now() - new Date(post.data.date).getTime() < 7 * 24 * 60 * 60 * 1000 && (
                   <div class="badge badge-secondary">NEW</div>
                 )}
               </h2>
 
-              {/* 日期與摘要 */}
+              {/* date */}
               <div class="text-sm text-base-content/70 mb-2">
-                {new Date(post.data.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW')}
+                {new Date(post.data.date).toLocaleDateString(t.locale)}
               </div>
               
-              {/* 摘要：如果 frontmatter 有 description 就顯示，沒有就留空 */}
+              {/* summary */}
               <p class="line-clamp-3 text-base-content/80">
-                {post.data.description || '點擊閱讀更多...'}
+                {post.data.description || t.defaultDesc}
               </p>
 
-              {/* 按鈕區域 */}
+              {/* button */}
               <div class="card-actions justify-end mt-4">
                 <a href={postUrl} class="btn btn-primary btn-sm">
-                  {lang === 'en' ? 'Read More' : '閱讀全文'}
+                  {t.readMore}
                 </a>
               </div>
             </div>
