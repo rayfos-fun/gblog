@@ -79,7 +79,57 @@ const latestGames = getLatest(games, 'Game');
 const latestTools = getLatest(tools, 'Tool');
 const latestStories = getLatest(stories, 'Story');
 
-const pageTitle = "Home";
+const translations = {
+    'en': {
+        pageTitle: 'Home',
+        latestUpdates: 'Latest Updates',
+        latestPosts: 'Latest Posts',
+        latestGames: 'Latest Games',
+        latestTools: 'Latest Tools',
+        latestStories: 'Latest Stories',
+        readMore: 'Read More',
+        new: 'NEW',
+        typePost: 'Post',
+        typeGame: 'Game',
+        typeTool: 'Tool',
+        typeStory: 'Story',
+        noDescription: 'No description available.'
+    },
+    'zh-tw': {
+        pageTitle: '首頁',
+        latestUpdates: '最新更新',
+        latestPosts: '最新文章',
+        latestGames: '最新遊戲',
+        latestTools: '最新工具',
+        latestStories: '最新故事',
+        readMore: '閱讀更多',
+        new: '新',
+        typePost: '文章',
+        typeGame: '遊戲',
+        typeTool: '工具',
+        typeStory: '故事',
+        noDescription: '暫無描述。'
+    },
+    'zh-cn': {
+        pageTitle: '首页',
+        latestUpdates: '最新更新',
+        latestPosts: '最新文章',
+        latestGames: '最新游戏',
+        latestTools: '最新工具',
+        latestStories: '最新故事',
+        readMore: '阅读更多',
+        new: '新',
+        typePost: '文章',
+        typeGame: '游戏',
+        typeTool: '工具',
+        typeStory: '故事',
+        noDescription: '暂无描述。'
+    }
+};
+
+const t = translations[lang] || translations['en'];
+
+const pageTitle = t.pageTitle;
 ---
 
 <BaseLayout pageTitle={pageTitle} lang={lang}>
@@ -87,15 +137,17 @@ const pageTitle = "Home";
         
         {/* Latest Updates Section */}
         <section class="mb-12">
-            <h2 class="text-3xl font-bold mb-6 border-b pb-2">Latest Updates ({lang})</h2>
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2">{t.latestUpdates}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {latestUpdates.map(item => (
                     <ContentCard
                         title={item.title}
                         date={item.date}
                         url={item.url}
-                        description={`${item.type} - ${item.description || 'No description available.'}`}
+                        description={`${t[`type${item.type}`]} - ${item.description || t.noDescription}`}
                         isNew={true} 
+                        readMoreText={t.readMore}
+                        newText={t.new}
                     />
                 ))}
             </div>
@@ -106,14 +158,15 @@ const pageTitle = "Home";
             
             {/* Latest Posts */}
             <section>
-                <h3 class="text-2xl font-bold mb-4">Latest Posts</h3>
+                <h3 class="text-2xl font-bold mb-4">{t.latestPosts}</h3>
                 <div class="space-y-4">
                     {latestPosts.map(item => (
                         <ContentCard
                              title={item.title}
                              date={item.date}
                              url={item.url}
-                             description={item.description}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
                         />
                     ))}
                 </div>
@@ -121,14 +174,15 @@ const pageTitle = "Home";
 
             {/* Latest Games */}
             <section>
-                <h3 class="text-2xl font-bold mb-4">Latest Games</h3>
+                <h3 class="text-2xl font-bold mb-4">{t.latestGames}</h3>
                 <div class="space-y-4">
                      {latestGames.map(item => (
                         <ContentCard
                              title={item.title}
                              date={item.date}
                              url={item.url}
-                             description={item.description}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
                         />
                     ))}
                 </div>
@@ -136,14 +190,15 @@ const pageTitle = "Home";
 
              {/* Latest Tools */}
              <section>
-                <h3 class="text-2xl font-bold mb-4">Latest Tools</h3>
+                <h3 class="text-2xl font-bold mb-4">{t.latestTools}</h3>
                 <div class="space-y-4">
                      {latestTools.map(item => (
                         <ContentCard
                              title={item.title}
                              date={item.date}
                              url={item.url}
-                             description={item.description}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
                         />
                     ))}
                 </div>
@@ -151,14 +206,15 @@ const pageTitle = "Home";
 
              {/* Latest Stories */}
              <section>
-                <h3 class="text-2xl font-bold mb-4">Latest Stories</h3>
+                <h3 class="text-2xl font-bold mb-4">{t.latestStories}</h3>
                 <div class="space-y-4">
                      {latestStories.map(item => (
                         <ContentCard
                              title={item.title}
                              date={item.date}
                              url={item.url}
-                             description={item.description}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
                         />
                     ))}
                 </div>

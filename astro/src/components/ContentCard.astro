@@ -6,6 +6,7 @@ interface Props {
   description: string;
   isNew?: boolean;
   readMoreText?: string;
+  newText?: string;
   locale?: string;
   descriptionPlaceholder?: string;
 }
@@ -17,6 +18,7 @@ const {
   description, 
   isNew = false,
   readMoreText = 'Read More',
+  newText = 'NEW',
   locale = 'en-US',
   descriptionPlaceholder = 'Click to read more...'
 } = Astro.props;
@@ -30,7 +32,7 @@ const {
         {title}
       </a>
       {isNew && (
-        <div class="badge badge-secondary">NEW</div>
+        <div class="badge badge-secondary">{newText}</div>
       )}
     </h2>
 
