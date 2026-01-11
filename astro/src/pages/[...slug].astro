@@ -4,6 +4,7 @@ import PostList from '../components/pages/PostList.astro';
 import GameList from '../components/pages/GameList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
+import LoopTimer from '@/components/tools/LoopTimer.astro';
 
 // Type Definitions
 type RouteType = 'home' | 'post-list' | 'game-list' | 'post' | 'game';
@@ -14,6 +15,7 @@ export async function getStaticPaths() {
 
   const allPosts = await getCollection('posts');
   const allGames = await getCollection('games');
+  const allTools = await getCollection('tools');
 
   for (const lang of languages) {
     const isEn = lang === 'en';
@@ -58,6 +60,17 @@ export async function getStaticPaths() {
             props: { type: 'game', lang, item: game }
         });
     }
+
+    // 6. Tools (Specific Request)
+    const toolsInLang = allTools.filter(t => t.id.startsWith(`${lang}/`));
+    for (const tool of toolsInLang) {
+        const cleanSlug = tool.slug.split('/').slice(1).join('/');
+        paths.push({
+            // Request: /zh-tw/tool/loop-timer/
+             params: { slug: isEn ? `tool/${cleanSlug}` : `${lang}/tool/${cleanSlug}` },
+             props: { type: 'tool', lang, item: tool }
+        });
+    }
   }
 
   return paths;
@@ -67,7 +80,7 @@ const { type, lang, item } = Astro.props;
 const { slug } = Astro.params;
 
 // Helper to render post content
-const { Content: PostContent } = type === 'post' ? await item.render() : { Content: null };
+const { Content: PostContent } = (type === 'post' || type === 'tool') ? await item.render() : { Content: null };
 
 // Helper to decide which game component to render
 const getGameComponent = (gameSlug: string) => {
@@ -78,7 +91,16 @@ const getGameComponent = (gameSlug: string) => {
     return null;
 }
 
+// Helper for tools
+const getToolComponent = (toolSlug: string) => {
+    if (toolSlug && toolSlug.includes('loop-timer')) {
+        return LoopTimer;
+    }
+    return null;
+}
+
 const GameComponent = type === 'game' ? getGameComponent(item.slug) : null;
+const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 ---
 
 {type === 'home' && (
@@ -110,4 +132,14 @@ const GameComponent = type === 'game' ? getGameComponent(item.slug) : null;
     <div class="p-10 text-center">
         <h1 class="text-2xl font-bold">Game Not Found (Component Missing)</h1>
     </div>
+)}
+
+{type === 'tool' && ToolComponent && (
+    <PostLayout title={item.data.title} lang={lang}>
+        <article class="prose lg:prose-xl mx-auto dark:prose-invert mb-8">
+            <h1>{item.data.title}</h1>
+            <PostContent />
+        </article>
+        <ToolComponent lang={lang} />
+    </PostLayout>
 )}

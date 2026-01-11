@@ -1,0 +1,376 @@
+---
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+const i18n = {
+  'zh-tw': {
+    title: '循環計時器',
+    addPhase: '新增階段',
+    start: '開始',
+    pause: '暫停',
+    reset: '重置',
+    phase: '階段',
+    duration: '秒數',
+    color: '顏色',
+    loopCount: '循環次數',
+    totalTime: '總時間',
+    currentPhase: '目前階段',
+    nextPhase: '下一階段'
+  },
+  'zh-cn': {
+    title: '循环计时器',
+    addPhase: '新增阶段',
+    start: '开始',
+    pause: '暂停',
+    reset: '重置',
+    phase: '阶段',
+    duration: '秒数',
+    color: '颜色',
+    loopCount: '循环次数',
+    totalTime: '总时间',
+    currentPhase: '当前阶段',
+    nextPhase: '下一阶段'
+  },
+  'en': {
+    title: 'Loop Timer',
+    addPhase: 'Add Phase',
+    start: 'Start',
+    pause: 'Pause',
+    reset: 'Reset',
+    phase: 'Phase',
+    duration: 'Seconds',
+    color: 'Color',
+    loopCount: 'Loops',
+    totalTime: 'Total Time',
+    currentPhase: 'Current',
+    nextPhase: 'Next'
+  }
+};
+
+const t = i18n[lang] || i18n['en'];
+---
+
+<div class="max-w-2xl mx-auto p-4">
+  <div class="bg-base-200 rounded-xl p-6 shadow-lg mb-8">
+    <div class="text-center mb-8">
+        <div id="timer-display" class="text-8xl font-black font-mono tracking-wider tabular-nums mb-2">00:00</div>
+        <div id="phase-label" class="text-2xl font-bold opacity-75">-</div>
+    </div>
+
+    <div class="flex justify-center gap-4 mb-6">
+      <button id="btn-start" class="btn btn-primary btn-lg w-32">{t.start}</button>
+      <button id="btn-reset" class="btn btn-outline btn-lg w-32">{t.reset}</button>
+    </div>
+
+    <div class="stats shadow w-full bg-base-100">
+        <div class="stat place-items-center">
+            <div class="stat-title">{t.loopCount}</div>
+            <div id="loop-counter" class="stat-value text-secondary">0</div>
+        </div>
+        <div class="stat place-items-center">
+            <div class="stat-title">{t.totalTime}</div>
+            <div id="total-time" class="stat-value text-primary">00:00</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title justify-between">
+        {t.phase}
+        <button id="btn-add-phase" class="btn btn-sm btn-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            {t.addPhase}
+        </button>
+      </h2>
+      
+      <div id="phase-list" class="space-y-4">
+        <!-- Phases will be injected here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="phase-template">
+    <div class="phase-item flex items-center gap-4 bg-base-200 p-3 rounded-lg group ">
+        <div class="handle cursor-move p-2 opacity-50 hover:opacity-100 select-none">☰</div>
+        <input type="color" class="input-color w-12 h-12 p-1 rounded bg-transparent cursor-pointer" value="#3b82f6">
+        <div class="flex-1">
+            <label class="input-group">
+                <span>{t.duration}</span>
+                <input type="number" class="input-duration input input-bordered w-full" value="30" min="1">
+            </label>
+        </div>
+        <button class="btn-delete btn btn-square btn-ghost text-error opacity-50 hover:opacity-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+        </button>
+    </div>
+</template>
+
+<script>
+class LoopTimer {
+    phases = [
+        { color: '#10b981', duration: 30 }, // Emerald-500
+        { color: '#ef4444', duration: 10 }  // Red-500
+    ];
+    
+    constructor() {
+        this.isRunning = false;
+        this.currentPhaseIndex = 0;
+        this.timeRemaining = 0;
+        this.loopCount = 0;
+        this.startTime = 0;
+        this.totalElapsed = 0;
+        this.timerInterval = 0;
+
+        this.elements = {
+            display: document.getElementById('timer-display'),
+            phaseLabel: document.getElementById('phase-label'),
+            startBtn: document.getElementById('btn-start'),
+            resetBtn: document.getElementById('btn-reset'),
+            addPhaseBtn: document.getElementById('btn-add-phase'),
+            phaseList: document.getElementById('phase-list'),
+            loopCounter: document.getElementById('loop-counter'),
+            totalTime: document.getElementById('total-time'),
+            template: document.getElementById('phase-template'),
+            container: document.querySelector('.max-w-2xl') // Context for bg changes
+        };
+
+        // Audio Context for Beep
+        this.audioCtx = null;
+
+        this.init();
+    }
+
+    init() {
+        this.loadSettings();
+        this.renderPhases();
+        
+        // Use Astro view transitions if available, or standard events
+        this.elements.startBtn?.addEventListener('click', () => this.toggleStart());
+        this.elements.resetBtn?.addEventListener('click', () => this.reset());
+        this.elements.addPhaseBtn?.addEventListener('click', () => this.addPhase());
+
+        // Event delegation for phase items
+        this.elements.phaseList?.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target.closest('.btn-delete')) {
+                const item = target.closest('.phase-item');
+                const index = Array.from(this.elements.phaseList.children).indexOf(item);
+                this.removePhase(index);
+            }
+        });
+
+        this.elements.phaseList?.addEventListener('change', (e) => {
+            const target = e.target;
+            if (target.classList.contains('input-duration') || target.classList.contains('input-color')) {
+                this.updatePhasesFromDOM();
+            }
+        });
+
+        this.resetUI();
+    }
+
+    playBeep(freq = 440, duration = 0.1) {
+        if (!this.audioCtx) {
+            this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        }
+        if (this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+        }
+        const osc = this.audioCtx.createOscillator();
+        const gain = this.audioCtx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + duration);
+        osc.stop(this.audioCtx.currentTime + duration);
+    }
+
+    toggleStart() {
+        if (this.isRunning) {
+            this.pause();
+        } else {
+            this.start();
+        }
+    }
+
+    start() {
+        if (this.phases.length === 0) return;
+        this.isRunning = true;
+        this.elements.startBtn.textContent = this.elements.startBtn.textContent === 'Start' ? 'Pause' : (this.elements.startBtn.innerText === '開始' ? '暫停' : 'Pause'); // Simple toggle logic, better to use dictionary
+        this.elements.startBtn.classList.replace('btn-primary', 'btn-warning');
+        
+        this.lastTick = performance.now();
+        this.timerInterval = requestAnimationFrame(this.tick.bind(this));
+    }
+
+    pause() {
+        this.isRunning = false;
+        this.elements.startBtn.textContent = this.elements.startBtn.textContent === 'Pause' ? 'Start' : (this.elements.startBtn.innerText === '暫停' ? '開始' : 'Start');
+        this.elements.startBtn.classList.replace('btn-warning', 'btn-primary');
+        cancelAnimationFrame(this.timerInterval);
+    }
+
+    reset() {
+        this.pause();
+        this.currentPhaseIndex = 0;
+        this.timeRemaining = this.phases[0]?.duration || 0;
+        this.loopCount = 0;
+        this.totalElapsed = 0;
+        this.resetUI();
+    }
+
+    resetUI() {
+        if (this.phases.length > 0) {
+            this.timeRemaining = this.phases[0].duration;
+            this.updateDisplay();
+            this.updatePhaseStyle(0);
+        }
+        this.elements.loopCounter.textContent = '0';
+        this.elements.totalTime.textContent = '00:00';
+    }
+
+    tick(now) {
+        if (!this.isRunning) return;
+
+        const delta = (now - this.lastTick) / 1000;
+        this.lastTick = now;
+
+        this.timeRemaining -= delta;
+        this.totalElapsed += delta;
+
+        if (this.timeRemaining <= 0) {
+            this.nextPhase();
+        }
+
+        this.updateDisplay();
+        this.updateTotalTime();
+        this.timerInterval = requestAnimationFrame(this.tick.bind(this));
+    }
+
+    nextPhase() {
+        this.playBeep(880, 0.2);
+        this.currentPhaseIndex++;
+        
+        if (this.currentPhaseIndex >= this.phases.length) {
+            this.currentPhaseIndex = 0;
+            this.loopCount++;
+            this.elements.loopCounter.textContent = this.loopCount.toString();
+        }
+
+        const phase = this.phases[this.currentPhaseIndex];
+        this.timeRemaining = phase.duration;
+        this.updatePhaseStyle(this.currentPhaseIndex);
+    }
+
+    updatePhaseStyle(index) {
+        const phase = this.phases[index];
+        const color = phase.color || '#3b82f6';
+        
+        this.elements.display.style.color = color;
+        this.elements.phaseLabel.style.color = color;
+        this.elements.phaseLabel.textContent = `Phase ${index + 1}`;
+        
+        // Highlight active phase in list
+        const items = this.elements.phaseList.children;
+        Array.from(items).forEach((item, i) => {
+            if (i === index) item.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            else item.classList.remove('ring-2', 'ring-offset-2', 'ring-primary');
+        });
+    }
+
+    updateDisplay() {
+        const t = Math.max(0, this.timeRemaining); // Float
+        const seconds = Math.ceil(t); // Ceil for better human read
+        const min = Math.floor(seconds / 60);
+        const sec = seconds % 60;
+        this.elements.display.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    updateTotalTime() {
+        const total = Math.floor(this.totalElapsed);
+        const min = Math.floor(total / 60);
+        const sec = total % 60;
+        this.elements.totalTime.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    addPhase() {
+        this.phases.push({ color: '#3b82f6', duration: 30 });
+        this.renderPhases();
+        this.saveSettings();
+    }
+
+    removePhase(index) {
+        if (this.phases.length <= 1) return;
+        this.phases.splice(index, 1);
+        this.renderPhases();
+        this.saveSettings();
+        if (this.currentPhaseIndex >= this.phases.length) {
+            this.currentPhaseIndex = 0;
+            this.reset();
+        }
+    }
+
+    updatePhasesFromDOM() {
+        const items = this.elements.phaseList.children;
+        this.phases = Array.from(items).map(item => {
+            return {
+                color: (item.querySelector('.input-color') as HTMLInputElement).value,
+                duration: parseFloat((item.querySelector('.input-duration') as HTMLInputElement).value)
+            };
+        });
+        this.saveSettings();
+        if (!this.isRunning) {
+             this.timeRemaining = this.phases[this.currentPhaseIndex].duration;
+             this.updateDisplay();
+             this.updatePhaseStyle(this.currentPhaseIndex);
+        }
+    }
+
+    renderPhases() {
+        if (!this.elements.phaseList) return;
+        this.elements.phaseList.innerHTML = '';
+        this.phases.forEach((phase, index) => {
+            const clone = this.elements.template.content.cloneNode(true);
+            const root = clone.querySelector('.phase-item');
+            
+            clone.querySelector('.input-color').value = phase.color;
+            clone.querySelector('.input-duration').value = phase.duration;
+            
+            this.elements.phaseList.appendChild(clone);
+        });
+        this.updatePhaseStyle(this.currentPhaseIndex);
+    }
+
+    saveSettings() {
+        localStorage.setItem('loop-timer-phases', JSON.stringify(this.phases));
+    }
+
+    loadSettings() {
+        const saved = localStorage.getItem('loop-timer-phases');
+        if (saved) {
+            try {
+                this.phases = JSON.parse(saved);
+            } catch (e) {
+                console.error('Failed to load settings', e);
+            }
+        }
+    }
+}
+
+// Initialize on page load
+document.addEventListener('astro:page-load', () => {
+    new LoopTimer();
+}, { once: false });
+
+if (!document.querySelector('script[data-astro-exec]')) { 
+     document.addEventListener('DOMContentLoaded', () => new LoopTimer());
+}
+</script>
