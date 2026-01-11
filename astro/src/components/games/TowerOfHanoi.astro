@@ -1,22 +1,12 @@
 ---
-import { getEntry } from 'astro:content';
 import GameLayout from '@/layouts/GameLayout.astro';
 
-export async function getStaticPaths() {
-  return [
-    { params: { lang: 'zh-tw' } },
-    { params: { lang: 'zh-cn' } },
-    { params: { lang: 'en' } },
-  ];
+interface Props {
+  game: any;
+  lang: string;
 }
 
-const { lang } = Astro.params;
-const game = await getEntry('games', `${lang}/tower-of-hanoi`);
-
-if (!game) {
-  return Astro.redirect('/404');
-}
-
+const { game, lang } = Astro.props;
 const { i18n } = game.data;
 ---
 

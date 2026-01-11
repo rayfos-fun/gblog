@@ -1,0 +1,110 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import PostList from '../components/pages/PostList.astro';
+import GameList from '../components/pages/GameList.astro';
+import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
+import PostLayout from '@/layouts/PostLayout.astro';
+
+// Type Definitions
+type RouteType = 'home' | 'post-list' | 'game-list' | 'post' | 'game';
+
+export async function getStaticPaths() {
+  const languages = ['en', 'zh-tw', 'zh-cn'];
+  const paths = [];
+
+  const allPosts = await getCollection('posts');
+  const allGames = await getCollection('games');
+
+  for (const lang of languages) {
+    // 1. Language Home Redirect (Simplification: redirect to post-list or just rendering post list as home)
+    // Actually, traditionally /zh-tw is home. Let's make home render PostList for now (or a Welcome page).
+    // Based on previous BaseLayout, homeLink was /$lang.
+    paths.push({ 
+        params: { slug: lang }, 
+        props: { type: 'home', lang } 
+    });
+
+    // 2. Post List
+    paths.push({ 
+        params: { slug: `${lang}/posts` }, 
+        props: { type: 'post-list', lang } 
+    });
+
+    // 3. Game List
+    paths.push({ 
+        params: { slug: `${lang}/games` }, 
+        props: { type: 'game-list', lang } 
+    });
+
+    // 4. Individual Posts
+    const postsInLang = allPosts.filter(p => p.id.startsWith(`${lang}/`));
+    for (const post of postsInLang) {
+        const cleanSlug = post.slug.split('/').slice(1).join('/'); // remove lang prefix if present in slug
+        paths.push({
+            params: { slug: `${lang}/post/${cleanSlug}` },
+            props: { type: 'post', lang, item: post }
+        });
+    }
+
+    // 5. Individual Games
+    const gamesInLang = allGames.filter(g => g.id.startsWith(`${lang}/`));
+    for (const game of gamesInLang) {
+        const cleanSlug = game.slug.split('/').slice(1).join('/');
+        paths.push({
+            params: { slug: `${lang}/game/${cleanSlug}` },
+            props: { type: 'game', lang, item: game }
+        });
+    }
+  }
+
+  return paths;
+}
+
+const { type, lang, item } = Astro.props;
+const { slug } = Astro.params;
+
+// Helper to render post content
+const { Content: PostContent } = type === 'post' ? await item.render() : { Content: null };
+
+// Helper to decide which game component to render
+const getGameComponent = (gameSlug: string) => {
+    // Check if it is Tower of Hanoi
+    if (gameSlug && gameSlug.includes('tower-of-hanoi')) {
+        return TowerOfHanoi;
+    }
+    return null;
+}
+
+const GameComponent = type === 'game' ? getGameComponent(item.slug) : null;
+---
+
+{type === 'home' && (
+    <meta http-equiv="refresh" content={`0;url=/${lang}/posts`} />
+)}
+
+{type === 'post-list' && (
+    <PostList lang={lang} />
+)}
+
+{type === 'game-list' && (
+    <GameList lang={lang} />
+)}
+
+{type === 'post' && (
+    <PostLayout title={item.data.title} lang={lang}>
+        <article class="prose lg:prose-xl mx-auto dark:prose-invert">
+            <h1>{item.data.title}</h1>
+            <PostContent />
+        </article>
+    </PostLayout>
+)}
+
+{type === 'game' && GameComponent && (
+    <GameComponent game={item} lang={lang} />
+)}
+
+{type === 'game' && !GameComponent && (
+    <div class="p-10 text-center">
+        <h1 class="text-2xl font-bold">Game Not Found (Component Missing)</h1>
+    </div>
+)}

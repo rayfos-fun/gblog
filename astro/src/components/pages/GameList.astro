@@ -3,24 +3,16 @@ import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
-export async function getStaticPaths() {
-  const allGames = await getCollection('games');
-  const languages = ['en', 'zh-tw', 'zh-cn'];
-
-  return languages.map((lang) => {
-    const gamesInLang = allGames.filter((game) => game.id.startsWith(`${lang}/`));
-    // sort (latest to oldest)
-    gamesInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
-
-    return {
-      params: { lang },
-      props: { games: gamesInLang },
-    };
-  });
+interface Props {
+  lang: string;
 }
 
-const { lang } = Astro.params;
-const { games } = Astro.props;
+const { lang } = Astro.props;
+
+const allGames = await getCollection('games');
+const games = allGames.filter((game) => game.id.startsWith(`${lang}/`));
+// sort (latest to oldest)
+games.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
 const translations = {
   'en': {

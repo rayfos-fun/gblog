@@ -3,24 +3,16 @@ import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
 
-export async function getStaticPaths() {
-  const allPosts = await getCollection('posts');
-  const languages = [...new Set(allPosts.map((post) => post.id.split('/')[0]))];
-
-  return languages.map((lang) => {
-    const postsInLang = allPosts.filter((post) => post.id.startsWith(`${lang}/`));
-    // sort (latest to oldest)
-    postsInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
-
-    return {
-      params: { lang },
-      props: { posts: postsInLang },
-    };
-  });
+interface Props {
+  lang: string;
 }
 
-const { lang } = Astro.params;
-const { posts } = Astro.props;
+const { lang } = Astro.props;
+
+const allPosts = await getCollection('posts');
+const posts = allPosts.filter((post) => post.id.startsWith(`${lang}/`));
+// sort (latest to oldest)
+posts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
 
 const translations = {
   'en': {
