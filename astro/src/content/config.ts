@@ -15,7 +15,7 @@ const gameCollection = defineCollection({
     date: z.string(),
     description: z.string().optional(),
     bgmSrc: z.string().optional(),
-  }),
+  }).catchall(z.any()),
 });
 
 export const collections = {
