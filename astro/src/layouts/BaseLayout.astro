@@ -16,6 +16,14 @@ const languages = [
   { code: 'zh-cn', label: '简体中文' },
 ];
 
+const navI18n = {
+  'en': { posts: 'Posts', games: 'Games', language: 'Language' },
+  'zh-tw': { posts: '文章', games: '遊戲', language: '語言' },
+  'zh-cn': { posts: '文章', games: '游戏', language: '语言' },
+};
+
+const tNav = navI18n[lang] || navI18n['en'];
+
 const otherLanguages = languages.filter((l) => l.code !== lang);
 ---
 
@@ -34,11 +42,11 @@ const otherLanguages = languages.filter((l) => l.code !== lang);
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
-          <li><a href={postLink}>Posts</a></li>
-          <li><a href="#">Games</a></li>
+          <li><a href={postLink}>{tNav.posts}</a></li>
+          <li><a href="#">{tNav.games}</a></li>
           <li>
             <details>
-              <summary>Language</summary>
+              <summary>{tNav.language}</summary>
               <ul class="p-2 bg-base-100 rounded-t-none">
                 {otherLanguages.map((l) => (
                   <li>
