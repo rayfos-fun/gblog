@@ -2,3 +2,19 @@ astro:content
   defineCollection
   z (zod)
 
+
+public  [built-in] static files
+src
+  assets  
+  components  
+  content  [built-in] schema (config.ts)
+    $COLLECTION
+  layouts
+  pages  [built-in] router
+  styles  
+
+
+# .astro
+---
+  export async function getStaticPaths() {...}
+---

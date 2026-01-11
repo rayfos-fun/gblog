@@ -27,6 +27,7 @@
 ../astro/src/layouts/PostLayout.astro
 ../astro/src/pages/index.astro
 ../astro/src/pages/[lang]/post/[...slug].astro
+../astro/tailwind.config.mjs
 ../astro/tsconfig.json
 
 ../jekyll-site/_config.yml
