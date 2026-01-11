@@ -7,7 +7,7 @@ interface Props {
 const { title, lang } = Astro.props;
 
 const homeLink = `/${lang}`;
-const postLink = `/${lang}/post`;
+const postLink = `/${lang}/posts`;
 const switchLangLink = lang === 'en' ? '/zh-tw' : '/en';
 const switchLangLabel = lang === 'en' ? '中文' : 'English';
 ---
@@ -26,7 +26,7 @@ const switchLangLabel = lang === 'en' ? '中文' : 'English';
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
-          <li><a href={postLink}>Post</a></li>
+          <li><a href={postLink}>Posts</a></li>
           <li><a href="#">Games</a></li> <li>
             <details>
               <summary>Language</summary>
