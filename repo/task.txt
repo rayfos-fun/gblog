@@ -26,6 +26,8 @@
 ../astro/src/content/posts/zh-cn/2026-01-09.md
 ../astro/src/content/posts/zh-tw/2026-01-07.md
 ../astro/src/content/posts/zh-tw/2026-01-09.md
+../astro/src/content/tools/en/loop-timer.md
+../astro/src/content/tools/zh-cn/loop-timer.md
 ../astro/src/content/tools/zh-tw/loop-timer.md
 ../astro/src/layouts/BaseLayout.astro  # header, nav, footer, ...etc.
 ../astro/src/layouts/GameLayout.astro  # based on BaseLayout

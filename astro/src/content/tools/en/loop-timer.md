@@ -1,6 +1,6 @@
 ---
 title: "Loop Timer"
-date: "2024-01-11"
+date: "2025-12-11"
 description: "Customizable loop timer with multiple phases and colors."
 ---
 
