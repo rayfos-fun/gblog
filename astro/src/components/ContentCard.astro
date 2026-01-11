@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  url: string;
+  date: string;
+  description: string;
+  isNew?: boolean;
+  readMoreText?: string;
+  locale?: string;
+  descriptionPlaceholder?: string;
+}
+
+const { 
+  title, 
+  url, 
+  date, 
+  description, 
+  isNew = false,
+  readMoreText = 'Read More',
+  locale = 'en-US',
+  descriptionPlaceholder = 'Click to read more...'
+} = Astro.props;
+---
+
+<div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl transition-shadow duration-300">
+  <div class="card-body">
+    
+    <h2 class="card-title">
+      <a href={url} class="hover:text-primary transition-colors">
+        {title}
+      </a>
+      {isNew && (
+        <div class="badge badge-secondary">NEW</div>
+      )}
+    </h2>
+
+    {/* date */}
+    <div class="text-sm text-base-content/70 mb-2">
+      {new Date(date).toLocaleDateString(locale)}
+    </div>
+    
+    {/* summary */}
+    <p class="line-clamp-3 text-base-content/80">
+      {description || descriptionPlaceholder}
+    </p>
+
+    {/* button */}
+    <div class="card-actions justify-end mt-4">
+      <a href={url} class="btn btn-primary btn-sm">
+        {readMoreText}
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+
+export async function getStaticPaths() {
+  const allGames = await getCollection('game');
+  // Assuming games have similar folder structure $LANG/$SLUG
+  const languages = ['en', 'zh-tw', 'zh-cn'];
+
+  return languages.map((lang) => {
+    const gamesInLang = allGames.filter((game) => game.id.startsWith(`${lang}/`));
+    // sort (latest to oldest)
+    gamesInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+    return {
+      params: { lang },
+      props: { games: gamesInLang },
+    };
+  });
+}
+
+const { lang } = Astro.params;
+const { games } = Astro.props;
+
+const translations = {
+  'en': {
+    metaTitlePrefix: 'Game List',
+    pageName: 'Games',
+    latestGames: 'Latest Games',
+    playNow: 'Play Now',
+    defaultDesc: 'Click to play...',
+    locale: 'en-US'
+  },
+  'zh-tw': {
+    metaTitlePrefix: '遊戲列表',
+    pageName: '遊戲',
+    latestGames: '最新遊戲',
+    playNow: '立即遊玩',
+    defaultDesc: '點擊開始遊玩...',
+    locale: 'zh-TW'
+  },
+  'zh-cn': {
+    metaTitlePrefix: '游戏列表',
+    pageName: '游戏',
+    latestGames: '最新游戏',
+    playNow: '立即游玩',
+    defaultDesc: '点击开始游玩...',
+    locale: 'zh-CN'
+  }
+};
+
+const t = translations[lang] || translations['en'];
+---
+
+<PostLayout title={`${t.metaTitlePrefix} | Rayfos`} lang={lang}>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">
+      {t.latestGames}
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {games.map((game) => {
+        const cleanSlug = game.slug.split('/').slice(1).join('/');
+        const gameUrl = `/${lang}/game/${cleanSlug}`;
+        
+        return (
+          <ContentCard 
+            title={game.data.title}
+            url={gameUrl}
+            date={game.data.date}
+            description={game.data.description}
+            isNew={Date.now() - new Date(game.data.date).getTime() < 30 * 24 * 60 * 60 * 1000} 
+            readMoreText={t.playNow}
+            locale={t.locale}
+            descriptionPlaceholder={t.defaultDesc}
+          />
+        );
+      })}
+    </div>
+  </div>
+
+</PostLayout>

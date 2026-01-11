@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('post');
@@ -66,38 +67,16 @@ const t = translations[lang] || translations['en'];
         const postUrl = `/${lang}/post/${cleanSlug}`;
         
         return (
-          // card of DaisyUI
-          <div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl transition-shadow duration-300">
-            <div class="card-body">
-              
-              <h2 class="card-title">
-                <a href={postUrl} class="hover:text-primary transition-colors">
-                  {post.data.title}
-                </a>
-                {/* show NEW for recent (7 days) posts */}
-                {Date.now() - new Date(post.data.date).getTime() < 7 * 24 * 60 * 60 * 1000 && (
-                  <div class="badge badge-secondary">NEW</div>
-                )}
-              </h2>
-
-              {/* date */}
-              <div class="text-sm text-base-content/70 mb-2">
-                {new Date(post.data.date).toLocaleDateString(t.locale)}
-              </div>
-              
-              {/* summary */}
-              <p class="line-clamp-3 text-base-content/80">
-                {post.data.description || t.defaultDesc}
-              </p>
-
-              {/* button */}
-              <div class="card-actions justify-end mt-4">
-                <a href={postUrl} class="btn btn-primary btn-sm">
-                  {t.readMore}
-                </a>
-              </div>
-            </div>
-          </div>
+          <ContentCard 
+            title={post.data.title}
+            url={postUrl}
+            date={post.data.date}
+            description={post.data.description}
+            isNew={Date.now() - new Date(post.data.date).getTime() < 7 * 24 * 60 * 60 * 1000}
+            readMoreText={t.readMore}
+            locale={t.locale}
+            descriptionPlaceholder={t.defaultDesc}
+          />
         );
       })}
     </div>
