@@ -11,13 +11,8 @@
 ../requirements.txt
 ../venv
 
-../astro/.gitignore
 ../astro/.vscode/extensions.json
 ../astro/.vscode/launch.json
-../astro/README.md
-../astro/astro.config.mjs
-../astro/package-lock.json
-../astro/package.json
 ../astro/public/favicon.svg
 ../astro/src/assets/astro.svg
 ../astro/src/assets/background.svg
@@ -27,6 +22,12 @@
 ../astro/src/layouts/PostLayout.astro
 ../astro/src/pages/index.astro
 ../astro/src/pages/[lang]/post/[...slug].astro
+../astro/src/pages/[lang]/post.astro
+../astro/.gitignore
+../astro/README.md
+../astro/astro.config.mjs
+../astro/package-lock.json
+../astro/package.json
 ../astro/tailwind.config.mjs
 ../astro/tsconfig.json
 

@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('post');
+
+  const languages = [...new Set(allPosts.map((post) => post.id.split('/')[0]))];
+
+  return languages.map((lang) => {
+    const postsInLang = allPosts.filter((post) => post.id.startsWith(`${lang}/`));
+    // sort (latest to oldest)
+    postsInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+    return {
+      params: { lang },
+      props: { posts: postsInLang },
+    };
+  });
+}
+
+const { lang } = Astro.params;
+const { posts } = Astro.props;
+---
+<PostLayout title={`文章列表 | ${lang === 'en' ? 'Blog' : '部落格'}`} lang={lang}>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">
+      {lang === 'en' ? 'Latest Posts' : '最新文章'}
+    </h1>
+
+    {/* 格狀佈局：手機單欄，平板以上雙欄 */}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {posts.map((post) => {
+        // 處理 Slug：移除語言前綴
+        const cleanSlug = post.slug.split('/').slice(1).join('/');
+        const postUrl = `/${lang}/post/${cleanSlug}`;
+        
+        return (
+          // 使用 DaisyUI 的 Card 元件
+          <div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl transition-shadow duration-300">
+            <div class="card-body">
+              
+              {/* 標題 */}
+              <h2 class="card-title">
+                <a href={postUrl} class="hover:text-primary transition-colors">
+                  {post.data.title}
+                </a>
+                {/* 如果是最近 7 天內的文章，顯示 NEW 標籤 (選用) */}
+                {Date.now() - new Date(post.data.date).getTime() < 7 * 24 * 60 * 60 * 1000 && (
+                  <div class="badge badge-secondary">NEW</div>
+                )}
+              </h2>
+
+              {/* 日期與摘要 */}
+              <div class="text-sm text-base-content/70 mb-2">
+                {new Date(post.data.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW')}
+              </div>
+              
+              {/* 摘要：如果 frontmatter 有 description 就顯示，沒有就留空 */}
+              <p class="line-clamp-3 text-base-content/80">
+                {post.data.description || '點擊閱讀更多...'}
+              </p>
+
+              {/* 按鈕區域 */}
+              <div class="card-actions justify-end mt-4">
+                <a href={postUrl} class="btn btn-primary btn-sm">
+                  {lang === 'en' ? 'Read More' : '閱讀全文'}
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+</PostLayout>
