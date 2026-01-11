@@ -10,6 +10,7 @@ const { pathname } = Astro.url;
 const homeLink = lang === 'en' ? '/' : `/${lang}`;
 const postLink = lang === 'en' ? '/posts' : `/${lang}/posts`;
 const gameLink = lang === 'en' ? '/games' : `/${lang}/games`;
+const toolLink = lang === 'en' ? '/tools' : `/${lang}/tools`;
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -18,9 +19,9 @@ const languages = [
 ];
 
 const navI18n = {
-  'en': { posts: 'Posts', games: 'Games', language: 'Language' },
-  'zh-tw': { posts: '文章', games: '遊戲', language: '語言' },
-  'zh-cn': { posts: '文章', games: '游戏', language: '语言' },
+  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', language: 'Language' },
+  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', language: '語言' },
+  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', language: '语言' },
 };
 
 const tNav = navI18n[lang] || navI18n['en'];
@@ -63,6 +64,7 @@ function getLangLink(targetLang: string) {
         <ul class="menu menu-horizontal px-1">
           <li><a href={postLink}>{tNav.posts}</a></li>
           <li><a href={gameLink}>{tNav.games}</a></li>
+          <li><a href={toolLink}>{tNav.tools}</a></li>
           <li>
             <details>
               <summary>{tNav.language}</summary>
