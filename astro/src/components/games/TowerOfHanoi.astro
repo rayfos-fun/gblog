@@ -11,7 +11,7 @@ const { i18n } = game.data;
 ---
 
 <GameLayout title={game.data.title} lang={lang as any} bgmSrc={game.data.bgmSrc}>
-    <div class="game-wrapper flex flex-col items-center gap-6 p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 shadow-2xl border-4 border-slate-200 dark:border-slate-700 max-w-4xl mx-auto my-8">
+    <div class="game-wrapper flex flex-col items-center gap-6 p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 shadow-2xl border-4 border-slate-200 dark:border-slate-700 max-w-4xl mx-auto my-8" data-i18n={JSON.stringify(i18n)}>
         <!-- Stats Dashboard -->
         <div class="grid grid-cols-2 gap-4 w-full max-w-lg mb-6">
             <!-- Move Count Card -->
@@ -68,163 +68,144 @@ const { i18n } = game.data;
         }
     </style>
     
-    <script define:vars={{ initialI18n: i18n }}>
+    <script>
+        import { HanoiEngine } from '../../lib/HanoiEngine';
+
+        // Vars from server-side (read from DOM)
+        const wrapper = document.querySelector('.game-wrapper') as HTMLElement;
+        const i18n = JSON.parse(wrapper.dataset.i18n || '{}');
+
         const CONFIG = {
             colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5', '#9B59B6'],
             pegColor: '#95a5a6',
-            messages: initialI18n.messages
+            messages: i18n.messages
         };
-    
-        let state = {
-            pegs: [[], [], []], // 三根柱子
-            selectedPeg: -1,    // 目前選中的柱子索引 (-1 代表沒選)
-            moves: 0,
-            totalDisks: 3,
-            gameOver: false
-        };
-    
-        // --- DOM 元素 ---
+
+        // --- Model Initialization ---
+        const diskSelect = document.getElementById('disk-select');
+        let totalDisks = parseInt(diskSelect.value);
+        const game = new HanoiEngine(totalDisks);
+        
+        // --- View State ---
+        let selectedPeg = -1;
+
+        // --- DOM Elements ---
         const canvas = document.getElementById('hanoi-canvas');
         const ctx = canvas.getContext('2d');
         const moveDisplay = document.getElementById('move-count');
         const msgDisplay = document.getElementById('message-area');
-        const diskSelect = document.getElementById('disk-select');
         const restartBtn = document.getElementById('restart-btn');
-    
-        // --- 遊戲邏輯 ---
-    
+
+        // --- Controller Logic ---
+
         function initGame() {
-            state.moves = 0;
-            state.selectedPeg = -1;
-            state.pegs = [[], [], []];
-            state.totalDisks = parseInt(diskSelect.value);
-            state.gameOver = false;
+            totalDisks = parseInt(diskSelect.value);
+            game.reset(totalDisks);
+            selectedPeg = -1;
             
-            // 初始化第一根柱子的盤子 (大在下，小在上)
-            for (let i = state.totalDisks; i >= 1; i--) {
-                state.pegs[0].push(i);
-            }
-    
             updateUI();
             draw();
-            showMessage(CONFIG.messages.start || "請點擊柱子開始移動");
+            showMessage(CONFIG.messages.start || "Click a peg to start");
         }
-    
+
         function handleInput(e) {
-            if (state.gameOver) return;
+            if (game.gameOver) return;
             const rect = canvas.getBoundingClientRect();
-            // 取得點擊相對於 Canvas 的 X 座標 (考慮縮放)
             const scaleX = canvas.width / rect.width;
             const x = (e.clientX - rect.left) * scaleX;
             
-            // 簡單判斷點擊了哪一根柱子 (將寬度三等分)
             const colWidth = canvas.width / 3;
             const pegIndex = Math.floor(x / colWidth);
-    
-            if (state.selectedPeg === -1) {
-                // 1. 還沒選柱子 -> 嘗試選取
-                if (state.pegs[pegIndex].length > 0) {
-                    state.selectedPeg = pegIndex;
-                    showMessage((CONFIG.messages.select || "選擇了柱子 ") + (pegIndex + 1));
+
+            if (selectedPeg === -1) {
+                // Select Peg
+                // Use engine to check if peg has disks
+                if (game.pegs[pegIndex].length > 0) {
+                    selectedPeg = pegIndex;
+                    showMessage((CONFIG.messages.select || "Selected peg ") + (pegIndex + 1));
                 } else {
                     showMessage(CONFIG.messages.empty);
                 }
             } else {
-                // 2. 已經選了柱子 -> 嘗試移動到新柱子
-                if (state.selectedPeg === pegIndex) {
-                    // 點同一根 -> 取消選取
-                    state.selectedPeg = -1;
-                    showMessage(CONFIG.messages.cancel || "取消選取");
+                // Move or Deselect
+                if (selectedPeg === pegIndex) {
+                    selectedPeg = -1;
+                    showMessage(CONFIG.messages.cancel || "Selection cancelled");
                 } else {
-                    attemptMove(state.selectedPeg, pegIndex);
+                    const result = game.attemptMove(selectedPeg, pegIndex);
+                    
+                    if (result === 'SUCCESS') {
+                        selectedPeg = -1;
+                        updateUI();
+                        // Check win is handled inside attemptMove return value 'GAME_OVER' 
+                        // but wait, attemptMove returns 'GAME_OVER' if it was the winning move?
+                        // My implementation returns 'GAME_OVER' if gameOver becomes true.
+                        // Let's re-verify engine logic in mind. 
+                        // Yes, if(checkWin()) { gameOver=true; return 'GAME_OVER' }
+                    } else if (result === 'GAME_OVER') {
+                        selectedPeg = -1;
+                        updateUI();
+                        showMessage(CONFIG.messages.win);
+                    } else if (result === 'INVALID') {
+                        showMessage(CONFIG.messages.warn);
+                         selectedPeg = -1;
+                    }
                 }
             }
             draw();
         }
-    
-        function attemptMove(from, to) {
-            const fromPeg = state.pegs[from];
-            const toPeg = state.pegs[to];
-            
-            const diskToMove = fromPeg[fromPeg.length - 1]; // 頂端盤子
-            const targetTopDisk = toPeg[toPeg.length - 1];  // 目標柱頂端盤子
-    
-            // 規則檢查：目標柱必須為空，或者目標盤子比移動盤子大
-            if (toPeg.length === 0 || targetTopDisk > diskToMove) {
-                toPeg.push(fromPeg.pop());
-                state.moves++;
-                state.selectedPeg = -1;
-                updateUI();
-                checkWin();
-            } else {
-                showMessage(CONFIG.messages.warn);
-                state.selectedPeg = -1; // 失敗後重置選取
-            }
-        }
-    
-        function checkWin() {
-            // 所有盤子都移到最後一根柱子 (或者第二根也可以)
-            if (state.pegs[2].length === state.totalDisks) {
-                state.gameOver = true;
-                showMessage(CONFIG.messages.win);
-            } else {
-                showMessage("");
-            }
-        }
-    
-        // --- 繪圖邏輯 ---
+
+        // --- View Logic (Pure Rendering) ---
         function draw() {
-            // 清空畫布
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
             const pegWidth = 10;
             const pegHeight = 200;
             const baseHeight = 20;
             const floorY = canvas.height - baseHeight;
             const colWidth = canvas.width / 3;
-    
-            // 畫底座
+
+            // Base
             ctx.fillStyle = '#34495e';
             ctx.fillRect(20, floorY, canvas.width - 40, baseHeight);
-    
-            // 畫三根柱子
+
+            // Pegs
             for (let i = 0; i < 3; i++) {
                 const centerX = i * colWidth + colWidth / 2;
                 
-                // 柱子本體
+                // Peg Body
                 ctx.fillStyle = CONFIG.pegColor;
                 ctx.fillRect(centerX - pegWidth / 2, floorY - pegHeight, pegWidth, pegHeight);
-    
-                // 高亮目前選取的柱子
-                if (state.selectedPeg === i) {
+
+                // Highlight Selection
+                if (selectedPeg === i) {
                     ctx.strokeStyle = '#f1c40f';
                     ctx.lineWidth = 4;
                     ctx.strokeRect(i * colWidth + 10, 10, colWidth - 20, canvas.height - 20);
                 }
-    
-                // 畫盤子
-                const pegDisks = state.pegs[i];
+
+                // Disks
+                // Read from Game Model
+                const pegDisks = game.pegs[i];
                 for (let j = 0; j < pegDisks.length; j++) {
-                    const diskSize = pegDisks[j]; // 1 (最小) ~ totalDisks (最大)
-                    // 計算盤子寬度：根據盤子大小比例
+                    const diskSize = pegDisks[j];
                     const maxDiskWidth = colWidth * 0.8;
                     const minDiskWidth = 40;
-                    const widthStep = (maxDiskWidth - minDiskWidth) / state.totalDisks;
+                    const widthStep = (maxDiskWidth - minDiskWidth) / game.totalDisks;
                     const width = minDiskWidth + (diskSize - 1) * widthStep;
                     
                     const height = 25;
                     const x = centerX - width / 2;
-                    const y = floorY - (j + 1) * height; // 由下往上堆疊
-    
-                    // 顏色循環
+                    const y = floorY - (j + 1) * height;
+
                     ctx.fillStyle = CONFIG.colors[(diskSize - 1) % CONFIG.colors.length];
                     ctx.beginPath();
-                    ctx.roundRect(x, y, width, height, 5); // 圓角矩形
+                    ctx.roundRect(x, y, width, height, 5);
                     ctx.fill();
                     ctx.strokeStyle = '#2c3e50';
                     ctx.stroke();
                     
-                    // 畫數字 (可選)
+                    // Number (Optional)
                     ctx.fillStyle = '#000';
                     ctx.font = '12px Arial';
                     ctx.textAlign = 'center';
@@ -232,27 +213,21 @@ const { i18n } = game.data;
                 }
             }
         }
-    
+
         function updateUI() {
-            moveDisplay.textContent = state.moves;
+            moveDisplay.textContent = game.moves;
         }
-    
+
         function showMessage(msg) {
             msgDisplay.textContent = msg;
         }
-    
-        // --- 事件監聽 ---
+
+        // --- Event Listeners ---
         canvas.addEventListener('click', handleInput);
-        
-        restartBtn.addEventListener('click', () => {
-            initGame();
-        });
-    
-        diskSelect.addEventListener('change', () => {
-            initGame();
-        });
-    
-        // 啟動
+        restartBtn.addEventListener('click', () => initGame());
+        diskSelect.addEventListener('change', () => initGame());
+
+        // Start
         initGame();
     </script>
 </GameLayout>
