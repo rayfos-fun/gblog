@@ -1,3 +1,4 @@
+import 'dotenv/config'; // Load .env file
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 
 let cachedSecrets: Record<string, string> | null = null;
@@ -8,14 +9,17 @@ export async function getSecrets() {
     }
 
     // Check if we are in development (using .env)
-    // We can use a heuristic: if GOOGLE_CLIENT_ID is already set in process.env, use that.
-    if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    // Check both process.env and import.meta.env (for Vite/Astro dev)
+    const envClientId = process.env.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+    const envClientSecret = process.env.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
+
+    if (envClientId && envClientSecret) {
         console.log('Using environment variables for config.');
         cachedSecrets = {
-            GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-            GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-            // Default to env or specific local fallback logic if needed
-            SECRET_KEY: process.env.SECRET_KEY || 'local-dev-secret'
+            GOOGLE_CLIENT_ID: envClientId,
+            GOOGLE_CLIENT_SECRET: envClientSecret,
+            GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || import.meta.env.GOOGLE_REDIRECT_URI || 'http://localhost:4321/auth/callback',
+            SECRET_KEY: process.env.SECRET_KEY || import.meta.env.SECRET_KEY || 'local-dev-secret'
         };
         return cachedSecrets;
     }

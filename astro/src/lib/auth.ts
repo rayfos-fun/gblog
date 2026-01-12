@@ -14,7 +14,13 @@ export async function getOAuthClient() {
     const CLIENT_SECRET = secrets?.GOOGLE_CLIENT_SECRET;
 
     // Redirect URI can often stay in env, or be passed in
-    const REDIRECT_URI = import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4321/auth/callback';
+    const REDIRECT_URI = secrets?.GOOGLE_REDIRECT_URI || import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4321/auth/callback';
+
+    console.log('OAuth Init:', {
+        hasClientId: !!CLIENT_ID,
+        hasClientSecret: !!CLIENT_SECRET,
+        redirectUri: REDIRECT_URI
+    });
 
     if (!CLIENT_ID || !CLIENT_SECRET) {
         console.warn('Missing Google Client ID/Secret in secrets/env');
