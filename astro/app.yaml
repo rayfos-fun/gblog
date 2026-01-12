@@ -1,0 +1,23 @@
+runtime: nodejs20
+instance_class: F2
+
+# Astro SSR environment variables
+env_variables:
+  # The host expected by Astro node adapter
+  HOST: '0.0.0.0'
+  # Node environment
+  NODE_ENV: 'production'
+
+handlers:
+  # Serve static files from dist/client/
+  - url: /_astro
+    static_dir: dist/client/_astro
+
+  # Serve other static assets if any (e.g., favicon, robots.txt in public/)
+  # Careful: static_dir uploads the folder. dist/client is the web root.
+  # We can map root files individually if needed or just let Node serve them (slower but simpler)
+  # Ideally, map specific static folders.
+
+  # Catch-all to Node.js app
+  - url: .*
+    script: auto
