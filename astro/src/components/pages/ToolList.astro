@@ -21,7 +21,8 @@ const translations = {
     latestTools: 'Latest Tools',
     tryNow: 'Try Now',
     defaultDesc: 'Click to try...',
-    locale: 'en-US'
+    locale: 'en-US',
+    new: 'NEW'
   },
   'zh-tw': {
     metaTitlePrefix: '工具列表',
@@ -29,7 +30,8 @@ const translations = {
     latestTools: '最新工具',
     tryNow: '立即試用',
     defaultDesc: '點擊開始試用...',
-    locale: 'zh-TW'
+    locale: 'zh-TW',
+    new: '新'
   },
   'zh-cn': {
     metaTitlePrefix: '工具列表',
@@ -37,7 +39,8 @@ const translations = {
     latestTools: '最新工具',
     tryNow: '立即试用',
     defaultDesc: '点击开始试用...',
-    locale: 'zh-CN'
+    locale: 'zh-CN',
+    new: '新'
   }
 };
 
@@ -67,6 +70,7 @@ const t = translations[lang] || translations['en'];
             readMoreText={t.tryNow}
             locale={t.locale}
             descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
           />
         );
       })}

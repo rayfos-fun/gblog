@@ -21,7 +21,8 @@ const translations = {
     latestPosts: 'Latest Posts',
     readMore: 'Read More',
     defaultDesc: 'Click to read more...',
-    locale: 'en-US'
+    locale: 'en-US',
+    new: 'NEW'
   },
   'zh-tw': {
     metaTitlePrefix: '文章列表',
@@ -29,7 +30,8 @@ const translations = {
     latestPosts: '最新文章',
     readMore: '閱讀全文',
     defaultDesc: '點擊閱讀更多...',
-    locale: 'zh-TW'
+    locale: 'zh-TW',
+    new: '新'
   },
   'zh-cn': {
     metaTitlePrefix: '文章列表',
@@ -37,7 +39,8 @@ const translations = {
     latestPosts: '最新文章',
     readMore: '阅读全文',
     defaultDesc: '点击阅读更多...',
-    locale: 'zh-CN'
+    locale: 'zh-CN',
+    new: '新'
   }
 };
 
@@ -68,6 +71,7 @@ const t = translations[lang] || translations['en'];
             readMoreText={t.readMore}
             locale={t.locale}
             descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
           />
         );
       })}

@@ -21,7 +21,8 @@ const translations = {
     latestGames: 'Latest Games',
     playNow: 'Play Now',
     defaultDesc: 'Click to play...',
-    locale: 'en-US'
+    locale: 'en-US',
+    new: 'NEW'
   },
   'zh-tw': {
     metaTitlePrefix: '遊戲列表',
@@ -29,7 +30,8 @@ const translations = {
     latestGames: '最新遊戲',
     playNow: '立即遊玩',
     defaultDesc: '點擊開始遊玩...',
-    locale: 'zh-TW'
+    locale: 'zh-TW',
+    new: '新'
   },
   'zh-cn': {
     metaTitlePrefix: '游戏列表',
@@ -37,7 +39,8 @@ const translations = {
     latestGames: '最新游戏',
     playNow: '立即游玩',
     defaultDesc: '点击开始游玩...',
-    locale: 'zh-CN'
+    locale: 'zh-CN',
+    new: '新'
   }
 };
 
@@ -67,6 +70,7 @@ const t = translations[lang] || translations['en'];
             readMoreText={t.playNow}
             locale={t.locale}
             descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
           />
         );
       })}

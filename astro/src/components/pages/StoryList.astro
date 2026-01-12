@@ -21,7 +21,8 @@ const translations = {
     latestStories: 'Latest Stories',
     readMore: 'Read',
     defaultDesc: 'Click to read...',
-    locale: 'en-US'
+    locale: 'en-US',
+    new: 'NEW'
   },
   'zh-tw': {
     metaTitlePrefix: '故事列表',
@@ -29,7 +30,8 @@ const translations = {
     latestStories: '最新故事',
     readMore: '閱讀',
     defaultDesc: '點擊閱讀...',
-    locale: 'zh-TW'
+    locale: 'zh-TW',
+    new: '新'
   },
   'zh-cn': {
     metaTitlePrefix: '故事列表',
@@ -37,7 +39,8 @@ const translations = {
     latestStories: '最新故事',
     readMore: '阅读',
     defaultDesc: '点击阅读...',
-    locale: 'zh-CN'
+    locale: 'zh-CN',
+    new: '新'
   }
 };
 
@@ -67,6 +70,7 @@ const t = translations[lang] || translations['en'];
             readMoreText={t.readMore}
             locale={t.locale}
             descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
           />
         );
       })}
