@@ -1,6 +1,6 @@
 ---
 title: "Peg Solitaire"
-date: "2024-01-11"
+date: "2026-01-01"
 description: "A classic strategy board game for one player involving movement of pegs on a board with holes."
 bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 i18n:

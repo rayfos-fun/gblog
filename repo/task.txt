@@ -19,7 +19,12 @@
 ../astro/src/components/Welcome.astro
 ../astro/src/components/ContentCard.astro
 ../astro/src/content/config.ts  # schema
+../astro/src/content/games/en/tower-of-hanoi.md
+../astro/src/content/games/en/peg-solitaire.md
+../astro/src/content/games/zh-cn/tower-of-hanoi.md
+../astro/src/content/games/zh-cn/peg-solitaire.md
 ../astro/src/content/games/zh-tw/tower-of-hanoi.md
+../astro/src/content/games/zh-tw/peg-solitaire.md
 ../astro/src/content/posts/en/2026-01-07.md
 ../astro/src/content/posts/en/2026-01-09.md
 ../astro/src/content/posts/zh-cn/2026-01-07.md

@@ -1,6 +1,6 @@
 ---
 title: "Tower of Hanoi"
-date: "2024-01-11"
+date: "2025-12-25"
 description: "Classic mathematical recursive puzzle game"
 bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 i18n:

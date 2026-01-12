@@ -1,6 +1,6 @@
 ---
 title: "汉诺塔 (Tower of Hanoi)"
-date: "2024-01-11"
+date: "2025-12-25"
 description: "经典的数学递归益智游戏"
 bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 i18n:

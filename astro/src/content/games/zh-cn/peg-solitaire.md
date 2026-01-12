@@ -1,6 +1,6 @@
 ---
 title: "孔明棋 (Peg Solitaire)"
-date: "2024-01-11"
+date: "2026-01-01"
 description: "经典的单人策略益智游戏，挑战只剩下一颗棋子在中央。"
 bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 i18n:

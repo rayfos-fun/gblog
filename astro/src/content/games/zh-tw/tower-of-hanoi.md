@@ -1,6 +1,6 @@
 ---
 title: "河內塔 (Tower of Hanoi)"
-date: "2024-01-11"
+date: "2025-12-25"
 description: "經典的數學遞迴益智遊戲"
 bgmSrc: "https://storage.googleapis.com/rayfos-bucket/audio/soft_theme.mp3"
 i18n:
