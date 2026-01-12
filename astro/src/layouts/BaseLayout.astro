@@ -22,9 +22,9 @@ const languages = [
 ];
 
 const navI18n = {
-  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language', login: 'Login', logout: 'Logout', privacyPolicy: 'Privacy Policy' },
-  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言', login: '登入', logout: '登出', privacyPolicy: '隱私權政策' },
-  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言', login: '登录', logout: '登出', privacyPolicy: '隐私权政策' },
+  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language', login: 'Login', logout: 'Logout', privacyPolicy: 'Privacy Policy', contact: 'Contact' },
+  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言', login: '登入', logout: '登出', privacyPolicy: '隱私權政策', contact: '聯絡我們' },
+  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言', login: '登录', logout: '登出', privacyPolicy: '隐私权政策', contact: '联系我们' },
 };
 
 const tNav = navI18n[lang] || navI18n['en'];
@@ -196,7 +196,7 @@ function getLangLink(targetLang: string) {
     <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
       <nav class="grid grid-flow-col gap-4">
 
-        <a href="#" class="link link-hover">Contact</a>
+        <a href="mailto:rayfos@rayfos.fun" class="link link-hover">{tNav.contact}</a>
         <a href={lang === 'en' ? '/privacy-policy' : `/${lang}/privacy-policy`} class="link link-hover">{tNav.privacyPolicy}</a>
       </nav> 
       <nav>
