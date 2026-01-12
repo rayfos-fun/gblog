@@ -20,9 +20,9 @@ const languages = [
 ];
 
 const navI18n = {
-  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language' },
-  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言' },
-  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言' },
+  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language', login: 'Login', logout: 'Logout' },
+  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言', login: '登入', logout: '登出' },
+  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言', login: '登录', logout: '登出' },
 };
 
 const tNav = navI18n[lang] || navI18n['en'];
@@ -119,9 +119,41 @@ function getLangLink(targetLang: string) {
               </ul>
             </details>
           </li>
+          {/* Login/User Section */}
+          <li>
+            <a id="login-btn" href="/login" class="hidden">{tNav.login}</a>
+            <div id="user-info" class="hidden flex items-center gap-2">
+                <img id="user-avatar" src="" alt="User Avatar" class="w-8 h-8 rounded-full" />
+                <span id="user-name" class="max-w-[100px] truncate hidden md:inline"></span>
+                <a href="/logout" class="text-xs opacity-70 hover:opacity-100 ml-1">({tNav.logout})</a>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
+    
+    <script is:inline>
+      // Auth Check
+      fetch('/api/me')
+        .then(res => res.json())
+        .then(data => {
+            const loginBtn = document.getElementById('login-btn');
+            const userInfo = document.getElementById('user-info');
+            
+            if (data.authed) {
+                if (userInfo) {
+                    userInfo.classList.remove('hidden');
+                    const avatar = document.getElementById('user-avatar');
+                    if (avatar) avatar.src = data.picture;
+                    const name = document.getElementById('user-name');
+                    if (name) name.textContent = data.nickname || data.name;
+                }
+            } else {
+                if (loginBtn) loginBtn.classList.remove('hidden');
+            }
+        })
+        .catch(err => console.log('Auth check failed', err));
+    </script>
 
     <main class="flex-grow container mx-auto px-4 py-8">
       <slot />
