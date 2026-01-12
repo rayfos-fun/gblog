@@ -7,6 +7,7 @@ import StoryList from '../components/pages/StoryList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
 import PegSolitaire from '../components/games/PegSolitaire.astro';
 import Memory from '../components/games/Memory.astro';
+import LightsOut from '../components/games/LightsOut.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
 
@@ -138,6 +139,9 @@ const getGameComponent = (gameSlug: string) => {
     }
     if (gameSlug && gameSlug.includes('memory')) {
         return Memory;
+    }
+    if (gameSlug && gameSlug.includes('lights-out')) {
+        return LightsOut;
     }
     return null;
 }
