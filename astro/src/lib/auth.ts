@@ -9,6 +9,13 @@ export async function createOAuthClient(requestUrl?: URL) {
     // 1. Try environment / secret
     let redirectUri = secrets?.GOOGLE_REDIRECT_URI || import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI;
 
+    // Safety check: specific to preventing localhost redirect in production
+    // If we have a requestUrl that isn't localhost, but the config is localhost, ignore the config.
+    if (redirectUri && redirectUri.includes('localhost') && requestUrl && !requestUrl.hostname.includes('localhost')) {
+        console.warn('Ignoring localhost redirect_uri in production context');
+        redirectUri = undefined;
+    }
+
     // 2. Fallback to constructing from request origin (most robust for dynamic hosts)
     if (!redirectUri && requestUrl) {
         redirectUri = `${requestUrl.origin}/auth/callback`;
