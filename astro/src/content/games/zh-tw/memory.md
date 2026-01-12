@@ -1,6 +1,6 @@
 ---
 title: "記憶力大考驗 (Memory Challenge)"
-date: "2024-01-11"
+date: "2025-12-18"
 description: "測試你的記憶力！觀察顏色順序並重複它。你能記住幾關？"
 bgmSrc: ""
 i18n:

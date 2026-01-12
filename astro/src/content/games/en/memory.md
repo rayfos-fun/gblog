@@ -1,6 +1,6 @@
 ---
 title: "Memory Challenge"
-date: "2024-01-11"
+date: "2025-12-18"
 description: "Test your memory! Watch the sequence and repeat it. How far can you go?"
 bgmSrc: ""
 i18n:
