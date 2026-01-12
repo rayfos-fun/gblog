@@ -59,11 +59,11 @@ For more information on how these services handle your data, please refer to the
 ## 6. Data Retention and Deletion
 
 * **Retention:** We retain your comment content and related profile information as long as your comments remain on the website.
-* **Deletion:** You have the right to request the deletion of your personal data. If you wish to remove your comments and related data, please contact us at **rayfos.fun@gmail.com**. We will process your request within 30 days.
+* **Deletion:** You have the right to request the deletion of your personal data. If you wish to remove your comments and related data, please contact us at **rayfos [at] rayfos.fun**. We will process your request within 30 days.
 
 ## 7. Contact Us
 
 If you have any questions about this Privacy Policy, please contact us at:
 
-* **Email:** [rayfos.fun@gmail.com](mailto:rayfos.fun@gmail.com)
+* **Email:** [rayfos [at] rayfos.fun](mailto:rayfos [at] rayfos.fun)
 * **Website:** [https://rayfos.fun](https://rayfos.fun)

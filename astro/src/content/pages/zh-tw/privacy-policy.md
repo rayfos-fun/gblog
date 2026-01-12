@@ -59,11 +59,11 @@ description: Rayfos.fun 隱私權政策
 ## 6. 資料保留與刪除
 
 * **保留：** 只要您的留言保留在網站上，我們會持續保留您的留言內容及相關的個人檔案資訊。
-* **刪除：** 您有權要求刪除您的個人資料。如果您希望移除您的留言及相關數據，請透過 **rayfos.fun@gmail.com** 聯絡我們。我們將在 30 天內處理您的請求。
+* **刪除：** 您有權要求刪除您的個人資料。如果您希望移除您的留言及相關數據，請透過 **rayfos [at] rayfos.fun** 聯絡我們。我們將在 30 天內處理您的請求。
 
 ## 7. 聯絡我們
 
 如果您對本隱私權政策有任何疑問，請透過以下方式聯絡我們：
 
-* **Email：** [rayfos.fun@gmail.com](mailto:rayfos.fun@gmail.com)
+* **Email：** [rayfos [at] rayfos.fun](mailto:rayfos [at] rayfos.fun)
 * **網站：** [https://rayfos.fun](https://rayfos.fun)

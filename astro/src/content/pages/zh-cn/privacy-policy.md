@@ -59,11 +59,11 @@ description: Rayfos.fun 隐私权政策
 ## 6. 资料保留与删除
 
 * **保留：** 只要您的留言保留在网站上，我们会持续保留您的留言内容及相关的个人档案信息。
-* **删除：** 您有权要求删除您的个人资料。如果您希望移除您的留言及相关数据，请通过 **rayfos.fun@gmail.com** 联络我们。我们将在 30 天内处理您的请求。
+* **删除：** 您有权要求删除您的个人资料。如果您希望移除您的留言及相关数据，请通过 **rayfos [at] rayfos.fun** 联络我们。我们将在 30 天内处理您的请求。
 
 ## 7. 联络我们
 
 如果您对本隐私权政策有任何疑问，请通过以下方式联络我们：
 
-* **Email：** [rayfos.fun@gmail.com](mailto:rayfos.fun@gmail.com)
+* **Email：** [rayfos [at] rayfos.fun](mailto:rayfos [at] rayfos.fun)
 * **网站：** [https://rayfos.fun](https://rayfos.fun)
