@@ -22,9 +22,9 @@ const languages = [
 ];
 
 const navI18n = {
-  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language', login: 'Login', logout: 'Logout' },
-  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言', login: '登入', logout: '登出' },
-  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言', login: '登录', logout: '登出' },
+  'en': { posts: 'Posts', games: 'Games', tools: 'Tools', stories: 'Stories', language: 'Language', login: 'Login', logout: 'Logout', privacyPolicy: 'Privacy Policy' },
+  'zh-tw': { posts: '文章', games: '遊戲', tools: '工具', stories: '故事', language: '語言', login: '登入', logout: '登出', privacyPolicy: '隱私權政策' },
+  'zh-cn': { posts: '文章', games: '游戏', tools: '工具', stories: '故事', language: '语言', login: '登录', logout: '登出', privacyPolicy: '隐私权政策' },
 };
 
 const tNav = navI18n[lang] || navI18n['en'];
@@ -197,7 +197,7 @@ function getLangLink(targetLang: string) {
       <nav class="grid grid-flow-col gap-4">
         <a href="#" class="link link-hover">About us</a>
         <a href="#" class="link link-hover">Contact</a>
-        <a href="#" class="link link-hover">Privacy Policy</a>
+        <a href={lang === 'en' ? '/privacy-policy' : `/${lang}/privacy-policy`} class="link link-hover">{tNav.privacyPolicy}</a>
       </nav> 
       <nav>
         <div class="grid grid-flow-col gap-4">

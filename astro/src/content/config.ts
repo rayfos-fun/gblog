@@ -35,9 +35,18 @@ const storiesCollection = defineCollection({
   }),
 });
 
+const pagesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
 export const collections = {
   'games': gamesCollection,
   'posts': postsCollection,
   'tools': toolsCollection,
   'stories': storiesCollection,
+  'pages': pagesCollection,
 };

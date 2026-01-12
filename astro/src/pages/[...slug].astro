@@ -117,6 +117,17 @@ export async function getStaticPaths() {
             props: { type: 'story', lang, item: story }
         });
     }
+
+    // 9. Static Pages (like Privacy Policy)
+    const allPages = await getCollection('pages');
+    const pagesInLang = allPages.filter(s => s.id.startsWith(`${lang}/`));
+    for (const page of pagesInLang) {
+        const cleanSlug = page.slug.split('/').slice(1).join('/');
+        paths.push({
+            params: { slug: isEn ? `${cleanSlug}` : `${lang}/${cleanSlug}` },
+            props: { type: 'page', lang, item: page }
+        });
+    }
   }
 
   return paths;
@@ -126,7 +137,7 @@ const { type, lang, item } = Astro.props;
 const { slug } = Astro.params;
 
 // Helper to render post content
-const { Content: PostContent } = (type === 'post' || type === 'tool' || type === 'story') ? await item.render() : { Content: null };
+const { Content: PostContent } = (type === 'post' || type === 'tool' || type === 'story' || type === 'page') ? await item.render() : { Content: null };
 
 // Helper to decide which game component to render
 const getGameComponent = (gameSlug: string) => {
@@ -188,6 +199,15 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 {type === 'story' && (
     <PostLayout title={item.data.title} lang={lang}>
         <article class="prose lg:prose-xl mx-auto dark:prose-invert">
+            <h1>{item.data.title}</h1>
+            <PostContent />
+        </article>
+    </PostLayout>
+)}
+
+{type === 'page' && (
+    <PostLayout title={item.data.title} lang={lang}>
+        <article class="prose lg:prose-xl mx-auto dark:prose-invert mb-8">
             <h1>{item.data.title}</h1>
             <PostContent />
         </article>
