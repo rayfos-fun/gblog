@@ -1,42 +1,40 @@
 import { OAuth2Client } from 'google-auth-library';
 import { getSecrets } from './secrets';
 
-let oAuth2ClientInstance: OAuth2Client | null = null;
-
-export async function getOAuthClient() {
-    if (oAuth2ClientInstance) {
-        return oAuth2ClientInstance;
-    }
-
+export async function createOAuthClient(requestUrl?: URL) {
     const secrets = await getSecrets();
-
     const CLIENT_ID = secrets?.GOOGLE_CLIENT_ID;
     const CLIENT_SECRET = secrets?.GOOGLE_CLIENT_SECRET;
 
-    // Redirect URI can often stay in env, or be passed in
-    const REDIRECT_URI = secrets?.GOOGLE_REDIRECT_URI || import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4321/auth/callback';
+    // 1. Try environment / secret
+    let redirectUri = secrets?.GOOGLE_REDIRECT_URI || import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI;
 
-    console.log('OAuth Init:', {
-        hasClientId: !!CLIENT_ID,
-        hasClientSecret: !!CLIENT_SECRET,
-        redirectUri: REDIRECT_URI
-    });
+    // 2. Fallback to constructing from request origin (most robust for dynamic hosts)
+    if (!redirectUri && requestUrl) {
+        redirectUri = `${requestUrl.origin}/auth/callback`;
+    }
+
+    // 3. Fallback to localhost default
+    if (!redirectUri) {
+        redirectUri = 'http://localhost:4321/auth/callback';
+    }
 
     if (!CLIENT_ID || !CLIENT_SECRET) {
         console.warn('Missing Google Client ID/Secret in secrets/env');
     }
 
-    oAuth2ClientInstance = new OAuth2Client(
+    // Debug (optional, remove in strict prod if too noisy)
+    // console.log('Creating OAuth Client with redirect:', redirectUri);
+
+    return new OAuth2Client(
         CLIENT_ID,
         CLIENT_SECRET,
-        REDIRECT_URI
+        redirectUri
     );
-
-    return oAuth2ClientInstance;
 }
 
-export async function getAuthUrl(state?: string) {
-    const client = await getOAuthClient();
+export async function getAuthUrl(requestUrl: URL, state?: string) {
+    const client = await createOAuthClient(requestUrl);
     return client.generateAuthUrl({
         access_type: 'offline',
         scope: ['openid', 'email', 'profile'],

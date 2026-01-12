@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ redirect, url }) => {
     const next = url.searchParams.get('next') || '/';
     // We could encode 'next' in the state param
 
-    const authUrl = await getAuthUrl(next);
+    const authUrl = await getAuthUrl(url, next);
 
     return redirect(authUrl);
 }

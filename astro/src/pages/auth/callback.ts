@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getOAuthClient } from '@/lib/auth';
+import { createOAuthClient } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { serialize } from 'cookie';
 import { getSecrets } from '@/lib/secrets';
@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ request, redirect }) => {
     }
 
     try {
-        const oAuth2Client = await getOAuthClient();
+        const oAuth2Client = await createOAuthClient(url);
         const { tokens } = await oAuth2Client.getToken(code);
         oAuth2Client.setCredentials(tokens);
 
