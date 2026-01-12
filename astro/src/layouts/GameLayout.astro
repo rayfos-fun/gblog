@@ -28,36 +28,40 @@ const t = i18n[lang] || i18n['en'];
       
       <div class="flex items-center gap-6 text-sm">
         
-        <div class="flex items-center gap-2">
-          <label for="bgm-toggle" class="font-medium text-slate-300 cursor-pointer select-none">
-            {t.bgmLabel}
-          </label>
-          <button 
-            id="bgm-toggle" 
-            class="group flex items-center justify-center w-10 h-8 rounded border border-slate-500/50 bg-slate-700/30 hover:bg-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400"
-            aria-pressed="false"
-            title={t.bgmLabel}
-          >
-            <span class="text-lg leading-none hidden group-aria-[pressed=true]:block">🔊</span>
-            <span class="text-lg leading-none block group-aria-[pressed=true]:hidden">🔇</span>
-          </button>
-        </div>
+        {bgmSrc && (
+          <>
+            <div class="flex items-center gap-2">
+              <label for="bgm-toggle" class="font-medium text-slate-300 cursor-pointer select-none">
+                {t.bgmLabel}
+              </label>
+              <button 
+                id="bgm-toggle" 
+                class="group flex items-center justify-center w-10 h-8 rounded border border-slate-500/50 bg-slate-700/30 hover:bg-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400"
+                aria-pressed="false"
+                title={t.bgmLabel}
+              >
+                <span class="text-lg leading-none hidden group-aria-[pressed=true]:block">🔊</span>
+                <span class="text-lg leading-none block group-aria-[pressed=true]:hidden">🔇</span>
+              </button>
+            </div>
 
-        <div class="flex items-center gap-2">
-          <label for="bgm-volume" class="font-medium text-slate-300 cursor-pointer select-none">
-            {t.volLabel}
-          </label>
-          <input 
-            type="range" 
-            id="bgm-volume" 
-            min="0" 
-            max="1" 
-            step="0.05" 
-            value="0.5"
-            aria-label={t.volLabel}
-            class="w-24 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-          >
-        </div>
+            <div class="flex items-center gap-2">
+              <label for="bgm-volume" class="font-medium text-slate-300 cursor-pointer select-none">
+                {t.volLabel}
+              </label>
+              <input 
+                type="range" 
+                id="bgm-volume" 
+                min="0" 
+                max="1" 
+                step="0.05" 
+                value="0.5"
+                aria-label={t.volLabel}
+                class="w-24 h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+              >
+            </div>
+          </>
+        )}
 
       </div>
     </div>
