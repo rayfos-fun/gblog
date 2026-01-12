@@ -5,6 +5,7 @@ interface Props {
 }
 
 import Comments from '@/components/Comments.astro';
+import ObfuscatedMail from '@/components/ObfuscatedMail.astro';
 
 const { title, lang } = Astro.props;
 const { pathname } = Astro.url;
@@ -196,7 +197,7 @@ function getLangLink(targetLang: string) {
     <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
       <nav class="grid grid-flow-col gap-4">
 
-        <a href="mailto:rayfos@rayfos.fun" class="link link-hover">{tNav.contact}</a>
+        <ObfuscatedMail user="rayfos" domain="rayfos.fun" class="link link-hover" title={tNav.contact} />
         <a href={lang === 'en' ? '/privacy-policy' : `/${lang}/privacy-policy`} class="link link-hover">{tNav.privacyPolicy}</a>
       </nav> 
       <nav>

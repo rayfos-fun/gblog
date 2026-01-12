@@ -1,0 +1,44 @@
+---
+interface Props {
+  user: string;
+  domain: string;
+  class?: string;
+  title?: string; // Optional title/label override, otherwise defaults to email
+}
+
+const { user, domain, class: className, title } = Astro.props;
+---
+
+<a href="#" class={className} data-obfuscated-user={user} data-obfuscated-domain={domain} title={title}>
+  {title || '[Email Protected]'}
+</a>
+
+<script>
+  // Simple obfuscation to prevent simple scrapers
+  const links = document.querySelectorAll('a[data-obfuscated-user]');
+  
+  links.forEach(link => {
+    const el = link as HTMLAnchorElement;
+    const user = el.dataset.obfuscatedUser;
+    const domain = el.dataset.obfuscatedDomain;
+    
+    // Add event listener to construct mailto on hover or focus to delay exposing it even further
+    // Or just set it immediately on load (client-side) which defeats static scrapers.
+    // Let's set it on load but obfuscate the logic slightly.
+    
+    if (user && domain) {
+      const email = `${user}@${domain}`;
+      
+      // Update href
+      el.href = `mailto:${email}`;
+      
+      // Update text content if it's the default placeholder or if we want to show the email
+      // If a specific title/label was provided (like "Contact Us"), we might want to keep it.
+      // But typically "ObfuscatedMail" implies showing the mail. 
+      // The user requirement says: "It should set the visible text content to user@domain".
+      if (!el.getAttribute('title')) {
+          el.textContent = email;
+      }
+    }
+  });
+</script>
