@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
-import { oAuth2Client } from '@/lib/auth';
+import { getOAuthClient } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { serialize } from 'cookie';
+import { getSecrets } from '@/lib/secrets';
 
 export const prerender = false;
 
@@ -11,17 +12,20 @@ export const GET: APIRoute = async ({ request, redirect }) => {
     const state = url.searchParams.get('state') || '/'; // next url
 
     if (!code) {
-        return new Response('Missing code', { status: 400 });
+        return new Response('Missing code. URL: ' + request.url, { status: 400 });
     }
 
     try {
+        const oAuth2Client = await getOAuthClient();
         const { tokens } = await oAuth2Client.getToken(code);
         oAuth2Client.setCredentials(tokens);
+
+        const secrets = await getSecrets();
 
         // Verify ID Token
         const ticket = await oAuth2Client.verifyIdToken({
             idToken: tokens.id_token!,
-            audience: import.meta.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID,
+            audience: secrets?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID,
         });
         const payload = ticket.getPayload();
 

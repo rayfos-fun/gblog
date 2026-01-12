@@ -1,22 +1,37 @@
 import { OAuth2Client } from 'google-auth-library';
+import { getSecrets } from './secrets';
 
-const CLIENT_ID = import.meta.env.GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.GOOGLE_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET;
-// Default to localhost for dev, but this should be configured
-const REDIRECT_URI = import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI || 'http://127.0.0.1:4321/auth/callback';
+let oAuth2ClientInstance: OAuth2Client | null = null;
 
-if (!CLIENT_ID || !CLIENT_SECRET) {
-    console.warn('Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET env variables.');
+export async function getOAuthClient() {
+    if (oAuth2ClientInstance) {
+        return oAuth2ClientInstance;
+    }
+
+    const secrets = await getSecrets();
+
+    const CLIENT_ID = secrets?.GOOGLE_CLIENT_ID;
+    const CLIENT_SECRET = secrets?.GOOGLE_CLIENT_SECRET;
+
+    // Redirect URI can often stay in env, or be passed in
+    const REDIRECT_URI = import.meta.env.GOOGLE_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4321/auth/callback';
+
+    if (!CLIENT_ID || !CLIENT_SECRET) {
+        console.warn('Missing Google Client ID/Secret in secrets/env');
+    }
+
+    oAuth2ClientInstance = new OAuth2Client(
+        CLIENT_ID,
+        CLIENT_SECRET,
+        REDIRECT_URI
+    );
+
+    return oAuth2ClientInstance;
 }
 
-export const oAuth2Client = new OAuth2Client(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    REDIRECT_URI
-);
-
-export function getAuthUrl(state?: string) {
-    return oAuth2Client.generateAuthUrl({
+export async function getAuthUrl(state?: string) {
+    const client = await getOAuthClient();
+    return client.generateAuthUrl({
         access_type: 'offline',
         scope: ['openid', 'email', 'profile'],
         include_granted_scopes: true,
