@@ -4,6 +4,8 @@ interface Props {
   lang: string;
 }
 
+import Comments from '@/components/Comments.astro';
+
 const { title, lang } = Astro.props;
 const { pathname } = Astro.url;
 
@@ -157,6 +159,7 @@ function getLangLink(targetLang: string) {
 
     <main class="flex-grow container mx-auto px-4 py-8">
       <slot />
+      <Comments lang={lang as any} />
     </main>
 
     <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">

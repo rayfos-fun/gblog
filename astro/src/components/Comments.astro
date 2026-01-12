@@ -1,0 +1,219 @@
+---
+interface Props {
+  lang?: 'en' | 'zh-cn' | 'zh-tw';
+}
+
+const { lang = 'en' } = Astro.props;
+
+const i18n = {
+  'en': {
+    header: 'Comments',
+    placeholder: 'Write a comment... (max 1000 bytes)',
+    postBtn: 'Post Comment',
+    loginPrefix: 'Please',
+    loginLink: 'login',
+    loginSuffix: 'to leave a comment.',
+    loading: 'Loading comments...',
+    noComments: 'No comments yet. Be the first!',
+    anonymous: 'Anonymous',
+    tooLong: 'Comment is too long (max 1000 bytes).',
+    posting: 'Posting...',
+    postErrorPrefix: 'Error posting comment: ',
+    postErrorGeneric: 'Error posting comment.',
+    loadError: 'Error loading comments.',
+    unknownError: 'Unknown error'
+  },
+  'zh-tw': {
+    header: '留言',
+    placeholder: '寫下您的留言... (最多 1000 字節)',
+    postBtn: '發布留言',
+    loginPrefix: '請',
+    loginLink: '登入',
+    loginSuffix: '以發表留言。',
+    loading: '載入留言中...',
+    noComments: '尚無留言，成為第一個留言的人吧！',
+    anonymous: '無名',
+    tooLong: '留言過長 (最多 1000 字節)。',
+    posting: '發布中...',
+    postErrorPrefix: '發布留言錯誤：',
+    postErrorGeneric: '發布留言失敗。',
+    loadError: '載入留言失敗。',
+    unknownError: '未知錯誤'
+  },
+  'zh-cn': {
+    header: '评论',
+    placeholder: '写下您的留言... (最多 1000 字节)',
+    postBtn: '发布评论',
+    loginPrefix: '请',
+    loginLink: '登录',
+    loginSuffix: '以发表评论。',
+    loading: '加载评论中...',
+    noComments: '暂无评论，成为第一个评论的人吧！',
+    anonymous: '无名',
+    tooLong: '评论过长 (最多 1000 字节)。',
+    posting: '发布中...',
+    postErrorPrefix: '发布评论错误：',
+    postErrorGeneric: '发布评论失败。',
+    loadError: '加载评论失败。',
+    unknownError: '未知错误'
+  }
+};
+
+const t = i18n[lang] || i18n['en'];
+const currentPath = Astro.url.pathname;
+const loginUrl = `/login?next=${currentPath}`;
+---
+
+<div class="comments-section mt-8 pt-8 border-t border-base-300" data-ui-text={JSON.stringify(t)}>
+    <h3 class="text-2xl font-bold mb-4">{t.header}</h3>
+    
+    <div id="comments-list" class="space-y-4">
+        <p class="text-gray-500">{t.loading}</p>
+    </div>
+
+    <div id="comment-form-container" class="hidden mt-6">
+        <textarea 
+            id="comment-content" 
+            rows="4" 
+            class="textarea textarea-bordered w-full"
+            placeholder={t.placeholder}
+            maxlength="1000"
+        ></textarea>
+        <div class="mt-2 text-right">
+            <button id="submit-comment" class="btn btn-primary">
+                {t.postBtn}
+            </button>
+        </div>
+    </div>
+
+    <div id="login-container" class="hidden mt-6 text-center bg-base-200 p-4 rounded-lg">
+        <p>
+            {t.loginPrefix} <a href={loginUrl} class="link link-primary font-bold">{t.loginLink}</a> {t.loginSuffix}
+        </p>
+    </div>
+</div>
+
+<script>
+    const container = document.querySelector('.comments-section') as HTMLElement;
+    if (container) {
+        const uiText = JSON.parse(container.dataset.uiText || '{}');
+        const commentsList = document.getElementById('comments-list')!;
+        const formContainer = document.getElementById('comment-form-container')!;
+        const loginContainer = document.getElementById('login-container')!;
+        const contentInput = document.getElementById('comment-content') as HTMLTextAreaElement;
+        const submitBtn = document.getElementById('submit-comment') as HTMLButtonElement;
+        
+        // Use window.location.pathname to ensure client-side consistency
+        // But remove trailing slash to match backend storage if needed?
+        // Actually Firestore doesn't care, but let's be consistent.
+        // main.py didn't strip it. We'll use exact path.
+        const slug = window.location.pathname;
+
+        function updateAuthUI(authed) {
+            if (authed) {
+                formContainer.classList.remove('hidden');
+                loginContainer.classList.add('hidden');
+            } else {
+                formContainer.classList.add('hidden');
+                loginContainer.classList.remove('hidden');
+            }
+        }
+
+        // Check Auth using the API (or rely on BaseLayout script to dispatch event/share state)
+        // BaseLayout script might be running in parallel. safer to fetch or reuse.
+        // Let's fetch to be safe and independent.
+        fetch('/api/me')
+            .then(res => res.json())
+            .then(user => updateAuthUI(user.authed))
+            .catch(console.error);
+
+        // Fetch Comments
+        function loadComments() {
+            commentsList.innerHTML = `<p class="text-gray-500">${uiText.loading}</p>`;
+            
+            fetch(`/api/comments?slug=${encodeURIComponent(slug)}`)
+                .then(res => res.json())
+                .then(comments => {
+                    if (comments.length === 0) {
+                        commentsList.innerHTML = `<p class="text-gray-500 italic">${uiText.noComments}</p>`;
+                        return;
+                    }
+
+                    commentsList.innerHTML = '';
+                    comments.forEach((c: any) => {
+                       const div = document.createElement('div');
+                       div.className = 'border-b border-base-200 pb-4';
+                       
+                       const authorName = (c.author_name === 'Anonymous') ? uiText.anonymous : c.author_name;
+                       const dateStr = new Date(c.created_at).toLocaleString();
+
+                       // Safe rendering using textContent for user content
+                       const header = document.createElement('div');
+                       header.className = 'flex items-center gap-2 mb-1';
+                       
+                       const nameSpan = document.createElement('span');
+                       nameSpan.className = 'font-bold';
+                       nameSpan.textContent = authorName;
+                       
+                       const dateSpan = document.createElement('span');
+                       dateSpan.className = 'text-xs text-gray-400';
+                       dateSpan.textContent = dateStr;
+
+                       header.appendChild(nameSpan);
+                       header.appendChild(dateSpan);
+
+                       const body = document.createElement('div');
+                       body.className = 'whitespace-pre-wrap text-sm';
+                       body.textContent = c.content;
+
+                       div.appendChild(header);
+                       div.appendChild(body);
+                       commentsList.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    commentsList.innerHTML = `<p class="text-error">${uiText.loadError}</p>`;
+                });
+        }
+
+        loadComments();
+
+        // Submit
+        submitBtn.addEventListener('click', async () => {
+            const content = contentInput.value.trim();
+            if (!content) return;
+
+            if (new TextEncoder().encode(content).length > 1000) {
+                alert(uiText.tooLong);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = uiText.posting;
+
+            try {
+                const res = await fetch('/api/comments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug, content })
+                });
+                const data = await res.json();
+                
+                if (res.ok && data.status === 'success') {
+                    contentInput.value = '';
+                    loadComments();
+                } else {
+                    alert(`${uiText.postErrorPrefix}${data.error || uiText.unknownError}`);
+                }
+            } catch (e) {
+                console.error(e);
+                alert(uiText.postErrorGeneric);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+            }
+        });
+    }
+</script>
