@@ -5,6 +5,7 @@ import GameList from '../components/pages/GameList.astro';
 import ToolList from '../components/pages/ToolList.astro';
 import StoryList from '../components/pages/StoryList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
+import PegSolitaire from '../components/games/PegSolitaire.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
 
@@ -130,6 +131,9 @@ const getGameComponent = (gameSlug: string) => {
     // Check if it is Tower of Hanoi
     if (gameSlug && gameSlug.includes('tower-of-hanoi')) {
         return TowerOfHanoi;
+    }
+    if (gameSlug && gameSlug.includes('peg-solitaire')) {
+        return PegSolitaire;
     }
     return null;
 }
