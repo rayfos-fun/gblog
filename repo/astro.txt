@@ -1,0 +1,29 @@
+astro:content
+  defineCollection
+  z (zod)
+
+Collection
+  id  // basename including extname
+  slug  // 
+  body
+  collection  // content/$COLLECITON
+  data: {... /* frontmatter */}
+
+
+public  [built-in] static files
+src
+  assets  
+  components  
+  content  [built-in] schema (config.ts)
+    $COLLECTION
+  layouts
+  pages  [built-in] router
+  styles  
+
+
+# .astro
+---  // frontmatter
+  export async function getStaticPaths() {...}
+---
+
+{/* comment */}

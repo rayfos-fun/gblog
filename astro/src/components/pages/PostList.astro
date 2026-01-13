@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+const allPosts = await getCollection('posts');
+const posts = allPosts.filter((post) => post.id.startsWith(`${lang}/`));
+// sort (latest to oldest)
+posts.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const translations = {
+  'en': {
+    metaTitlePrefix: 'Blog List',
+    blogName: 'Blog',
+    latestPosts: 'Latest Posts',
+    readMore: 'Read More',
+    defaultDesc: 'Click to read more...',
+    locale: 'en-US',
+    new: 'NEW'
+  },
+  'zh-tw': {
+    metaTitlePrefix: '文章列表',
+    blogName: '部落格',
+    latestPosts: '最新文章',
+    readMore: '閱讀全文',
+    defaultDesc: '點擊閱讀更多...',
+    locale: 'zh-TW',
+    new: '新'
+  },
+  'zh-cn': {
+    metaTitlePrefix: '文章列表',
+    blogName: '博客',
+    latestPosts: '最新文章',
+    readMore: '阅读全文',
+    defaultDesc: '点击阅读更多...',
+    locale: 'zh-CN',
+    new: '新'
+  }
+};
+
+const t = translations[lang] || translations['en'];
+---
+
+<PostLayout title={`${t.metaTitlePrefix} | ${t.blogName}`} lang={lang}>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">
+      {t.latestPosts}
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {posts.map((post) => {
+        // $LANG/xxx => xxx
+        const cleanSlug = post.slug.split('/').slice(1).join('/');
+        const postUrl = lang === 'en' ? `/post/${cleanSlug}` : `/${lang}/post/${cleanSlug}`;
+        
+        return (
+          <ContentCard 
+            title={post.data.title}
+            url={postUrl}
+            date={post.data.date}
+            description={post.data.description}
+            isNew={Date.now() - new Date(post.data.date).getTime() < 7 * 24 * 60 * 60 * 1000}
+            readMoreText={t.readMore}
+            locale={t.locale}
+            descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
+          />
+        );
+      })}
+    </div>
+  </div>
+
+</PostLayout>

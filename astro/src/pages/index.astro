@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Redirecting...</title>
+<script>
+  // Language detection logic
+  (function() {
+    var supportedLangs = ['zh-tw', 'zh-cn', 'en'];
+    var defaultLang = 'zh-tw';
+
+    function getBestLang(userLangs) {
+      for (var i = 0; i < userLangs.length; i++) {
+        var lang = userLangs[i].toLowerCase();
+        
+        // Exact match
+        if (supportedLangs.includes(lang)) {
+          return lang;
+        }
+
+        // Partial match for Chinese
+        if (lang.startsWith('zh')) {
+            if (lang === 'zh-cn' || lang === 'zh-sg' || lang === 'zh-hans') {
+                return 'zh-cn';
+            }
+            // Assume Traditional for others (zh-tw, zh-hk, or just zh)
+            return 'zh-tw'; 
+        }
+
+        // Partial match for English
+        if (lang.startsWith('en')) {
+          return 'en';
+        }
+      }
+      return defaultLang;
+    }
+
+    var userLangs = navigator.languages || [navigator.language || navigator.userLanguage];
+    var storedLang = localStorage.getItem('preferred-lang');
+    var targetLang = defaultLang;
+
+    if (storedLang && supportedLangs.includes(storedLang)) {
+        targetLang = storedLang;
+    } else {
+        targetLang = getBestLang(userLangs);
+    }
+    
+    // Redirect
+    window.location.replace('/' + targetLang + '/');
+  })();
+</script>
+<noscript>
+    <meta http-equiv="refresh" content="0;url=/zh-tw/" />
+</noscript>
+</head>
+<body>
+    <p>Redirecting to <a href="/zh-tw/">/zh-tw/</a>...</p>
+</body>
+</html>

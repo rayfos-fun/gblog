@@ -1,0 +1,233 @@
+---
+import GameLayout from '@/layouts/GameLayout.astro';
+
+interface Props {
+  game: any;
+  lang: string;
+}
+
+const { game, lang } = Astro.props;
+const { i18n } = game.data;
+---
+
+<GameLayout title={game.data.title} lang={lang as any} bgmSrc={game.data.bgmSrc}>
+    <div class="game-wrapper flex flex-col items-center gap-6 p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 shadow-2xl border-4 border-slate-200 dark:border-slate-700 max-w-4xl mx-auto my-8" data-i18n={JSON.stringify(i18n)}>
+        <!-- Stats Dashboard -->
+        <div class="grid grid-cols-2 gap-4 w-full max-w-lg mb-6">
+            <!-- Move Count Card -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-transform hover:scale-[1.02]">
+                <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl">
+                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{i18n.labels.moves}</div>
+                    <div id="move-count" class="text-2xl font-mono font-bold text-slate-800 dark:text-slate-100">0</div>
+                </div>
+            </div>
+    
+            <!-- Difficulty Card -->
+            <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4 transition-transform hover:scale-[1.02]">
+                <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <label for="disk-select" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1">{i18n.labels.disks}</label>
+                    <select id="disk-select" class="select select-bordered select-xs w-full bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-purple-500">
+                        {i18n.options.map((opt: any) => (
+                          <option value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="canvas-container relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
+            <canvas id="hanoi-canvas" width="600" height="300" class="max-w-full h-auto cursor-pointer"></canvas>
+        </div>
+        <div class="controls flex gap-4">
+    <button 
+            id="restart-btn" 
+            class="relative overflow-hidden group px-8 py-3 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 font-bold tracking-wide flex items-center gap-2"
+        >
+            <span class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-500 ease-out -skew-x-12 origin-left"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:rotate-180 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span class="relative z-10">{i18n.controls.restart}</span>
+        </button>
+        </div>
+        <div id="message-area" class="h-6 text-xl font-bold text-primary"></div>
+    </div>
+    
+    <style>
+        .game-wrapper {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+    
+    <script>
+        import { HanoiEngine } from '../../lib/HanoiEngine';
+
+        // Vars from server-side (read from DOM)
+        const wrapper = document.querySelector('.game-wrapper') as HTMLElement;
+        const i18n = JSON.parse(wrapper.dataset.i18n || '{}');
+
+        const CONFIG = {
+            colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5', '#9B59B6'],
+            pegColor: '#95a5a6',
+            messages: i18n.messages
+        };
+
+        // --- Model Initialization ---
+        const diskSelect = document.getElementById('disk-select');
+        let totalDisks = parseInt(diskSelect.value);
+        const game = new HanoiEngine(totalDisks);
+        
+        // --- View State ---
+        let selectedPeg = -1;
+
+        // --- DOM Elements ---
+        const canvas = document.getElementById('hanoi-canvas');
+        const ctx = canvas.getContext('2d');
+        const moveDisplay = document.getElementById('move-count');
+        const msgDisplay = document.getElementById('message-area');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- Controller Logic ---
+
+        function initGame() {
+            totalDisks = parseInt(diskSelect.value);
+            game.reset(totalDisks);
+            selectedPeg = -1;
+            
+            updateUI();
+            draw();
+            showMessage(CONFIG.messages.start || "Click a peg to start");
+        }
+
+        function handleInput(e) {
+            if (game.gameOver) return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const x = (e.clientX - rect.left) * scaleX;
+            
+            const colWidth = canvas.width / 3;
+            const pegIndex = Math.floor(x / colWidth);
+
+            if (selectedPeg === -1) {
+                // Select Peg
+                // Use engine to check if peg has disks
+                if (game.pegs[pegIndex].length > 0) {
+                    selectedPeg = pegIndex;
+                    showMessage((CONFIG.messages.select || "Selected peg ") + (pegIndex + 1));
+                } else {
+                    showMessage(CONFIG.messages.empty);
+                }
+            } else {
+                // Move or Deselect
+                if (selectedPeg === pegIndex) {
+                    selectedPeg = -1;
+                    showMessage(CONFIG.messages.cancel || "Selection cancelled");
+                } else {
+                    const result = game.attemptMove(selectedPeg, pegIndex);
+                    
+                    if (result === 'SUCCESS') {
+                        selectedPeg = -1;
+                        updateUI();
+                        // Check win is handled inside attemptMove return value 'GAME_OVER' 
+                        // but wait, attemptMove returns 'GAME_OVER' if it was the winning move?
+                        // My implementation returns 'GAME_OVER' if gameOver becomes true.
+                        // Let's re-verify engine logic in mind. 
+                        // Yes, if(checkWin()) { gameOver=true; return 'GAME_OVER' }
+                    } else if (result === 'GAME_OVER') {
+                        selectedPeg = -1;
+                        updateUI();
+                        showMessage(CONFIG.messages.win);
+                    } else if (result === 'INVALID') {
+                        showMessage(CONFIG.messages.warn);
+                         selectedPeg = -1;
+                    }
+                }
+            }
+            draw();
+        }
+
+        // --- View Logic (Pure Rendering) ---
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const pegWidth = 10;
+            const pegHeight = 200;
+            const baseHeight = 20;
+            const floorY = canvas.height - baseHeight;
+            const colWidth = canvas.width / 3;
+
+            // Base
+            ctx.fillStyle = '#34495e';
+            ctx.fillRect(20, floorY, canvas.width - 40, baseHeight);
+
+            // Pegs
+            for (let i = 0; i < 3; i++) {
+                const centerX = i * colWidth + colWidth / 2;
+                
+                // Peg Body
+                ctx.fillStyle = CONFIG.pegColor;
+                ctx.fillRect(centerX - pegWidth / 2, floorY - pegHeight, pegWidth, pegHeight);
+
+                // Highlight Selection
+                if (selectedPeg === i) {
+                    ctx.strokeStyle = '#f1c40f';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(i * colWidth + 10, 10, colWidth - 20, canvas.height - 20);
+                }
+
+                // Disks
+                // Read from Game Model
+                const pegDisks = game.pegs[i];
+                for (let j = 0; j < pegDisks.length; j++) {
+                    const diskSize = pegDisks[j];
+                    const maxDiskWidth = colWidth * 0.8;
+                    const minDiskWidth = 40;
+                    const widthStep = (maxDiskWidth - minDiskWidth) / game.totalDisks;
+                    const width = minDiskWidth + (diskSize - 1) * widthStep;
+                    
+                    const height = 25;
+                    const x = centerX - width / 2;
+                    const y = floorY - (j + 1) * height;
+
+                    ctx.fillStyle = CONFIG.colors[(diskSize - 1) % CONFIG.colors.length];
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, width, height, 5);
+                    ctx.fill();
+                    ctx.strokeStyle = '#2c3e50';
+                    ctx.stroke();
+                    
+                    // Number (Optional)
+                    ctx.fillStyle = '#000';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(diskSize, centerX, y + 17);
+                }
+            }
+        }
+
+        function updateUI() {
+            moveDisplay.textContent = game.moves;
+        }
+
+        function showMessage(msg) {
+            msgDisplay.textContent = msg;
+        }
+
+        // --- Event Listeners ---
+        canvas.addEventListener('click', handleInput);
+        restartBtn.addEventListener('click', () => initGame());
+        diskSelect.addEventListener('change', () => initGame());
+
+        // Start
+        initGame();
+    </script>
+</GameLayout>

@@ -1,0 +1,45 @@
+---
+interface Props {
+  user: string;
+  domain: string;
+  class?: string;
+  title?: string; // Optional title/label override, otherwise defaults to email
+}
+
+const { user, domain, class: className, title } = Astro.props;
+---
+
+<obfuscated-mail data-user={user} data-domain={domain} data-title={title} class={className}>
+  <a href="#" class={className} title={title}>
+    {title || '[Email Protected]'}
+  </a>
+</obfuscated-mail>
+
+<script>
+  class ObfuscatedMail extends HTMLElement {
+    connectedCallback() {
+      const user = this.dataset.user;
+      const domain = this.dataset.domain;
+      const title = this.dataset.title;
+      const link = this.querySelector('a');
+
+      if (user && domain && link) {
+        const email = `${user}@${domain}`;
+        
+        // Update href safely
+        link.href = `mailto:${email}`;
+        
+        // Update text content if it matches the default placeholder or if no title was explicitly provided
+        // logic: if title attribute is empty/null on the link, we show the email.
+        // But in our markup below, we render {title || '[Email Protected]'}
+        // So we check if the current text is the placeholder or if we essentially "want" the email shown.
+        // Actually, simpler logic: if the 'title' prop was NOT passed, show email.
+        if (!title) {
+            link.textContent = email;
+        }
+      }
+    }
+  }
+
+  customElements.define('obfuscated-mail', ObfuscatedMail);
+</script>

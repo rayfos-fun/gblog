@@ -11,6 +11,50 @@
 ../requirements.txt
 ../venv
 
+../astro/.vscode/extensions.json
+../astro/.vscode/launch.json
+../astro/public/favicon.svg
+../astro/src/assets/astro.svg
+../astro/src/assets/background.svg
+../astro/src/components/Welcome.astro
+../astro/src/components/ContentCard.astro
+../astro/src/content/config.ts  # schema
+../astro/src/content/games/en/memory.md
+../astro/src/content/games/en/peg-solitaire.md
+../astro/src/content/games/en/tower-of-hanoi.md
+../astro/src/content/games/zh-cn/memory.md
+../astro/src/content/games/zh-cn/peg-solitaire.md
+../astro/src/content/games/zh-cn/tower-of-hanoi.md
+../astro/src/content/games/zh-tw/memory.md
+../astro/src/content/games/zh-tw/peg-solitaire.md
+../astro/src/content/games/zh-tw/tower-of-hanoi.md
+../astro/src/content/posts/en/2026-01-07.md
+../astro/src/content/posts/en/2026-01-09.md
+../astro/src/content/posts/zh-cn/2026-01-07.md
+../astro/src/content/posts/zh-cn/2026-01-09.md
+../astro/src/content/posts/zh-tw/2026-01-07.md
+../astro/src/content/posts/zh-tw/2026-01-09.md
+../astro/src/content/stories/en/0001.md
+../astro/src/content/stories/en/0022.md
+../astro/src/content/stories/zh-cn/0001.md
+../astro/src/content/stories/zh-cn/0022.md
+../astro/src/content/stories/zh-tw/0001.md
+../astro/src/content/stories/zh-tw/0022.md
+../astro/src/content/tools/en/loop-timer.md
+../astro/src/content/tools/zh-cn/loop-timer.md
+../astro/src/content/tools/zh-tw/loop-timer.md
+../astro/src/layouts/BaseLayout.astro  # header, nav, footer, ...etc.
+../astro/src/layouts/GameLayout.astro  # based on BaseLayout
+../astro/src/layouts/PostLayout.astro  # based on BaseLayout
+../astro/src/pages/[...slug].astro
+../astro/.gitignore
+../astro/README.md
+../astro/astro.config.mjs
+../astro/package-lock.json
+../astro/package.json
+../astro/tailwind.config.mjs
+../astro/tsconfig.json
+
 ../jekyll-site/_config.yml
 ../jekyll-site/404.html
 ../jekyll-site/Gemfile

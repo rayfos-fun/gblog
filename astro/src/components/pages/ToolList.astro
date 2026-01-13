@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+const allTools = await getCollection('tools');
+const tools = allTools.filter((tool) => tool.id.startsWith(`${lang}/`));
+// sort (latest to oldest)
+tools.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+const translations = {
+  'en': {
+    metaTitlePrefix: 'Tools List',
+    pageName: 'Tools',
+    latestTools: 'Latest Tools',
+    tryNow: 'Try Now',
+    defaultDesc: 'Click to try...',
+    locale: 'en-US',
+    new: 'NEW'
+  },
+  'zh-tw': {
+    metaTitlePrefix: '工具列表',
+    pageName: '工具',
+    latestTools: '最新工具',
+    tryNow: '立即試用',
+    defaultDesc: '點擊開始試用...',
+    locale: 'zh-TW',
+    new: '新'
+  },
+  'zh-cn': {
+    metaTitlePrefix: '工具列表',
+    pageName: '工具',
+    latestTools: '最新工具',
+    tryNow: '立即试用',
+    defaultDesc: '点击开始试用...',
+    locale: 'zh-CN',
+    new: '新'
+  }
+};
+
+const t = translations[lang] || translations['en'];
+---
+
+<PostLayout title={`${t.metaTitlePrefix} | Rayfos`} lang={lang}>
+  
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center">
+      {t.latestTools}
+    </h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {tools.map((tool) => {
+        const cleanSlug = tool.slug.split('/').slice(1).join('/');
+        const toolUrl = lang === 'en' ? `/tool/${cleanSlug}` : `/${lang}/tool/${cleanSlug}`;
+        
+        return (
+          <ContentCard 
+            title={tool.data.title}
+            url={toolUrl}
+            date={tool.data.date}
+            description={tool.data.description}
+            isNew={Date.now() - new Date(tool.data.date).getTime() < 30 * 24 * 60 * 60 * 1000} 
+            readMoreText={t.tryNow}
+            locale={t.locale}
+            descriptionPlaceholder={t.defaultDesc}
+            newText={t.new}
+          />
+        );
+      })}
+    </div>
+  </div>
+
+</PostLayout>

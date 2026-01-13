@@ -1,0 +1,64 @@
+---
+// src/layouts/PostLayout.astro
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content'; 
+
+interface Props {
+  title: string;
+  lang?: string;
+  frontmatter?: CollectionEntry<'post'>['data']; 
+  prevPost?: { title: string; url: string } | null;
+  nextPost?: { title: string; url: string } | null;
+}
+
+const { title, lang, frontmatter, prevPost, nextPost } = Astro.props;
+
+const t = {
+    'en': { prev: 'Previous Post', next: 'Next Post' },
+    'zh-tw': { prev: '上一篇', next: '下一篇' },
+    'zh-cn': { prev: '上一篇', next: '下一篇' },
+}[lang || 'en'] || { prev: 'Previous Post', next: 'Next Post' };
+---
+<BaseLayout title={title} lang={lang} description={frontmatter?.description}>
+  <article class="max-w-4xl mx-auto px-4 py-10">
+    <div class="prose prose-lg prose-slate max-w-none mx-auto prose-img:rounded-xl prose-headings:scroll-mt-20 dark:prose-invert">
+      <slot />
+    </div>
+
+    {/* Post Navigation */}
+    <div class="flex justify-between items-center mt-12 border-t pt-8 border-base-200 dark:border-base-700">
+        
+        {/* Previous (Older) Post - Align Left */}
+        <div class="flex-1 text-left">
+            {prevPost && (
+                <a href={prevPost.url} class="group block">
+                    <span class="text-sm text-base-content/60 group-hover:text-primary transition-colors">
+                        &larr; {t.prev}
+                    </span>
+                    <div class="font-medium text-lg mt-1 group-hover:text-primary transition-colors line-clamp-2">
+                        {prevPost.title}
+                    </div>
+                </a>
+            )}
+        </div>
+
+        {/* Separator / Spacer */}
+        <div class="w-8"></div>
+
+        {/* Next (Newer) Post - Align Right */}
+        <div class="flex-1 text-right">
+            {nextPost && (
+                <a href={nextPost.url} class="group block">
+                    <span class="text-sm text-base-content/60 group-hover:text-primary transition-colors">
+                        {t.next} &rarr;
+                    </span>
+                    <div class="font-medium text-lg mt-1 group-hover:text-primary transition-colors line-clamp-2">
+                        {nextPost.title}
+                    </div>
+                </a>
+            )}
+        </div>
+
+    </div>
+  </article>
+</BaseLayout>

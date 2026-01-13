@@ -1,1 +1,3 @@
 Node Package Execute
+
+astro> npx astro add tailwind   # add vite plugins tailwindcss() in astro.config.mjs

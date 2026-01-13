@@ -1,0 +1,226 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContentCard from '@/components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'zh-tw'}},
+    {params: {lang: 'zh-cn'}},
+    {params: {lang: 'en'}},
+  ];
+}
+
+const { lang } = Astro.params;
+
+const posts = await getCollection('posts');
+const games = await getCollection('games');
+const tools = await getCollection('tools');
+const stories = await getCollection('stories');
+
+// Helper to normalized items and filter by language
+const normalizeItem = (item, type, basePath) => {
+    // Determine language from ID (assuming folder structure like "zh-tw/...")
+    // or slug
+    const idParts = item.id.split('/');
+    const itemLang = idParts[0];
+
+    // Filter out items not matching current language
+    if (itemLang !== lang) return null;
+
+    const slugParts = item.slug.split('/');
+    const cleanSlug = slugParts.length > 1 ? slugParts.slice(1).join('/') : item.slug;
+    
+    const routeType = type.toLowerCase();
+    
+    let url = '';
+    if (lang === 'en') {
+        url = `/${routeType}/${cleanSlug}`;
+    } else {
+        url = `/${lang}/${routeType}/${cleanSlug}`;
+    }
+
+    return {
+        ...item.data,
+        originalItem: item,
+        type: type,
+        dateObj: new Date(item.data.date),
+        url: url
+    };
+};
+
+const filterByLang = (collection, type, basePath) => {
+    return collection
+        .map(i => normalizeItem(i, type, basePath))
+        .filter(i => i !== null);
+};
+
+const allItems = [
+    ...filterByLang(posts, 'Post', 'posts'),
+    ...filterByLang(games, 'Game', 'games'),
+    ...filterByLang(tools, 'Tool', 'tools'),
+    ...filterByLang(stories, 'Story', 'stories')
+];
+
+// Sort by date descending
+allItems.sort((a, b) => b.dateObj - a.dateObj);
+
+const latestUpdates = allItems.slice(0, 3);
+
+// Get top 3 for each category
+const getLatest = (collection, type) => {
+    const items = filterByLang(collection, type, type.toLowerCase() + 's');
+    items.sort((a, b) => b.dateObj - a.dateObj);
+    return items.slice(0, 3);
+};
+
+const latestPosts = getLatest(posts, 'Post');
+const latestGames = getLatest(games, 'Game');
+const latestTools = getLatest(tools, 'Tool');
+const latestStories = getLatest(stories, 'Story');
+
+const translations = {
+    'en': {
+        pageTitle: 'Home',
+        latestUpdates: 'Latest Updates',
+        latestPosts: 'Latest Posts',
+        latestGames: 'Latest Games',
+        latestTools: 'Latest Tools',
+        latestStories: 'Latest Stories',
+        readMore: 'Read More',
+        new: 'NEW',
+        typePost: 'Post',
+        typeGame: 'Game',
+        typeTool: 'Tool',
+        typeStory: 'Story',
+        noDescription: 'No description available.'
+    },
+    'zh-tw': {
+        pageTitle: '首頁',
+        latestUpdates: '最新更新',
+        latestPosts: '最新文章',
+        latestGames: '最新遊戲',
+        latestTools: '最新工具',
+        latestStories: '最新故事',
+        readMore: '閱讀更多',
+        new: '新',
+        typePost: '文章',
+        typeGame: '遊戲',
+        typeTool: '工具',
+        typeStory: '故事',
+        noDescription: '暫無描述。'
+    },
+    'zh-cn': {
+        pageTitle: '首页',
+        latestUpdates: '最新更新',
+        latestPosts: '最新文章',
+        latestGames: '最新游戏',
+        latestTools: '最新工具',
+        latestStories: '最新故事',
+        readMore: '阅读更多',
+        new: '新',
+        typePost: '文章',
+        typeGame: '游戏',
+        typeTool: '工具',
+        typeStory: '故事',
+        noDescription: '暂无描述。'
+    }
+};
+
+const t = translations[lang] || translations['en'];
+
+const pageTitle = t.pageTitle;
+---
+
+<BaseLayout pageTitle={pageTitle} lang={lang}>
+    <div class="container mx-auto px-4 py-8">
+        
+        {/* Latest Updates Section */}
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 border-b pb-2">{t.latestUpdates}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {latestUpdates.map(item => (
+                    <ContentCard
+                        title={item.title}
+                        date={item.date}
+                        url={item.url}
+                        description={`${t[`type${item.type}`]} - ${item.description || t.noDescription}`}
+                        isNew={true} 
+                        readMoreText={t.readMore}
+                        newText={t.new}
+                    />
+                ))}
+            </div>
+        </section>
+
+        {/* Individual Sections */}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            
+            {/* Latest Posts */}
+            <section>
+                <h3 class="text-2xl font-bold mb-4">{t.latestPosts}</h3>
+                <div class="space-y-4">
+                    {latestPosts.map(item => (
+                        <ContentCard
+                             title={item.title}
+                             date={item.date}
+                             url={item.url}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
+                        />
+                    ))}
+                </div>
+            </section>
+
+            {/* Latest Games */}
+            <section>
+                <h3 class="text-2xl font-bold mb-4">{t.latestGames}</h3>
+                <div class="space-y-4">
+                     {latestGames.map(item => (
+                        <ContentCard
+                             title={item.title}
+                             date={item.date}
+                             url={item.url}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
+                        />
+                    ))}
+                </div>
+            </section>
+
+             {/* Latest Tools */}
+             <section>
+                <h3 class="text-2xl font-bold mb-4">{t.latestTools}</h3>
+                <div class="space-y-4">
+                     {latestTools.map(item => (
+                        <ContentCard
+                             title={item.title}
+                             date={item.date}
+                             url={item.url}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
+                        />
+                    ))}
+                </div>
+            </section>
+
+             {/* Latest Stories */}
+             <section>
+                <h3 class="text-2xl font-bold mb-4">{t.latestStories}</h3>
+                <div class="space-y-4">
+                     {latestStories.map(item => (
+                        <ContentCard
+                             title={item.title}
+                             date={item.date}
+                             url={item.url}
+                             description={item.description || t.noDescription}
+                             readMoreText={t.readMore}
+                        />
+                    ))}
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+</BaseLayout>
