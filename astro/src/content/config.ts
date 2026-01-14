@@ -5,6 +5,7 @@ const postsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
+    description: z.string().optional(),
   }),
 });
 
@@ -32,6 +33,7 @@ const storiesCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
+    description: z.string().optional(),
   }),
 });
 
