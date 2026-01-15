@@ -13,30 +13,52 @@
 
 ../astro/.vscode/extensions.json
 ../astro/.vscode/launch.json
+../astro/dist  # generated files from build; excluded from git
+../astro/node_modules  # installed node_modules; excluded from git
 ../astro/public/favicon.svg
 ../astro/src/assets/astro.svg
 ../astro/src/assets/background.svg
-../astro/src/components/Welcome.astro
+../astro/src/components/games/LightsOut.astro  
+../astro/src/components/games/Memory.astro     
+../astro/src/components/games/PegSolitaire.astro     
+../astro/src/components/games/TowerOfHanoi.astro     
+../astro/src/components/pages/GameList.astro
+../astro/src/components/pages/PostList.astro
+../astro/src/components/pages/StoryList.astro
+../astro/src/components/pages/ToolList.astro
+../astro/src/components/tools/LoopTimer.astro
+../astro/src/components/Comments.astro
 ../astro/src/components/ContentCard.astro
-../astro/src/content/config.ts  # schema
+../astro/src/components/ObfuscatedMail.astro
+../astro/src/components/Welcome.astro
+../astro/src/content/games/en/lights-out.md
 ../astro/src/content/games/en/memory.md
 ../astro/src/content/games/en/peg-solitaire.md
 ../astro/src/content/games/en/tower-of-hanoi.md
+../astro/src/content/games/zh-cn/lights-out.md
 ../astro/src/content/games/zh-cn/memory.md
 ../astro/src/content/games/zh-cn/peg-solitaire.md
 ../astro/src/content/games/zh-cn/tower-of-hanoi.md
-../astro/src/content/games/zh-tw/memory.md
-../astro/src/content/games/zh-tw/peg-solitaire.md
-../astro/src/content/games/zh-tw/tower-of-hanoi.md
+../astro/src/content/games/zh-tw/lights-out.md  # 2026-01-08
+../astro/src/content/games/zh-tw/memory.md  # 2025-12-18
+../astro/src/content/games/zh-tw/peg-solitaire.md  # 2026-01-01
+../astro/src/content/games/zh-tw/tower-of-hanoi.md  # 2025-12-25
 ../astro/src/content/posts/en/2026-01-07.md
 ../astro/src/content/posts/en/2026-01-09.md
 ../astro/src/content/posts/en/2026-01-13.md
+../astro/src/content/posts/en/2026-01-14.md
+../astro/src/content/posts/zh-cn/2026-01-06.md
 ../astro/src/content/posts/zh-cn/2026-01-07.md
 ../astro/src/content/posts/zh-cn/2026-01-09.md
 ../astro/src/content/posts/zh-cn/2026-01-13.md
-../astro/src/content/posts/zh-tw/2026-01-07.md
-../astro/src/content/posts/zh-tw/2026-01-09.md
-../astro/src/content/posts/zh-tw/2026-01-13.md  # 適性而為
+../astro/src/content/posts/zh-cn/2026-01-14.md
+../astro/src/content/posts/zh-tw/2025-12-31.md  # Wed 漢諾塔/河內塔
+../astro/src/content/posts/zh-tw/2026-01-02.md  # Fri 2026新年新希望
+../astro/src/content/posts/zh-tw/2026-01-06.md  # Tue 勇氣做自己
+../astro/src/content/posts/zh-tw/2026-01-07.md  # Wed 馬鈴薯悖論
+../astro/src/content/posts/zh-tw/2026-01-09.md  # Fri AI 音樂製作
+../astro/src/content/posts/zh-tw/2026-01-13.md  # Tue 適性而為
+../astro/src/content/posts/zh-tw/2026-01-14.md  # Wed 熄燈遊戲
 ../astro/src/content/stories/en/0001.md
 ../astro/src/content/stories/en/0022.md
 ../astro/src/content/stories/zh-cn/0001.md
@@ -46,6 +68,7 @@
 ../astro/src/content/tools/en/loop-timer.md
 ../astro/src/content/tools/zh-cn/loop-timer.md
 ../astro/src/content/tools/zh-tw/loop-timer.md
+../astro/src/content/config.ts  # schema
 ../astro/src/layouts/BaseLayout.astro  # header, nav, footer, ...etc.
 ../astro/src/layouts/GameLayout.astro  # based on BaseLayout
 ../astro/src/layouts/PostLayout.astro  # based on BaseLayout

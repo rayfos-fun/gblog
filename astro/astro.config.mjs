@@ -2,9 +2,10 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import react from '@astrojs/react';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
-
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,6 +20,11 @@ export default defineConfig({
   server: {
     port: 4321,
     host: true,
+  },
+
+  markdown: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
   },
 
   integrations: [tailwind(), react(), sitemap()],
