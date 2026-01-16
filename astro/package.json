@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "itch": "npm run build && npx inline-source --root dist dist/client/game/2048/index.html > ~/temp/index.html",
     "preview": "astro preview",
     "astro": "astro",
     "start": "node dist/server/entry.mjs"
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
-    "daisyui": "^5.5.14"
+    "daisyui": "^5.5.14",
+    "inline-source-cli": "^1.2.0"
   }
 }

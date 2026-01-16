@@ -9,15 +9,30 @@ env_variables:
   NODE_ENV: 'production'
 
 handlers:
-  # Serve static files from dist/client/
+  # 1. Astro built assets (hashed) - Long Cache (1 year)
+  # served from dist/client/_astro
   - url: /_astro
     static_dir: dist/client/_astro
+    expiration: 365d
+    secure: always
 
-  # Serve other static assets if any (e.g., favicon, robots.txt in public/)
-  # Careful: static_dir uploads the folder. dist/client is the web root.
-  # We can map root files individually if needed or just let Node serve them (slower but simpler)
-  # Ideally, map specific static folders.
+  # 2. Main Index Page - NO CACHE
+  # ensures users always get the latest version pointing to new CSS/JS
+  - url: /
+    static_files: dist/client/index.html
+    upload: dist/client/index.html
+    expiration: 0s
+    secure: always
 
-  # Catch-all to Node.js app
+  # 3. Root static files (robots.txt, favicon.ico, sitemap) - Moderate Cache (1 day)
+  - url: /(robots\.txt|favicon\.ico|sitemap.*\.xml)$
+    static_files: dist/client/\1
+    upload: dist/client/(robots\.txt|favicon\.ico|sitemap.*\.xml)$
+    expiration: 1d
+    secure: always
+
+  # 4. Catch-all to Node.js app
+  # Handles all other routes (dynamic pages, API, sub-pages)
   - url: .*
     script: auto
+    secure: always
