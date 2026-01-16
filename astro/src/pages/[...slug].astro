@@ -5,8 +5,10 @@ import GameList from '../components/pages/GameList.astro';
 import ToolList from '../components/pages/ToolList.astro';
 import StoryList from '../components/pages/StoryList.astro';
 import TowerOfHanoi from '../components/games/TowerOfHanoi.astro';
+import LightsOut from '../components/games/LightsOut.astro';
 import PegSolitaire from '../components/games/PegSolitaire.astro';
 import Memory from '../components/games/Memory.astro';
+import Game2048 from '@/components/games/Game2048.astro';
 import LightsOut from '../components/games/LightsOut.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
@@ -145,15 +147,10 @@ const getGameComponent = (gameSlug: string) => {
     if (gameSlug && gameSlug.includes('tower-of-hanoi')) {
         return TowerOfHanoi;
     }
-    if (gameSlug && gameSlug.includes('peg-solitaire')) {
-        return PegSolitaire;
-    }
-    if (gameSlug && gameSlug.includes('memory')) {
-        return Memory;
-    }
-    if (gameSlug && gameSlug.includes('lights-out')) {
-        return LightsOut;
-    }
+    if (gameSlug && gameSlug.includes('peg-solitaire')) return PegSolitaire;
+    if (gameSlug && gameSlug.includes('memory')) return Memory;
+    if (gameSlug && gameSlug.includes('lights-out')) return LightsOut;
+    if (gameSlug && gameSlug.includes('2048')) return Game2048;
     return null;
 }
 

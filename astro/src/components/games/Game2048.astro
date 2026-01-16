@@ -1,0 +1,335 @@
+---
+import GameLayout from '@/layouts/GameLayout.astro';
+
+interface Props {
+  game: any;
+  lang: string;
+}
+
+const { game, lang } = Astro.props;
+const { i18n } = game.data;
+---
+
+<GameLayout title={game.data.title} lang={lang as any} bgmSrc={game.data.bgmSrc}>
+    <div class="game-wrapper flex flex-col items-center gap-8 p-4 max-w-lg mx-auto my-8 font-sans" data-i18n={JSON.stringify(i18n)}>
+        <!-- Header & Scores -->
+        <div class="w-full flex justify-between items-center mb-4">
+            <h1 class="text-5xl font-bold text-slate-700 dark:text-slate-200">2048</h1>
+            <div class="flex gap-2">
+                <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300">{i18n.labels.score}</span>
+                    <span id="score-val" class="font-bold text-xl">0</span>
+                </div>
+                <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-300">{i18n.labels.best}</span>
+                    <span id="best-val" class="font-bold text-xl">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls / New Game -->
+        <div class="w-full flex justify-end mb-4">
+             <button id="new-game-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded transition-colors shadow-md">
+                {i18n.controls.restart}
+             </button>
+        </div>
+
+        <!-- Game Container -->
+        <div class="relative bg-slate-300 dark:bg-slate-700 p-2 rounded-lg w-full aspect-square shadow-xl cursor-default touch-none outline-none select-none" id="game-container" tabindex="0">
+            <!-- Grid Background -->
+            <div class="grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
+                <!-- 16 Empty Cells -->
+                {Array.from({length: 16}).map(() => (
+                    <div class="bg-slate-400/50 rounded pointer-events-none"></div>
+                ))}
+            </div>
+
+            <!-- Tile Layer -->
+            <div id="tile-layer" class="absolute top-2 left-2 right-2 bottom-2 pointer-events-none">
+                <!-- Tiles injected by JS -->
+            </div>
+
+            <!-- Overlay -->
+            <div id="game-overlay" class="absolute inset-0 bg-white/70 dark:bg-slate-900/70 z-50 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none transition-opacity duration-300">
+                <div id="overlay-msg" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6"></div>
+                <button id="try-again-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded text-lg shadow-lg transform transition hover:scale-105">
+                    {i18n.controls.tryAgain}
+                </button>
+            </div>
+        </div>
+        
+        <div class="text-slate-500 dark:text-slate-400 text-sm mt-4 text-center" set:html={i18n.labels.instructions}></div>
+    </div>
+
+    <style>
+        /* Tile Styles */
+        :global(.tile) {
+            position: absolute;
+            width: calc(25% - 0.5rem); /* accounting for gap/padding approximation */
+            height: calc(25% - 0.5rem);
+            display: flex; /* Flexbox for centering text */
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.25rem;
+            font-weight: bold;
+            font-size: 2rem;
+            transition: transform 0.1s ease-in-out, top 0.1s ease-in-out, left 0.1s ease-in-out;
+            z-index: 10;
+        }
+
+        /* Simplified gap calculation: 
+           Grid is 4x4 with gap-2 (0.5rem).
+           Total width = 100%. 
+           Cell width approx 25%.
+           We use percentage-based positioning in JS 
+        */
+
+        :global(.tile-2) { background-color: #eee4da; color: #776e65; }
+        :global(.tile-4) { background-color: #ede0c8; color: #776e65; }
+        :global(.tile-8) { background-color: #f2b179; color: #f9f6f2; }
+        :global(.tile-16) { background-color: #f59563; color: #f9f6f2; }
+        :global(.tile-32) { background-color: #f67c5f; color: #f9f6f2; }
+        :global(.tile-64) { background-color: #f65e3b; color: #f9f6f2; }
+        :global(.tile-128) { background-color: #edcf72; color: #f9f6f2; font-size: 1.8rem; }
+        :global(.tile-256) { background-color: #edcc61; color: #f9f6f2; font-size: 1.8rem; }
+        :global(.tile-512) { background-color: #edc850; color: #f9f6f2; font-size: 1.8rem; }
+        :global(.tile-1024) { background-color: #edc53f; color: #f9f6f2; font-size: 1.5rem; }
+        :global(.tile-2048) { background-color: #edc22e; color: #f9f6f2; font-size: 1.5rem; }
+        :global(.tile-super) { background-color: #3c3a32; color: #f9f6f2; font-size: 1.2rem; }
+
+        :global(.tile-new) {
+            animation: appear 0.2s ease;
+        }
+
+        @keyframes appear {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+
+    <script>
+        import { Game2048Engine } from '../../lib/Game2048Engine';
+
+        const scoreEl = document.getElementById('score-val');
+        const bestEl = document.getElementById('best-val');
+        const tileLayer = document.getElementById('tile-layer');
+        const overlay = document.getElementById('game-overlay');
+        const msgText = document.getElementById('overlay-msg');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const tryAgainBtn = document.getElementById('try-again-btn');
+        const gameContainer = document.getElementById('game-container');
+
+        const STORAGE_KEY = 'rayfos_2048_best';
+        const bestScore = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+        
+        // Fetch i18n data
+        const i18n = JSON.parse(document.querySelector('.game-wrapper').dataset.i18n || '{}');
+
+        const engine = new Game2048Engine(bestScore);
+        const tileElements = new Map(); // id -> HTMLElement
+
+        function getPositionStyle(index) {
+            const r = Math.floor(index / 4);
+            const c = index % 4;
+            return { top: `${r * 25}%`, left: `${c * 25}%` };
+        }
+
+        function createTileElement(tile) {
+            const el = document.createElement('div');
+            el.className = `tile tile-${tile.value <= 2048 ? tile.value : 'super'} tile-new`;
+            el.textContent = tile.value.toString();
+            return el;
+        }
+
+        function updateView() {
+            const state = engine.getGameState();
+            
+            // Score
+            scoreEl.textContent = state.score.toString();
+            bestEl.textContent = state.highScore.toString();
+            localStorage.setItem(STORAGE_KEY, state.highScore.toString());
+            localStorage.setItem('rayfos_2048_state', JSON.stringify(state));
+
+            // --- Diffing & Rendering logic ---
+            const touchedIds = new Set();
+
+            state.grid.forEach((tile, index) => {
+                if (!tile) return;
+                
+                // 1. Handle Merged Parents (Animation only)
+                if (tile.mergedFrom) {
+                     tile.mergedFrom.forEach(parent => {
+                         // Move parent visual to new position, then remove
+                         const parentEl = tileElements.get(parent.id);
+                         if (parentEl) {
+                             const pos = getPositionStyle(index); // Destination
+                             parentEl.style.top = pos.top;
+                             parentEl.style.left = pos.left;
+                             parentEl.style.zIndex = '10'; // Below the new tile
+                             // Schedule removal
+                             setTimeout(() => {
+                                 if (parentEl.parentNode === tileLayer) tileLayer.removeChild(parentEl);
+                                 tileElements.delete(parent.id);
+                             }, 100); // Match transition duration
+                             touchedIds.add(parent.id);
+                         }
+                     });
+                }
+
+                // 2. Handle Current Tile
+                let el = tileElements.get(tile.id);
+                const pos = getPositionStyle(index);
+
+                if (!el) {
+                    // New tile (either random or result of merge)
+                    el = createTileElement(tile);
+                    // If merged, might want 'pop' effect. 
+                    // 'tile-new' class handles appear animation (scale 0->1).
+                    if (tile.mergedFrom) {
+                        el.classList.add('tile-merged'); // Helper for pop animation
+                        el.style.zIndex = '20'; // On top
+                    }
+                    
+                    el.style.top = pos.top;
+                    el.style.left = pos.left;
+                    tileLayer.appendChild(el);
+                    tileElements.set(tile.id, el);
+                } else {
+                    // Existing tile moving
+                    el.style.top = pos.top;
+                    el.style.left = pos.left;
+                    
+                    // Update value/class if somehow changed without ID change (unlikely in this logic but safe)
+                    if (el.textContent !== tile.value.toString()) {
+                        el.className = `tile tile-${tile.value <= 2048 ? tile.value : 'super'}`;
+                        el.textContent = tile.value.toString();
+                    }
+                }
+                touchedIds.add(tile.id);
+            });
+
+            // Garbage Collection: Remove any tiles not in touchedIds
+            // (e.g. tiles that were merged and replaced, unless handled above)
+            tileElements.forEach((el, id) => {
+                if (!touchedIds.has(id)) {
+                    if (el.parentNode === tileLayer) tileLayer.removeChild(el);
+                    tileElements.delete(id);
+                }
+            });
+
+            // Overlay
+            if (state.status !== 'PLAYING') {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                msgText.textContent = state.status === 'WON' ? i18n.messages.win : i18n.messages.gameover;
+                tryAgainBtn.textContent = state.status === 'WON' ? i18n.controls.continue : i18n.controls.tryAgain;
+            } else {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function restart() {
+            // Clear all tiles visual
+            tileElements.forEach(el => el.remove());
+            tileElements.clear();
+            
+            engine.restart();
+            updateView();
+            gameContainer.focus();
+        }
+
+        // Input Handling
+        let isProcessing = false;
+        
+        async function handleKey(e) {
+             // prevent scrolling
+            if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight", " "].indexOf(e.code) > -1) {
+                e.preventDefault();
+            }
+            if (isProcessing) return; // Debounce slightly for animation?
+
+            let moved = false;
+            switch(e.key) {
+                case 'ArrowUp': case 'w': moved = engine.move('UP'); break;
+                case 'ArrowDown': case 's': moved = engine.move('DOWN'); break;
+                case 'ArrowLeft': case 'a': moved = engine.move('LEFT'); break;
+                case 'ArrowRight': case 'd': moved = engine.move('RIGHT'); break;
+            }
+
+            if (moved) {
+                // requestAnimationFrame(() => {
+                    updateView();
+                // });
+            }
+        }
+        
+        // Touch Handling
+        let startX, startY;
+        gameContainer.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, {passive: false});
+
+        gameContainer.addEventListener('touchend', e => {
+            if(!startX || !startY) return;
+            const diffX = e.changedTouches[0].clientX - startX;
+            const diffY = e.changedTouches[0].clientY - startY;
+
+             if (Math.abs(diffX) > 30 || Math.abs(diffY) > 30) {
+                 let moved = false;
+                 if (Math.abs(diffX) > Math.abs(diffY)) {
+                     moved = engine.move(diffX > 0 ? 'RIGHT' : 'LEFT');
+                 } else {
+                     moved = engine.move(diffY > 0 ? 'DOWN' : 'UP');
+                 }
+                 if (moved) updateView();
+             }
+             startX = null; startY = null;
+             e.preventDefault(); 
+        }, {passive: false});
+
+
+        // Init
+        newGameBtn.onclick = restart;
+        tryAgainBtn.onclick = () => {
+             const state = engine.getGameState();
+             if (state.status === 'WON') {
+                 engine.continuePlaying();
+                 updateView();
+             } else {
+                 restart();
+             }
+        };
+        window.addEventListener('keydown', handleKey);
+        
+        // Initial Render
+        const STORAGE_STATE_KEY = 'rayfos_2048_state';
+        const savedState = localStorage.getItem(STORAGE_STATE_KEY);
+        
+        if (savedState) {
+            try {
+                const parsed = JSON.parse(savedState);
+                if (parsed) engine.loadState(parsed);
+            } catch (e) {
+                console.error('Failed to load save state', e);
+            }
+        }
+        
+        updateView();
+
+        function saveState() {
+            localStorage.setItem(STORAGE_STATE_KEY, JSON.stringify(engine.getGameState()));
+        }
+
+        // Add to updateView to save on changes (or call saveState explicitly after moves)
+        // Better to hook into move/restart.
+        // Let's modify updateView to save? No, updateView is for rendering.
+        // But engine state changes trigger updateView, so it's a good place to ensure sync?
+        // Actually, let's keep it simple: call saveState() at end of updateView
+        // But restart calls updateView too.
+        
+        // Let's just hook saveState into the places where state changes.
+        // But wait, updateView is called after moves and restart.
+        // So updateView is the single source of truth for "state has changed and needs render".
+
+    </script>
+</GameLayout>
