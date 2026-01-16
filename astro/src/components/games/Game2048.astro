@@ -1,65 +1,69 @@
 ---
-import GameLayout from '@/layouts/GameLayout.astro';
-
 interface Props {
   game: any;
   lang: string;
+  showPromoLink?: boolean;
 }
 
-const { game, lang } = Astro.props;
+const { game, lang, showPromoLink = false } = Astro.props;
 const { i18n } = game.data;
 ---
 
-<GameLayout title={game.data.title} lang={lang as any} bgmSrc={game.data.bgmSrc}>
-    <div class="game-wrapper flex flex-col items-center gap-8 p-4 max-w-lg mx-auto my-8 font-sans" data-i18n={JSON.stringify(i18n)}>
-        <!-- Header & Scores -->
-        <div class="w-full flex justify-between items-center mb-4">
-            <h1 class="text-5xl font-bold text-slate-700 dark:text-slate-200">2048</h1>
-            <div class="flex gap-2">
-                <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300">{i18n.labels.score}</span>
-                    <span id="score-val" class="font-bold text-xl">0</span>
-                </div>
-                <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
-                    <span class="text-xs font-bold uppercase tracking-wider text-amber-300">{i18n.labels.best}</span>
-                    <span id="best-val" class="font-bold text-xl">0</span>
-                </div>
+<div class="game-wrapper flex flex-col items-center gap-8 p-4 max-w-lg mx-auto my-8 font-sans" data-i18n={JSON.stringify(i18n)}>
+    <!-- Header & Scores -->
+    <div class="w-full flex justify-between items-center mb-4">
+        <h1 class="text-5xl font-bold text-slate-700 dark:text-slate-200">2048</h1>
+        <div class="flex gap-2">
+            <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-300">{i18n.labels.score}</span>
+                <span id="score-val" class="font-bold text-xl">0</span>
+            </div>
+            <div class="bg-slate-700 text-white p-2 rounded flex flex-col items-center min-w-[70px]">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-300">{i18n.labels.best}</span>
+                <span id="best-val" class="font-bold text-xl">0</span>
             </div>
         </div>
-
-        <!-- Controls / New Game -->
-        <div class="w-full flex justify-end mb-4">
-             <button id="new-game-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded transition-colors shadow-md">
-                {i18n.controls.restart}
-             </button>
-        </div>
-
-        <!-- Game Container -->
-        <div class="relative bg-slate-300 dark:bg-slate-700 p-2 rounded-lg w-full aspect-square shadow-xl cursor-default touch-none outline-none select-none" id="game-container" tabindex="0">
-            <!-- Grid Background -->
-            <div class="grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
-                <!-- 16 Empty Cells -->
-                {Array.from({length: 16}).map(() => (
-                    <div class="bg-slate-400/50 rounded pointer-events-none"></div>
-                ))}
-            </div>
-
-            <!-- Tile Layer -->
-            <div id="tile-layer" class="absolute top-2 left-2 right-2 bottom-2 pointer-events-none">
-                <!-- Tiles injected by JS -->
-            </div>
-
-            <!-- Overlay -->
-            <div id="game-overlay" class="absolute inset-0 bg-white/70 dark:bg-slate-900/70 z-50 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none transition-opacity duration-300">
-                <div id="overlay-msg" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6"></div>
-                <button id="try-again-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded text-lg shadow-lg transform transition hover:scale-105">
-                    {i18n.controls.tryAgain}
-                </button>
-            </div>
-        </div>
-        
-        <div class="text-slate-500 dark:text-slate-400 text-sm mt-4 text-center" set:html={i18n.labels.instructions}></div>
     </div>
+
+    <!-- Controls / New Game -->
+    <div class="w-full flex justify-end mb-4">
+            <button id="new-game-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded transition-colors shadow-md">
+            {i18n.controls.restart}
+            </button>
+    </div>
+
+    <!-- Game Container -->
+    <div class="relative bg-slate-300 dark:bg-slate-700 p-2 rounded-lg w-full aspect-square shadow-xl cursor-default touch-none outline-none select-none" id="game-container" tabindex="0">
+        <!-- Grid Background -->
+        <div class="grid grid-cols-4 grid-rows-4 gap-2 w-full h-full">
+            <!-- 16 Empty Cells -->
+            {Array.from({length: 16}).map(() => (
+                <div class="bg-slate-400/50 rounded pointer-events-none"></div>
+            ))}
+        </div>
+
+        <!-- Tile Layer -->
+        <div id="tile-layer" class="absolute top-2 left-2 right-2 bottom-2 pointer-events-none">
+            <!-- Tiles injected by JS -->
+        </div>
+
+        <!-- Overlay -->
+        <div id="game-overlay" class="absolute inset-0 bg-white/70 dark:bg-slate-900/70 z-50 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none transition-opacity duration-300">
+            <div id="overlay-msg" class="text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6"></div>
+            <button id="try-again-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded text-lg shadow-lg transform transition hover:scale-105">
+                {i18n.controls.tryAgain}
+            </button>
+        </div>
+    </div>
+    
+    <div class="text-slate-500 dark:text-slate-400 text-sm mt-4 text-center" set:html={i18n.labels.instructions}></div>
+
+    {showPromoLink && (
+        <a href="https://rayfos.fun" target="_blank" rel="noopener noreferrer" class="mt-8 text-amber-600 hover:text-amber-700 font-bold underline transition-colors">
+            {i18n.labels.promo}
+        </a>
+    )}
+</div>
 
     <style>
         /* Tile Styles */
@@ -271,6 +275,7 @@ const { i18n } = game.data;
 
         gameContainer.addEventListener('touchend', e => {
             if(!startX || !startY) return;
+    if (e.target.closest('button')) return; // Allow button clicks to propagate
             const diffX = e.changedTouches[0].clientX - startX;
             const diffY = e.changedTouches[0].clientY - startY;
 
@@ -332,4 +337,3 @@ const { i18n } = game.data;
         // So updateView is the single source of truth for "state has changed and needs render".
 
     </script>
-</GameLayout>

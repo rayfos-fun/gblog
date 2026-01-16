@@ -5,6 +5,10 @@
     "tailwindcss": "^4.1.18"
   },
   "scripts": {
+    "package:2048": "astro build && inline-source dist/itch/2048/index.html > game2048_itch.html",
     "emu": "firebase emulators:start --import=./emulator-data --export-on-exit"
+  },
+  "devDependencies": {
+    "inline-source-cli": "^2.0.0"
   }
 }

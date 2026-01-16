@@ -1,0 +1,33 @@
+---
+import { getEntry } from 'astro:content';
+import Game2048 from '../../components/games/Game2048.astro';
+
+// Use English content as per user request
+const game = await getEntry('games', 'en/2048');
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f8fafc; /* match slate-50 light */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #0f172a; /* match slate-900 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <Game2048 game={game} lang="en" showPromoLink={true} />
+</body>
+</html>

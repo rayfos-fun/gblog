@@ -10,6 +10,7 @@ import PegSolitaire from '../components/games/PegSolitaire.astro';
 import Memory from '../components/games/Memory.astro';
 import Game2048 from '@/components/games/Game2048.astro';
 import LightsOut from '../components/games/LightsOut.astro';
+import GameLayout from '@/layouts/GameLayout.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
 
@@ -212,7 +213,13 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 )}
 
 {type === 'game' && GameComponent && (
-    <GameComponent game={item} lang={lang} />
+    item.slug.includes('2048') ? (
+        <GameLayout title={item.data.title} lang={lang} bgmSrc={item.data.bgmSrc}>
+            <GameComponent game={item} lang={lang} />
+        </GameLayout>
+    ) : (
+        <GameComponent game={item} lang={lang} />
+    )
 )}
 
 {type === 'game' && !GameComponent && (
