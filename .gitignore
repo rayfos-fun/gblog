@@ -1,9 +1,12 @@
 __pycache__/
+dist/
+dist_itch/
 *.egg-info/
 emulator-data/
 venv/
 node_modules/
 venv/
+.DS_Store
 *.py[cod]
 .env
 .jekyll-cache
