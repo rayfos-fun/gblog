@@ -445,6 +445,7 @@
 ../jekyll-site/pages-zh-tw/tool.md
 
 ../README.md  # github project
+../CHANGELOG.md
 ../requirements.txt
 
 # repo
