@@ -93,7 +93,8 @@ const translations = {
         typeGame: 'Game',
         typeTool: 'Tool',
         typeStory: 'Story',
-        noDescription: 'No description available.'
+        noDescription: 'No description available.',
+        playNow: 'Play Now'
     },
     'zh-tw': {
         pageTitle: '首頁',
@@ -108,7 +109,8 @@ const translations = {
         typeGame: '遊戲',
         typeTool: '工具',
         typeStory: '故事',
-        noDescription: '暫無描述。'
+        noDescription: '暫無描述。',
+        playNow: '立即遊玩'
     },
     'zh-cn': {
         pageTitle: '首页',
@@ -123,7 +125,8 @@ const translations = {
         typeGame: '游戏',
         typeTool: '工具',
         typeStory: '故事',
-        noDescription: '暂无描述。'
+        noDescription: '暂无描述。',
+        playNow: '立即游玩'
     }
 };
 
@@ -146,7 +149,7 @@ const pageTitle = t.pageTitle;
                         url={item.url}
                         description={`${t[`type${item.type}`]} - ${item.description || t.noDescription}`}
                         isNew={true} 
-                        readMoreText={t.readMore}
+                        readMoreText={item.type === 'Game' ? t.playNow : t.readMore}
                         newText={t.new}
                     />
                 ))}
@@ -182,7 +185,7 @@ const pageTitle = t.pageTitle;
                              date={item.date}
                              url={item.url}
                              description={item.description || t.noDescription}
-                             readMoreText={t.readMore}
+                             readMoreText={t.playNow}
                         />
                     ))}
                 </div>
