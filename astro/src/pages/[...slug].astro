@@ -13,6 +13,7 @@ import LightsOut from '../components/games/LightsOut.astro';
 import GameLayout from '@/layouts/GameLayout.astro';
 import PostLayout from '@/layouts/PostLayout.astro';
 import LoopTimer from '@/components/tools/LoopTimer.astro';
+import ReadingProgressRecorder from '@/components/ReadingProgressRecorder.astro';
 
 // Type Definitions
 type RouteType = 'home' | 'post-list' | 'game-list' | 'post' | 'game';
@@ -196,6 +197,7 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 
 {type === 'story' && (
     <PostLayout title={item.data.title} lang={lang}>
+        <ReadingProgressRecorder />
         <article class="prose lg:prose-xl mx-auto dark:prose-invert">
             <h1>{item.data.title}</h1>
             <PostContent />

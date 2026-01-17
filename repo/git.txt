@@ -37,6 +37,19 @@ init => edit => modified (existing file) or untracked (new file) @[working direc
 => git commit ... => commited @[local repository]
 => git push ... => pushed / synced @[remote repository] 
 
+# commit message
+
+feat: feature
+fix: fix bug
+docs: document
+style: style
+refactor: refactor
+perf: performance
+test: test
+chore: other (deployment process)
+build: dependency
+
+
 # scenario
 
 ## init
@@ -72,4 +85,3 @@ git add .; git commit -m 'commit meesage'; git push -u origin feature/xyz
 goto github => pull request => merge
 
 ## release
-

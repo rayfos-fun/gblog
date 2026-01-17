@@ -1,0 +1,16 @@
+<script>
+    (function() {
+        try {
+            const key = 'story_last_read';
+            const data = {
+                title: document.title, 
+                url: window.location.pathname,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(key, JSON.stringify(data));
+            console.log('Progress recorded:', data);
+        } catch (e) {
+            console.error('Failed to save reading progress', e);
+        }
+    })();
+</script>

@@ -1,0 +1,112 @@
+---
+const { lang } = Astro.props;
+
+const translations = {
+  'en': {
+    welcomeBack: 'Welcome back, continue reading:',
+    continue: 'Continue',
+    startReading: 'Series in progress! Start reading Chapter 1',
+    start: 'Start Reading'
+  },
+  'zh-tw': {
+    welcomeBack: '歡迎回來，上次您讀到：',
+    continue: '點此繼續',
+    startReading: '連載中！點此開始閱讀第一章',
+    start: '開始閱讀'
+  },
+  'zh-cn': {
+    welcomeBack: '欢迎回来，上次您读到：',
+    continue: '点此继续',
+    startReading: '连载中！点此开始阅读第一章',
+    start: '开始阅读'
+  }
+};
+
+const t = translations[lang] || translations['en'];
+
+// Determine the first chapter URL based on language
+const firstChapterUrl = lang === 'en' ? '/story/0001' : `/${lang}/story/0001`;
+---
+
+<div id="continue-reading-banner" class="cursor-pointer hidden max-w-4xl mx-auto my-8 mt-6 mb-10 rounded-xl bg-orange-100 dark:bg-indigo-900/80 backdrop-blur-md border border-orange-200 dark:border-indigo-500/30 text-orange-900 dark:text-indigo-100 px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:brightness-105 group relative overflow-hidden">
+    <!-- Glow effect -->
+    <div class="absolute -top-10 -right-10 w-20 h-20 bg-orange-400/20 dark:bg-indigo-400/20 blur-3xl rounded-full pointer-events-none"></div>
+
+    <div class="relative flex justify-between items-center z-10">
+        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+            <span class="text-sm font-medium opacity-80 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span id="banner-prefix"></span>
+            </span>
+            <span id="banner-title" class="font-bold text-lg text-orange-800 dark:text-indigo-50 group-hover:text-orange-900 dark:group-hover:text-white transition-colors"></span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+             <span class="hidden md:inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-indigo-300 border border-orange-300 dark:border-indigo-500/50 px-2 py-1 rounded">
+                {t.continue}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </span>
+            <button id="close-banner" class="p-1 rounded-full text-orange-500 hover:text-orange-700 dark:text-indigo-400 dark:hover:text-indigo-200 hover:bg-orange-200/50 dark:hover:bg-indigo-800/50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script define:vars={{ t, firstChapterUrl }}>
+    (function() {
+        const banner = document.getElementById('continue-reading-banner');
+        const bannerPrefix = document.getElementById('banner-prefix');
+        const bannerTitle = document.getElementById('banner-title');
+        const closeBtn = document.getElementById('close-banner');
+        
+        if (!banner) return;
+
+        // Check if user manually closed it for this session
+        if (sessionStorage.getItem('hide_reading_banner')) return;
+
+        let targetUrl = firstChapterUrl;
+
+        try {
+            const rawData = localStorage.getItem('story_last_read');
+            
+            if (rawData) {
+                // Scenario A: Returning User
+                const data = JSON.parse(rawData);
+                // Data Clean: Remove suffix like "| Rayfos" and trim
+                const cleanTitle = data.title.split('|')[0].trim();
+                
+                bannerPrefix.textContent = t.welcomeBack;
+                bannerTitle.textContent = cleanTitle;
+                targetUrl = data.url;
+            } else {
+                // Scenario B: New User
+                bannerPrefix.textContent = t.startReading;
+                bannerTitle.textContent = ''; // Or put "Chapter 1" if desired, but request implies simple text adjustment
+                targetUrl = firstChapterUrl;
+            }
+
+            banner.classList.remove('hidden');
+        } catch (e) {
+            console.error('Error parsing reading progress', e);
+        }
+
+        // Full card click
+        banner.addEventListener('click', () => {
+            window.location.href = targetUrl;
+        });
+
+        // Close button (stop propagation)
+        closeBtn.addEventListener('click', (e) => {
+             e.stopPropagation(); // Prevent card click
+             banner.classList.add('hidden');
+             sessionStorage.setItem('hide_reading_banner', 'true');
+        });
+    })();
+</script>

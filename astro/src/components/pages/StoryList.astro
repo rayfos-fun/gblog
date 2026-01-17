@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import ContentCard from '@/components/ContentCard.astro';
+import ContinueReadingBanner from '@/components/ContinueReadingBanner.astro';
 
 interface Props {
   lang: string;
@@ -49,6 +50,8 @@ const t = translations[lang] || translations['en'];
 
 <PostLayout title={`${t.metaTitlePrefix} | Rayfos`} lang={lang}>
   
+  <ContinueReadingBanner lang={lang} />
+
   <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold mb-8 text-center">
       {t.latestStories}
