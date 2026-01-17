@@ -47,11 +47,13 @@
 ../astro/src/content/posts/en/2026-01-09.md
 ../astro/src/content/posts/en/2026-01-13.md
 ../astro/src/content/posts/en/2026-01-14.md
+../astro/src/content/posts/en/2026-01-16.md
 ../astro/src/content/posts/zh-cn/2026-01-06.md
 ../astro/src/content/posts/zh-cn/2026-01-07.md
 ../astro/src/content/posts/zh-cn/2026-01-09.md
 ../astro/src/content/posts/zh-cn/2026-01-13.md
 ../astro/src/content/posts/zh-cn/2026-01-14.md
+../astro/src/content/posts/zh-cn/2026-01-16.md
 ../astro/src/content/posts/zh-tw/2025-12-31.md  # Wed 漢諾塔/河內塔
 ../astro/src/content/posts/zh-tw/2026-01-02.md  # Fri 2026新年新希望
 ../astro/src/content/posts/zh-tw/2026-01-06.md  # Tue 勇氣做自己
@@ -59,6 +61,7 @@
 ../astro/src/content/posts/zh-tw/2026-01-09.md  # Fri AI 音樂製作
 ../astro/src/content/posts/zh-tw/2026-01-13.md  # Tue 適性而為
 ../astro/src/content/posts/zh-tw/2026-01-14.md  # Wed 熄燈遊戲
+../astro/src/content/posts/zh-tw/2026-01-16.md  # Fri 2048
 ../astro/src/content/stories/en/0001.md
 ../astro/src/content/stories/en/0022.md
 ../astro/src/content/stories/zh-cn/0001.md
