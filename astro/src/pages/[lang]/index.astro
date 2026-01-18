@@ -95,7 +95,8 @@ const translations = {
         typeStory: 'Story',
         noDescription: 'No description available.',
         playNow: 'Play Now',
-        tryNow: 'Try Now'
+        tryNow: 'Try Now',
+        description: 'Rayfos Fun is a personal lab gathering indie game development, full-stack tech notes, and original sci-fi novels. Explore the journey of coding puzzles and digital creation here.'
     },
     'zh-tw': {
         pageTitle: '首頁',
@@ -112,7 +113,8 @@ const translations = {
         typeStory: '故事',
         noDescription: '暫無描述。',
         playNow: '立即遊玩',
-        tryNow: '立即試用'
+        tryNow: '立即試用',
+        description: 'Rayfos Fun 是一個匯集獨立遊戲開發、全端技術筆記與原創科幻小說的個人實驗室。在這裡探索關於程式解謎與數位創作的旅程。'
     },
     'zh-cn': {
         pageTitle: '首页',
@@ -129,7 +131,8 @@ const translations = {
         typeStory: '故事',
         noDescription: '暂无描述。',
         playNow: '立即游玩',
-        tryNow: '立即试用'
+        tryNow: '立即试用',
+        description: 'Rayfos Fun 是一个汇集独立游戏开发、全栈技术笔记与原创科幻小说的个人实验室。在这里探索关于代码解谜与数字创作的旅程。'
     }
 };
 
@@ -138,7 +141,7 @@ const t = translations[lang] || translations['en'];
 const pageTitle = t.pageTitle;
 ---
 
-<BaseLayout pageTitle={pageTitle} lang={lang}>
+<BaseLayout pageTitle={pageTitle} lang={lang} description={t.description}>
     <div class="container mx-auto px-4 py-8">
         
         {/* Latest Updates Section */}

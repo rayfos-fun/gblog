@@ -2,12 +2,13 @@
 interface Props {
   title: string;
   lang: string;
+  description?: string;
 }
 
 import Comments from '@/components/Comments.astro';
 import ObfuscatedMail from '@/components/ObfuscatedMail.astro';
 
-const { title, lang } = Astro.props;
+const { title, lang, description } = Astro.props;
 const { pathname } = Astro.url;
 
 const homeLink = lang === 'en' ? '/' : `/${lang}`;
@@ -68,6 +69,8 @@ function getLangLink(targetLang: string) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title} | Rayfos</title>
+    {description && <meta name="description" content={description} />}
+    {description && <meta property="og:description" content={description} />}
     <script is:inline>
       // Theme init
       const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'cupcake');
