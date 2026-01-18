@@ -1,0 +1,217 @@
+---
+import { ThreeHeroesEngine } from '@/lib/ThreeHeroesEngine';
+import GameLayout from '@/layouts/GameLayout.astro';
+
+interface Props {
+  game: any;
+  lang: string;
+}
+
+const { game, lang } = Astro.props;
+
+const translations = {
+    'en': {
+        enemyZone: 'Enemy Zone (Lu Bu)',
+        playerZone: 'Player Zone (Three Heroes)',
+        start: 'Start Battle',
+        reset: 'Reset',
+        ticks: 'Tick'
+    },
+    'zh-tw': {
+        enemyZone: '敵方陣地 (呂布軍)',
+        playerZone: '我方陣地 (劉關張)',
+        start: '開始戰鬥',
+        reset: '重置',
+        ticks: '時間刻度'
+    },
+    'zh-cn': {
+        enemyZone: '敌方阵地 (吕布军)',
+        playerZone: '我方阵地 (刘关张)',
+        start: '开始战斗',
+        reset: '重置',
+        ticks: '时间刻度'
+    }
+};
+
+const t = translations[lang] || translations['en'];
+---
+
+<GameLayout title={game.data.title} lang={lang} bgmSrc={game.data.bgmSrc}>
+<div id="three-heroes-game" class="max-w-4xl mx-auto p-4 select-none">
+    <!-- Controls -->
+    <div class="flex justify-between items-center mb-6">
+        <div class="text-xl font-bold">
+            {t.ticks}: <span id="tick-display" class="font-mono text-primary">0</span>
+        </div>
+        <div class="space-x-2">
+            <button id="start-btn" class="btn btn-primary">{t.start}</button>
+            <button id="reset-btn" class="btn btn-neutral">{t.reset}</button>
+        </div>
+    </div>
+
+    <!-- Battle Field -->
+    <div class="flex flex-col gap-8">
+        
+        <!-- Enemy Zone -->
+        <div class="card bg-base-200 shadow-xl border-2 border-red-900/20">
+            <div class="card-body p-4">
+                <h2 class="card-title text-red-700 justify-center mb-4">{t.enemyZone}</h2>
+                <div class="grid grid-cols-3 gap-2 w-full max-w-sm mx-auto aspect-square" id="enemy-grid">
+                    {/* Grid E1-E9 (0-8) */}
+                    {Array.from({ length: 9 }).map((_, i) => (
+                        <div class="grid-cell border border-base-content/10 rounded flex items-center justify-center relative bg-base-100/50" data-pos={i} data-side="ENEMY">
+                            <span class="absolute top-1 left-1 text-[10px] opacity-30">E{i+1}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Zone -->
+        <div class="card bg-base-200 shadow-xl border-2 border-blue-900/20">
+            <div class="card-body p-4">
+                <h2 class="card-title text-blue-700 justify-center mb-4">{t.playerZone}</h2>
+                <div class="grid grid-cols-3 gap-2 w-full max-w-sm mx-auto aspect-square" id="player-grid">
+                    {/* Grid P1-P9 (0-8) */}
+                    {Array.from({ length: 9 }).map((_, i) => (
+                        <div class="grid-cell border border-base-content/10 rounded flex items-center justify-center relative bg-base-100/50" data-pos={i} data-side="PLAYER">
+                             <span class="absolute top-1 left-1 text-[10px] opacity-30">P{i+1}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battle Logs -->
+    <div class="mt-8 border rounded-lg bg-base-100 p-4 h-64 overflow-y-auto font-mono text-sm" id="battle-logs">
+        <div class="text-base-content/50 italic text-center">... 戰鬥紀錄 ...</div>
+    </div>
+</div>
+
+<script>
+    import { ThreeHeroesEngine, type Unit } from '@/lib/ThreeHeroesEngine';
+
+    let engine: ThreeHeroesEngine;
+
+    const tickDisplay = document.getElementById('tick-display');
+    const startBtn = document.getElementById('start-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const logsContainer = document.getElementById('battle-logs');
+    const enemyCells = document.querySelectorAll('#enemy-grid .grid-cell');
+    const playerCells = document.querySelectorAll('#player-grid .grid-cell');
+
+    function render() {
+        if (tickDisplay) tickDisplay.textContent = engine.tick.toString();
+
+        // Clear all cells
+        [...enemyCells, ...playerCells].forEach(cell => {
+             // Keep the coordinate label but remove unit content
+             const label = cell.querySelector('span');
+             cell.innerHTML = '';
+             if (label) cell.appendChild(label);
+             cell.className = 'grid-cell border border-base-content/10 rounded flex items-center justify-center relative bg-base-100/50 transition-colors duration-300';
+        });
+
+        // Render Units
+        engine.units.forEach(unit => {
+            if (unit.hp <= 0) return; // Dead units don't render? OR render corpse? Requirement implies "击倒". Let's hide for now.
+
+            const cells = unit.side === 'ENEMY' ? enemyCells : playerCells;
+            const cell = cells[unit.pos];
+            if (cell) {
+                const hpPercent = (unit.hp / unit.maxHp) * 100;
+                
+                // Color based on side
+                const bgClass = unit.side === 'ENEMY' ? 'bg-red-100 dark:bg-red-900/50' : 'bg-blue-100 dark:bg-blue-900/50';
+                const borderClass = unit.side === 'ENEMY' ? 'border-red-500' : 'border-blue-500';
+                
+                cell.classList.remove('bg-base-100/50', 'border-base-content/10');
+                
+                // Fix: Split by space because classList.add expects individual tokens
+                cell.classList.add(...bgClass.split(' '));
+                cell.classList.add(...borderClass.split(' '));
+                cell.classList.add('border-2');
+                
+                // Content
+                const content = document.createElement('div');
+                content.className = 'text-center w-full p-1';
+                content.innerHTML = `
+                    <div class="font-bold text-sm md:text-base">${unit.name}</div>
+                    <div class="text-xs mb-1">HP: ${unit.hp}</div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+                        <div class="bg-green-600 h-1.5 rounded-full" style="width: ${hpPercent}%"></div>
+                    </div>
+                    <div class="text-[10px] mt-1 opacity-75">Wait: ${unit.nextActionTick - engine.tick}</div>
+                `;
+                cell.appendChild(content);
+            }
+        });
+
+        // Logs
+        if (logsContainer) {
+            logsContainer.innerHTML = engine.logs.map(log => `
+                <div class="mb-1 border-b border-base-content/5 pb-1 last:border-0">
+                    <span class="text-primary font-bold">[Tick ${log.tick}]</span> ${log.message}
+                </div>
+            `).join('');
+        }
+    }
+
+    // Init
+    engine = new ThreeHeroesEngine(() => {
+        requestAnimationFrame(render);
+    });
+    
+    // Initial Render
+    render();
+
+    // Hook render to update button state
+    const originalRender = render;
+    // Re-define render to include button update (or just update it inside the existing render if I could see it all, but modifying existing block is safer)
+    // Actually, I can just append the logic to the render function I defined above? 
+    // Wait, the previous tool call showed the full file. I can replace the `render` function content or append the logic.
+    // Let's replace the end of `render` function or just add a watcher.
+    
+    // Simplest: Add checking logic to the `render` loop.
+    // I will replace the `render` function body end.
+    
+    function updateButtonState() {
+        if (startBtn) {
+            if (engine.isRunning) {
+                startBtn.textContent = 'Running...';
+                startBtn.setAttribute('disabled', 'true');
+            } else {
+                startBtn.textContent = '開始戰鬥'; // TODO: use t.start if possible, but localized string is in server script
+                startBtn.removeAttribute('disabled');
+            }
+        }
+    }
+    
+    // Patch render
+    const _render = render;
+    render = function() {
+       _render();
+       updateButtonState();
+    }
+
+    startBtn?.addEventListener('click', () => {
+        if (!engine.isRunning) {
+            engine.startBattle();
+            startBtn.textContent = 'Running...';
+            startBtn.setAttribute('disabled', 'true');
+        }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+        engine.stopBattle();
+        engine.reset();
+        if (startBtn) {
+            startBtn.textContent = '開始戰鬥'; // Need localized check? Or just reset to initial HTML text? 
+            // Better to match the input language logic, but for simplicity here resetting engine resets state
+            startBtn.removeAttribute('disabled');
+        }
+    });
+
+</script>
+</GameLayout>
