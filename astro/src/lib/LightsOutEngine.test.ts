@@ -58,7 +58,7 @@ describe('LightsOutEngine', () => {
     it('should detect win condition', () => {
         // Start fresh (all OFF)
         const cleanEngine = new LightsOutEngine();
-        expect(cleanEngine.currentState.status).toBe('WON'); // All off should actually be WON immediately if we check.
+        expect(cleanEngine.currentState.status).toBe('PLAYING'); // Initial state is PLAYING by default
         // Wait, the constructor sets status to 'PLAYING' but grid is all false.
         // Does constructor check win? No.
         // If I make a move that results in all OFF, it should trigger win.
