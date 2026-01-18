@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Features
 - **Smart Reading Progress**: Added a "Smart Resume" feature in stories page.
+- Added "Previous" and "Next" navigation links to story pages.
 
 ### Changed
 - Minor UI fixes such as the button text of recent games and tools

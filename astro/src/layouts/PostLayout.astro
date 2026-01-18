@@ -10,15 +10,22 @@ interface Props {
   frontmatter?: CollectionEntry<'post'>['data']; 
   prevPost?: { title: string; url: string } | null;
   nextPost?: { title: string; url: string } | null;
+  prevText?: string;
+  nextText?: string;
 }
 
-const { title, lang, frontmatter, prevPost, nextPost } = Astro.props;
+const { title, lang, frontmatter, prevPost, nextPost, prevText, nextText } = Astro.props;
 
-const t = {
+const defaultT = {
     'en': { prev: 'Previous Post', next: 'Next Post' },
     'zh-tw': { prev: '上一篇', next: '下一篇' },
     'zh-cn': { prev: '上一篇', next: '下一篇' },
 }[lang || 'en'] || { prev: 'Previous Post', next: 'Next Post' };
+
+const t = {
+    prev: prevText || defaultT.prev,
+    next: nextText || defaultT.next
+};
 ---
 <BaseLayout title={title} lang={lang} description={frontmatter?.description}>
   <article class="max-w-4xl mx-auto px-4 py-10">

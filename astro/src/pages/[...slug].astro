@@ -114,11 +114,39 @@ export async function getStaticPaths() {
 
     // 8. Individual Stories
     const storiesInLang = allStories.filter(s => s.id.startsWith(`${lang}/`));
-    for (const story of storiesInLang) {
+    // Sort Descending (Newest First) - similar to posts
+    storiesInLang.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+
+    for (let i = 0; i < storiesInLang.length; i++) {
+        const story = storiesInLang[i];
         const cleanSlug = story.slug.split('/').slice(1).join('/');
+
+        // Logic matches Posts:
+        // i - 1 is Newer (Next Chapter if released sequentially)
+        // i + 1 is Older (Prev Chapter)
+        
+        // However, for Stories UI, users usually want:
+        // Left Button: Previous Chapter (Older) -> similar to "Previous Post"
+        // Right Button: Next Chapter (Newer) -> similar to "Next Post"
+
+        const nextStory = i > 0 ? storiesInLang[i - 1] : null;
+        const prevStory = i < storiesInLang.length - 1 ? storiesInLang[i + 1] : null;
+
         paths.push({
             params: { slug: isEn ? `story/${cleanSlug}` : `${lang}/story/${cleanSlug}` },
-            props: { type: 'story', lang, item: story }
+            props: { 
+                type: 'story', 
+                lang, 
+                item: story,
+                prevPost: prevStory ? {
+                     title: prevStory.data.title,
+                     url: isEn ? `/story/${prevStory.slug.split('/').slice(1).join('/')}` : `/${lang}/story/${prevStory.slug.split('/').slice(1).join('/')}`
+                } : null,
+                nextPost: nextStory ? {
+                     title: nextStory.data.title,
+                     url: isEn ? `/story/${nextStory.slug.split('/').slice(1).join('/')}` : `/${lang}/story/${nextStory.slug.split('/').slice(1).join('/')}`
+                } : null
+            }
         });
     }
 
@@ -196,7 +224,22 @@ const ToolComponent = type === 'tool' ? getToolComponent(item.slug) : null;
 )}
 
 {type === 'story' && (
-    <PostLayout title={item.data.title} lang={lang}>
+    <PostLayout 
+        title={item.data.title} 
+        lang={lang}
+        prevPost={Astro.props.prevPost}
+        nextPost={Astro.props.nextPost}
+        prevText={{
+            'en': 'Previous Chapter',
+            'zh-tw': '上一回',
+            'zh-cn': '上一回'
+        }[lang] || 'Previous Chapter'}
+        nextText={{
+            'en': 'Next Chapter',
+            'zh-tw': '下一回',
+            'zh-cn': '下一回'
+        }[lang] || 'Next Chapter'}
+    >
         <ReadingProgressRecorder />
         <article class="prose lg:prose-xl mx-auto dark:prose-invert">
             <h1>{item.data.title}</h1>
