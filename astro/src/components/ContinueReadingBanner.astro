@@ -68,9 +68,6 @@ const firstChapterUrl = lang === 'en' ? '/story/0001' : `/${lang}/story/0001`;
         
         if (!banner) return;
 
-        // Check if user manually closed it for this session
-        if (sessionStorage.getItem('hide_reading_banner')) return;
-
         let targetUrl = firstChapterUrl;
 
         try {
@@ -88,7 +85,7 @@ const firstChapterUrl = lang === 'en' ? '/story/0001' : `/${lang}/story/0001`;
             } else {
                 // Scenario B: New User
                 bannerPrefix.textContent = t.startReading;
-                bannerTitle.textContent = ''; // Or put "Chapter 1" if desired, but request implies simple text adjustment
+                bannerTitle.textContent = ''; 
                 targetUrl = firstChapterUrl;
             }
 
@@ -106,7 +103,6 @@ const firstChapterUrl = lang === 'en' ? '/story/0001' : `/${lang}/story/0001`;
         closeBtn.addEventListener('click', (e) => {
              e.stopPropagation(); // Prevent card click
              banner.classList.add('hidden');
-             sessionStorage.setItem('hide_reading_banner', 'true');
         });
     })();
 </script>
